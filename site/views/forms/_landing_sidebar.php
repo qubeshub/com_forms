@@ -33,30 +33,21 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('formList');
-
-$breadcrumbs = [
-	'Forms' => '/forms'
-];
-$page = 'Forms list';
 $query = $this->query;
-
-$this->view('_breadcrumbs', 'shared')
-	->set('breadcrumbs', $breadcrumbs)
-	->set('page', $page)
-	->display();
 ?>
 
-<section class="main section">
-	<div class="grid">
-
-		<div class="col span2">
-			<?php
-				$this->view('_landing_sidebar')
-					->set('query', $query)
-					->display();
-			?>
-		</div>
-
+<div class="landing-sidebar">
+	<div class="row">
+		<?php
+			$this->view('_form_search_form')
+				->set('query', $query)
+				->display();
+		?>
 	</div>
-</section>
+
+	<div class="row">
+		<a href="<?php echo Route::url('/forms/news'); ?>">
+			<?php echo Lang::txt('COM_FORMS_LINKS_CREATE_FORM'); ?>
+		</a>
+	</div>
+</div>

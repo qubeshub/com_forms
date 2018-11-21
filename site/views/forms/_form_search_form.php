@@ -57,7 +57,7 @@ $query = $this->query;
 				->display();
 		?>
 		<div class="content">
-			<input type="text" name="query[name]" class="full-width">
+			<input type="text" name="query[name]">
 		</div>
 		<hr>
 	</div>
@@ -155,7 +155,7 @@ $query = $this->query;
 	</div>
 
 	<div class="row">
-			<input class="btn full-width" type="submit"
+			<input class="btn" type="submit"
 				value="<?php echo Lang::txt('COM_FORMS_FIELDS_SEARCH'); ?>">
 	</div>
 

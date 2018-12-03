@@ -34,8 +34,10 @@ namespace Components\Forms\Site\Controllers;
 
 $componentPath = Component::path('com_forms');
 
+require_once "$componentPath/helpers/pageBouncer.php";
 require_once "$componentPath/helpers/query.php";
 
+use Components\Forms\Helpers\PageBouncer;
 use Components\Forms\Helpers\Query;
 use Hubzero\Component\SiteController;
 
@@ -52,11 +54,28 @@ class Forms extends SiteController
 	];
 
 	/*
+	 * Executes the requested task
+	 *
+	 * @return   void
+	 */
+	public function execute()
+	{
+		$this->bouncer = new PageBouncer([
+			'component' => $this->_option
+		]);
+
+		parent::execute();
+	}
+
+	/*
 	 * Returns searchable list of forms
 	 *
+	 * @return   void
 	 */
 	public function listTask()
 	{
+		$this->bouncer->redirectUnlessAuthorized('core.create');
+
 		$query = Query::load();
 
 		$this->view

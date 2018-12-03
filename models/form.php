@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * HUBzero CMS
  *
  * Copyright 2005-2015 HUBzero Foundation, LLC.
@@ -25,58 +25,42 @@
  * HUBzero is a registered trademark of Purdue University.
  *
  * @package   hubzero-cms
- * @author    Anthony Fuentes <fuentesa@purdue.edu>
  * @copyright Copyright 2005-2015 HUBzero Foundation, LLC.
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Forms\Site;
+namespace Components\Forms\Models;
 
-use Hubzero\Component\Router\Base;
+use Hubzero\Database\Relational;
 
-class Router extends Base
+class Form extends Relational
 {
-	public function build(&$query)
-	{
-		$segments = [];
-		$queryParams = ['controller', 'task', 'id'];
 
-		foreach ($queryParams as $param)
-		{
-			if (!empty($query[$param]))
-			{
-				$segments[] = $query[$param];
-				unset($query[$param]);
-			}
-		}
+	/*
+	 * Records table
+	 *
+	 * @var string
+	 */
+	protected $table = '#__forms_forms';
 
-		return $segments;
-	}
+	/*
+	 * Attributes to be populated on record creation
+	 *
+	 * @var array
+	 */
+	public $initiate = ['created'];
 
-	public function parse(&$segments)
-	{
-		$vars = [];
+	/*
+	 * Attribute validation
+	 *
+	 * @var  array
+	 */
+	public $rules = [
+		'name' => 'notempty',
+		'opening_time' => 'notempty',
+		'closing_time' => 'notempty',
+		'created' => 'notempty',
+		'created_by' => 'notempty'
+	];
 
-		if (isset($segments[0]))
-		{
-			$vars['controller'] = $segments[0];
-		}
-		if (isset($segments[1]))
-		{
-			if (is_numeric($segments[1]))
-			{
-				$vars['id'] = $segments[1];
-			}
-			else
-			{
-				$vars['task'] = $segments[1];
-			}
-		}
-		if (isset($segments[2]))
-		{
-			$vars['id'] = $segments[1];
-		}
-
-		return $vars;
-	}
 }

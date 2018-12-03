@@ -25,58 +25,75 @@
  * HUBzero is a registered trademark of Purdue University.
  *
  * @package   hubzero-cms
- * @author    Anthony Fuentes <fuentesa@purdue.edu>
  * @copyright Copyright 2005-2015 HUBzero Foundation, LLC.
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Forms\Site;
+namespace Components\Forms\Tests;
 
-use Hubzero\Component\Router\Base;
+$componentPath = Component::path('com_forms');
 
-class Router extends Base
+require_once "$componentPath/models/form.php";
+
+use Hubzero\Test\Basic;
+use Components\Forms\Models\Form;
+
+class FormTest extends Basic
 {
-	public function build(&$query)
+
+	public function testInitiateHasCreated()
 	{
-		$segments = [];
-		$queryParams = ['controller', 'task', 'id'];
+		$form = Form::blank();
 
-		foreach ($queryParams as $param)
-		{
-			if (!empty($query[$param]))
-			{
-				$segments[] = $query[$param];
-				unset($query[$param]);
-			}
-		}
+		$initiate = $form->initiate;
+		$hasCreated = in_array('created', $initiate);
 
-		return $segments;
+		$this->assertEquals(true, $hasCreated);
 	}
 
-	public function parse(&$segments)
+	public function testRulesRequiresName()
 	{
-		$vars = [];
+		$form = Form::blank();
 
-		if (isset($segments[0]))
-		{
-			$vars['controller'] = $segments[0];
-		}
-		if (isset($segments[1]))
-		{
-			if (is_numeric($segments[1]))
-			{
-				$vars['id'] = $segments[1];
-			}
-			else
-			{
-				$vars['task'] = $segments[1];
-			}
-		}
-		if (isset($segments[2]))
-		{
-			$vars['id'] = $segments[1];
-		}
+		$validation = $form->rules['name'];
 
-		return $vars;
+		$this->assertEquals('notempty', $validation);
 	}
+
+	public function testRulesRequiresOpeningTime()
+	{
+		$form = Form::blank();
+
+		$validation = $form->rules['opening_time'];
+
+		$this->assertEquals('notempty', $validation);
+	}
+
+	public function testRulesRequiresClosingTime()
+	{
+		$form = Form::blank();
+
+		$validation = $form->rules['closing_time'];
+
+		$this->assertEquals('notempty', $validation);
+	}
+
+	public function testRulesRequiresCreated()
+	{
+		$form = Form::blank();
+
+		$validation = $form->rules['created'];
+
+		$this->assertEquals('notempty', $validation);
+	}
+
+	public function testRulesRequiresCreatedBy()
+	{
+		$form = Form::blank();
+
+		$validation = $form->rules['created_by'];
+
+		$this->assertEquals('notempty', $validation);
+	}
+
 }

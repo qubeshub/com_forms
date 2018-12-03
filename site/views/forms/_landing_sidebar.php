@@ -46,7 +46,7 @@ $query = $this->query;
 	</div>
 
 	<div class="row">
-		<a href="<?php echo Route::url('/forms/news'); ?>">
+		<a href="<?php echo Route::url('/forms/forms/new'); ?>">
 			<?php echo Lang::txt('COM_FORMS_LINKS_CREATE_FORM'); ?>
 		</a>
 	</div>

@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * HUBzero CMS
  *
  * Copyright 2005-2015 HUBzero Foundation, LLC.
@@ -25,81 +25,41 @@
  * HUBzero is a registered trademark of Purdue University.
  *
  * @package   hubzero-cms
- * @author    Anthony Fuentes <fuentesa@purdue.edu>
  * @copyright Copyright 2005-2015 HUBzero Foundation, LLC.
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Forms\Site\Controllers;
+// No direct access
+defined('_HZEXEC_') or die();
 
-$componentPath = Component::path('com_forms');
+$form = $this->form;
 
-require_once "$componentPath/helpers/pageBouncer.php";
-require_once "$componentPath/helpers/query.php";
-require_once "$componentPath/models/form.php";
+$fieldsetLegend = Lang::txt('COM_FORMS_FIELDSET_NAME_DESCRIPTION');
+$descriptionLabel = Lang::txt('COM_FORMS_FIELDS_DESCRIPTION');
+$nameLabel = Lang::txt('COM_FORMS_FIELDS_NAME');
+?>
 
-use Components\Forms\Helpers\PageBouncer;
-use Components\Forms\Helpers\Query;
-use Components\Forms\Models\Form;
-use Hubzero\Component\SiteController;
+<fieldset>
 
-class Forms extends SiteController
-{
+	<legend>
+		<?php echo $fieldsetLegend; ?>
+	</legend>
 
-	/*
-	 * Task mapping
-	 *
-	 * @var  array
-	 */
-	protected $_taskMap = [
-		'__default' => 'list'
-	];
+	<div class="grid">
+		<div class="col span12">
+			<label>
+				<?php echo $nameLabel; ?>
+				<input name="form[name]" type="text" value="<?php echo $form->get('name'); ?>">
+			</label>
+		</div>
 
-	/*
-	 * Executes the requested task
-	 *
-	 * @return   void
-	 */
-	public function execute()
-	{
-		$this->bouncer = new PageBouncer([
-			'component' => $this->_option
-		]);
+		<div class="col span12">
+			<label>
+				<?php echo $descriptionLabel; ?>
+				<textarea name="form[description]" value="<?php echo $form->get('description'); ?>">
+				</textarea>
+			</label>
+		</div>
+	</div>
 
-		parent::execute();
-	}
-
-	/*
-	 * Returns searchable list of forms
-	 *
-	 * @return   void
-	 */
-	public function listTask()
-	{
-		$this->bouncer->redirectUnlessAuthorized('core.create');
-
-		$query = Query::load();
-
-		$this->view
-			->set('query', $query)
-			->display();
-	}
-
-	/*
-	 * Renders new form page
-	 *
-	 * @param    object   $form   Form to be created
-	 * @return   void
-	 */
-	public function newTask($form = false)
-	{
-		$this->bouncer->redirectUnlessAuthorized('core.create');
-
-		$form = $form ? $form : Form::blank();
-
-		$this->view
-			->set('form', $form)
-			->display();
-	}
-
-}
+</fieldset>

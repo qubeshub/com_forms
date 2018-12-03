@@ -25,81 +25,38 @@
  * HUBzero is a registered trademark of Purdue University.
  *
  * @package   hubzero-cms
- * @author    Anthony Fuentes <fuentesa@purdue.edu>
  * @copyright Copyright 2005-2015 HUBzero Foundation, LLC.
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Forms\Site\Controllers;
+// No direct access
+defined('_HZEXEC_') or die();
 
-$componentPath = Component::path('com_forms');
+$this->css('formNew');
 
-require_once "$componentPath/helpers/pageBouncer.php";
-require_once "$componentPath/helpers/query.php";
-require_once "$componentPath/models/form.php";
+$breadcrumbs = [
+	'Forms' => '/forms',
+	'New' => '/new'
+];
+$form = $this->form;
+$formAction = '';
+$page = 'New Form';
 
-use Components\Forms\Helpers\PageBouncer;
-use Components\Forms\Helpers\Query;
-use Components\Forms\Models\Form;
-use Hubzero\Component\SiteController;
+$this->view('_breadcrumbs', 'shared')
+	->set('breadcrumbs', $breadcrumbs)
+	->set('page', $page)
+	->display();
+?>
 
-class Forms extends SiteController
-{
+<section class="main section">
+	<div class="grid">
 
-	/*
-	 * Task mapping
-	 *
-	 * @var  array
-	 */
-	protected $_taskMap = [
-		'__default' => 'list'
-	];
+		<?php
+			$this->view('_form_form')
+				->set('action', $formAction)
+				->set('form', $form)
+				->display();
+		?>
 
-	/*
-	 * Executes the requested task
-	 *
-	 * @return   void
-	 */
-	public function execute()
-	{
-		$this->bouncer = new PageBouncer([
-			'component' => $this->_option
-		]);
-
-		parent::execute();
-	}
-
-	/*
-	 * Returns searchable list of forms
-	 *
-	 * @return   void
-	 */
-	public function listTask()
-	{
-		$this->bouncer->redirectUnlessAuthorized('core.create');
-
-		$query = Query::load();
-
-		$this->view
-			->set('query', $query)
-			->display();
-	}
-
-	/*
-	 * Renders new form page
-	 *
-	 * @param    object   $form   Form to be created
-	 * @return   void
-	 */
-	public function newTask($form = false)
-	{
-		$this->bouncer->redirectUnlessAuthorized('core.create');
-
-		$form = $form ? $form : Form::blank();
-
-		$this->view
-			->set('form', $form)
-			->display();
-	}
-
-}
+	</div>
+</section>

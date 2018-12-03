@@ -25,81 +25,34 @@
  * HUBzero is a registered trademark of Purdue University.
  *
  * @package   hubzero-cms
- * @author    Anthony Fuentes <fuentesa@purdue.edu>
  * @copyright Copyright 2005-2015 HUBzero Foundation, LLC.
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Forms\Site\Controllers;
+// No direct access
+defined('_HZEXEC_') or die();
 
-$componentPath = Component::path('com_forms');
+$action = $this->action;
+$form = $this->form;
+$submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_CREATE_FORM');
+?>
 
-require_once "$componentPath/helpers/pageBouncer.php";
-require_once "$componentPath/helpers/query.php";
-require_once "$componentPath/models/form.php";
+<form id="hubForm" class="full" method="post" action="<?php echo $action; ?>">
 
-use Components\Forms\Helpers\PageBouncer;
-use Components\Forms\Helpers\Query;
-use Components\Forms\Models\Form;
-use Hubzero\Component\SiteController;
-
-class Forms extends SiteController
-{
-
-	/*
-	 * Task mapping
-	 *
-	 * @var  array
-	 */
-	protected $_taskMap = [
-		'__default' => 'list'
-	];
-
-	/*
-	 * Executes the requested task
-	 *
-	 * @return   void
-	 */
-	public function execute()
-	{
-		$this->bouncer = new PageBouncer([
-			'component' => $this->_option
-		]);
-
-		parent::execute();
-	}
-
-	/*
-	 * Returns searchable list of forms
-	 *
-	 * @return   void
-	 */
-	public function listTask()
-	{
-		$this->bouncer->redirectUnlessAuthorized('core.create');
-
-		$query = Query::load();
-
-		$this->view
-			->set('query', $query)
-			->display();
-	}
-
-	/*
-	 * Renders new form page
-	 *
-	 * @param    object   $form   Form to be created
-	 * @return   void
-	 */
-	public function newTask($form = false)
-	{
-		$this->bouncer->redirectUnlessAuthorized('core.create');
-
-		$form = $form ? $form : Form::blank();
-
-		$this->view
+	<?php
+		$this->view('_name_description_fields')
 			->set('form', $form)
 			->display();
-	}
 
-}
+		$this->view('_dates_option_fields')
+			->set('form', $form)
+			->display();
+	?>
+
+	<div class="grid button-container">
+		<div class="col span2">
+			<input type="submit" class="btn btn-success" value="<?php echo $submitValue; ?>">
+		</div>
+	</div>
+
+</form>

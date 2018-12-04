@@ -41,7 +41,7 @@ use Components\Forms\Helpers\CrudHelper;
 class CrudHelperTest extends Basic
 {
 
-	public function testFailedToCreateInvokesGetErrors()
+	public function testFailedCreateInvokesGetErrors()
 	{
 		$controller = $this->getMockBuilder('SiteController')
 			->setMethods(['setView', 'newTask'])
@@ -64,7 +64,7 @@ class CrudHelperTest extends Basic
 		$crudHelper->failedCreate($record, '');
 	}
 
-	public function testFailedToCreateInvokesError()
+	public function testFailedCreateInvokesError()
 	{
 		$controller = $this->getMockBuilder('SiteController')
 			->setMethods(['setView', 'newTask'])
@@ -87,7 +87,7 @@ class CrudHelperTest extends Basic
 		$crudHelper->failedCreate($record, '');
 	}
 
-	public function testFailedToCreateInvokesSetView()
+	public function testFailedCreateInvokesSetView()
 	{
 		$controller = $this->getMockBuilder('SiteController')
 			->setMethods(['setView', 'newTask'])
@@ -114,7 +114,7 @@ class CrudHelperTest extends Basic
 		$crudHelper->failedCreate($record, '');
 	}
 
-	public function testFailedToCreateInvokesNewTask()
+	public function testFailedCreateInvokesNewTask()
 	{
 		$controller = $this->getMockBuilder('SiteController')
 			->setMethods(['setView', 'newTask'])

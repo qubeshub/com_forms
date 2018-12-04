@@ -34,19 +34,23 @@ namespace Components\Forms\Site\Controllers;
 
 $componentPath = Component::path('com_forms');
 
+require_once "$componentPath/helpers/crudHelper.php";
 require_once "$componentPath/helpers/pageBouncer.php";
 require_once "$componentPath/helpers/query.php";
 require_once "$componentPath/models/form.php";
 
+use Components\Forms\Helpers\CrudHelper;
 use Components\Forms\Helpers\PageBouncer;
 use Components\Forms\Helpers\Query;
 use Components\Forms\Models\Form;
 use Hubzero\Component\SiteController;
+use \Date;
+use \User;
 
 class Forms extends SiteController
 {
 
-	/*
+	/**
 	 * Task mapping
 	 *
 	 * @var  array
@@ -55,7 +59,7 @@ class Forms extends SiteController
 		'__default' => 'list'
 	];
 
-	/*
+	/**
 	 * Executes the requested task
 	 *
 	 * @return   void
@@ -65,11 +69,15 @@ class Forms extends SiteController
 		$this->bouncer = new PageBouncer([
 			'component' => $this->_option
 		]);
+		$this->crudHelper = new CrudHelper([
+			'controller' => $this,
+			'errorSummary' => Lang::txt('COM_FORMS_FORM_CREATE_ERROR')
+		]);
 
 		parent::execute();
 	}
 
-	/*
+	/**
 	 * Returns searchable list of forms
 	 *
 	 * @return   void
@@ -85,7 +93,7 @@ class Forms extends SiteController
 			->display();
 	}
 
-	/*
+	/**
 	 * Renders new form page
 	 *
 	 * @param    object   $form   Form to be created
@@ -95,9 +103,56 @@ class Forms extends SiteController
 	{
 		$this->bouncer->redirectUnlessAuthorized('core.create');
 
+		$createTaskUrl = Route::url('/forms/forms/create');
 		$form = $form ? $form : Form::blank();
 
 		$this->view
+			->set('formAction', $createTaskUrl)
+			->set('form', $form)
+			->display();
+	}
+
+	/**
+	 * Attempts to create form record using submitted data
+	 *
+	 * @return   void
+	 */
+	public function createTask()
+	{
+		$formData = Request::getArray('form', []);
+		$formData['created'] = Date::toSql();
+		$formData['created_by'] = User::get('id');
+
+		$form = Form::blank();
+		$form->set($formData);
+
+		if ($form->save())
+		{
+			$formId = $form->get('id');
+			$successMessage = Lang::txt('COM_FORMS_FORM_SAVE_SUCCESS');
+			$forwardingUrl = Route::url("/forms/forms/edit/$formId");
+			$this->crudHelper->successfulCreate($successMessage, $forwardingUrl);
+		}
+		else
+		{
+			$this->crudHelper->failedCreate($form);
+		}
+	}
+
+	/**
+	 * Renders form edit page
+	 *
+	 * @return   void
+	 */
+	public function editTask()
+	{
+		$formId = Request::getInt('id');
+		$form = Form::one($formId);
+
+		$updateTaskUrl = Route::url('/forms/forms/update');
+
+		$this->view
+			->set('formAction', $updateTaskUrl)
 			->set('form', $form)
 			->display();
 	}

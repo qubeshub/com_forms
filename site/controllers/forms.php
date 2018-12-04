@@ -34,11 +34,13 @@ namespace Components\Forms\Site\Controllers;
 
 $componentPath = Component::path('com_forms');
 
+require_once "$componentPath/helpers/componentRouter.php";
 require_once "$componentPath/helpers/crudHelper.php";
 require_once "$componentPath/helpers/pageBouncer.php";
 require_once "$componentPath/helpers/query.php";
 require_once "$componentPath/models/form.php";
 
+use Components\Forms\Helpers\ComponentRouter;
 use Components\Forms\Helpers\CrudHelper;
 use Components\Forms\Helpers\PageBouncer;
 use Components\Forms\Helpers\Query;
@@ -69,6 +71,7 @@ class Forms extends SiteController
 		$this->bouncer = new PageBouncer([
 			'component' => $this->_option
 		]);
+		$this->router = new ComponentRouter();
 		$this->crudHelper = new CrudHelper([
 			'controller' => $this,
 			'errorSummary' => Lang::txt('COM_FORMS_FORM_CREATE_ERROR')
@@ -103,7 +106,7 @@ class Forms extends SiteController
 	{
 		$this->bouncer->redirectUnlessAuthorized('core.create');
 
-		$createTaskUrl = Route::url('/forms/forms/create');
+		$createTaskUrl = $this->router->formsCreateUrl();
 		$form = $form ? $form : Form::blank();
 
 		$this->view
@@ -119,6 +122,8 @@ class Forms extends SiteController
 	 */
 	public function createTask()
 	{
+		$this->bouncer->redirectUnlessAuthorized('core.create');
+
 		$formData = Request::getArray('form', []);
 		$formData['created'] = Date::toSql();
 		$formData['created_by'] = User::get('id');
@@ -130,7 +135,7 @@ class Forms extends SiteController
 		{
 			$formId = $form->get('id');
 			$successMessage = Lang::txt('COM_FORMS_FORM_SAVE_SUCCESS');
-			$forwardingUrl = Route::url("/forms/forms/edit/$formId");
+			$forwardingUrl = $this->router->formsEditUrl($formId);
 			$this->crudHelper->successfulCreate($successMessage, $forwardingUrl);
 		}
 		else
@@ -146,10 +151,12 @@ class Forms extends SiteController
 	 */
 	public function editTask()
 	{
+		$this->bouncer->redirectUnlessAuthorized('core.create');
+
 		$formId = Request::getInt('id');
 		$form = Form::one($formId);
 
-		$updateTaskUrl = Route::url('/forms/forms/update');
+		$updateTaskUrl = $this->router->formsUpdateUrl($formId);
 
 		$this->view
 			->set('formAction', $updateTaskUrl)

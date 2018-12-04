@@ -58,8 +58,7 @@ $nameLabel = Lang::txt('COM_FORMS_FIELDS_NAME');
 		<div class="col span12">
 			<label>
 				<?php echo $descriptionLabel; ?>
-				<textarea name="form[description]"><?php echo $formDescription; ?>
-				</textarea>
+				<textarea name="form[description]"><?php echo $formDescription; ?></textarea>
 			</label>
 		</div>
 	</div>

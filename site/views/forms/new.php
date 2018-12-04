@@ -32,15 +32,16 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('formNew');
+$this->css('formForm');
 
 $breadcrumbs = [
 	'Forms' => '/forms',
 	'New' => '/new'
 ];
 $form = $this->form;
-$formAction = '';
+$formAction = $this->formAction;
 $page = 'New Form';
+$submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_CREATE_FORM');
 
 $this->view('_breadcrumbs', 'shared')
 	->set('breadcrumbs', $breadcrumbs)
@@ -55,6 +56,7 @@ $this->view('_breadcrumbs', 'shared')
 			$this->view('_form_form')
 				->set('action', $formAction)
 				->set('form', $form)
+				->set('submitValue', $submitValue)
 				->display();
 		?>
 

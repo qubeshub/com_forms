@@ -32,27 +32,33 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$action = $this->action;
+$this->css('formForm');
+
+$breadcrumbs = [
+	'Forms' => '/forms',
+	'Edit' => '/edit'
+];
 $form = $this->form;
-$submitValue = $this->submitValue;
+$formAction = $this->formAction;
+$page = 'Edit Form';
+$submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_UPDATE_FORM');
+
+$this->view('_breadcrumbs', 'shared')
+	->set('breadcrumbs', $breadcrumbs)
+	->set('page', $page)
+	->display();
 ?>
 
-<form id="hubForm" class="full" method="post" action="<?php echo $action; ?>">
+<section class="main section">
+	<div class="grid">
+<!-- AF: allow submit text to be passed -->
+		<?php
+			$this->view('_form_form')
+				->set('action', $formAction)
+				->set('form', $form)
+				->set('submitValue', $submitValue)
+				->display();
+		?>
 
-	<?php
-		$this->view('_name_description_fields')
-			->set('form', $form)
-			->display();
-
-		$this->view('_dates_option_fields')
-			->set('form', $form)
-			->display();
-	?>
-
-	<div class="grid button-container">
-		<div class="col span2">
-			<input type="submit" class="btn btn-success" value="<?php echo $submitValue; ?>">
-		</div>
 	</div>
-
-</form>
+</section>

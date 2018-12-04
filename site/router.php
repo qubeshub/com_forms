@@ -74,7 +74,7 @@ class Router extends Base
 		}
 		if (isset($segments[2]))
 		{
-			$vars['id'] = $segments[1];
+			$vars['id'] = $segments[2];
 		}
 
 		return $vars;

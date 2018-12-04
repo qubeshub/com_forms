@@ -72,8 +72,8 @@ $query = $this->query;
 		<div class="content">
 			<?php
 				$this->view('_relative_date_fields', 'shared')
-					->set('selectFieldName', 'query[opening_date_relative_operator]')
-					->set('dateFieldName', 'query[opening_date]')
+					->set('selectFieldName', 'query[opening_time_relative_operator]')
+					->set('dateFieldName', 'query[opening_time]')
 					->display();
 			?>
 		</div>
@@ -90,8 +90,8 @@ $query = $this->query;
 		<div class="content">
 			<?php
 				$this->view('_relative_date_fields', 'shared')
-					->set('selectFieldName', 'query[closing_date_relative_operator]')
-					->set('dateFieldName', 'query[closing_date]')
+					->set('selectFieldName', 'query[closing_time_relative_operator]')
+					->set('dateFieldName', 'query[closing_time]')
 					->display();
 			?>
 		</div>

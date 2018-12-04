@@ -33,6 +33,8 @@
 defined('_HZEXEC_') or die();
 
 $form = $this->form;
+$formName = $form->get('name');
+$formDescription = $form->get('description');
 
 $fieldsetLegend = Lang::txt('COM_FORMS_FIELDSET_NAME_DESCRIPTION');
 $descriptionLabel = Lang::txt('COM_FORMS_FIELDS_DESCRIPTION');
@@ -49,14 +51,14 @@ $nameLabel = Lang::txt('COM_FORMS_FIELDS_NAME');
 		<div class="col span12">
 			<label>
 				<?php echo $nameLabel; ?>
-				<input name="form[name]" type="text" value="<?php echo $form->get('name'); ?>">
+				<input name="form[name]" type="text" value="<?php echo $formName; ?>">
 			</label>
 		</div>
 
 		<div class="col span12">
 			<label>
 				<?php echo $descriptionLabel; ?>
-				<textarea name="form[description]" value="<?php echo $form->get('description'); ?>">
+				<textarea name="form[description]"><?php echo $formDescription; ?>
 				</textarea>
 			</label>
 		</div>

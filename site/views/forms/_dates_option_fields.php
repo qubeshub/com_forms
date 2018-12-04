@@ -32,8 +32,18 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$form = $this->form;
 $fieldsetLegend = Lang::txt('COM_FORMS_FIELDSET_DATES_OPTIONS');
+
+$form = $this->form;
+$formArchived = $form->get('archived');
+$formClosingTime = $form->get('closing_time');
+$formattedClosingTime = $formClosingTime ? (new DateTime($formClosingTime))
+	->format('Y-m-d\TH:i:s') : '';
+$formDisabled = $form->get('disabled');
+$formOpeningTime = $form->get('opening_time');
+$formattedOpeningTime = $formOpeningTime ? (new DateTime($formOpeningTime))
+	->format('Y-m-d\TH:i:s') : '';
+$formResponsesLocked = $form->get('responses_locked');
 
 $archivedLabel = Lang::txt('COM_FORMS_FIELDS_ARCHIVED');
 $closingDateLabel = Lang::txt('COM_FORMS_FIELDS_CLOSING_DATE');
@@ -52,14 +62,20 @@ $responsesLabel = Lang::txt('COM_FORMS_FIELDS_RESPONSES');
 		<div class="col span2">
 			<label>
 				<?php echo $openingDateLabel; ?>
-				<input name="form[opening_date]" type="date">
+				<div class="datetime-container">
+					<input name="form[opening_time]" type="datetime-local"
+						value="<?php echo $formattedOpeningTime; ?>">
+				</div>
 			</label>
 		</div>
 
 		<div class="col span2">
 			<label>
 				<?php echo $closingDateLabel; ?>
-				<input name="form[closing_date]" type="date">
+				<div class="datetime-container">
+					<input name="form[closing_time]" type="datetime-local"
+						value="<?php echo $formattedClosingTime; ?>">
+				</div>
 			</label>
 		</div>
 
@@ -70,8 +86,8 @@ $responsesLabel = Lang::txt('COM_FORMS_FIELDS_RESPONSES');
 					<?php
 						$this->view('_binary_inline_radio_list', 'shared')
 							->set('falseTextKey', 'COM_FORMS_FIELDS_RESPONSES_EDITABLE')
-							->set('flag', $form->get('responses_locked'))
-							->set('name', 'query[responses_locked]')
+							->set('flag', $formResponsesLocked)
+							->set('name', 'form[responses_locked]')
 							->set('trueTextKey', 'COM_FORMS_FIELDS_RESPONSES_LOCKED')
 							->display();
 					?>
@@ -85,7 +101,7 @@ $responsesLabel = Lang::txt('COM_FORMS_FIELDS_RESPONSES');
 				<div class="radios-container">
 					<?php
 						$this->view('_binary_inline_radio_list', 'shared')
-							->set('flag', $form->get('disabled'))
+							->set('flag', $formDisabled)
 							->set('name', 'form[disabled]')
 							->display();
 					?>
@@ -99,7 +115,7 @@ $responsesLabel = Lang::txt('COM_FORMS_FIELDS_RESPONSES');
 				<div class="radios-container">
 					<?php
 						$this->view('_binary_inline_radio_list', 'shared')
-							->set('flag', $form->get('archived'))
+							->set('flag', $formArchived)
 							->set('name', 'form[archived]')
 							->display();
 					?>

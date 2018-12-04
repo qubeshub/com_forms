@@ -18,7 +18,16 @@
 	margin: 0 1.15em 0 0;
 }
 
-.radios-container > .inline-radio {
+.datetime-container {
 	display: flex;
 	align-items: center;
+	padding: 1.25em 0 0 0;
+}
+
+input[type=datetime-local] {
+	border: 1px solid rgba(0,0,0,0.15);
+	background-color: rgba(200,200,200,0.15);
+	font-family: 'OpenSans','Helvetica Neue', Arial, sans-serif;
+	font-size: .95em;
+	line-height: 1.61803399em;
 }

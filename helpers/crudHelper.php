@@ -33,10 +33,12 @@ namespace Components\Forms\Helpers;
 
 $componentPath = Component::path('com_forms');
 
+require_once "$componentPath/helpers/appWrapper.php";
 require_once "$componentPath/helpers/notifyWrapper.php";
 
 use Hubzero\Utility\Arr;
 use Components\Forms\Helpers\NotifyWrapper as Notify;
+use Components\Forms\Helpers\AppWrapper as Router;
 
 class CrudHelper
 {
@@ -52,6 +54,20 @@ class CrudHelper
 		$this->_controller = $args['controller'];
 		$this->_errorSummary = Arr::getValue($args, 'errorSummary', '');
 		$this->_notify = Arr::getValue($args, 'notify', new NotifyWrapper());
+		$this->_router = Arr::getValue($args, 'router', new AppWrapper());
+	}
+
+	/**
+	 * Handles successful creation of record based on user inputs
+	 *
+	 * @param    string   $successMessage   Create sucess message
+	 * @param    string   $url              URL to redirect user to
+	 * @return   void
+	 */
+	public function successfulCreate($successMessage, $url)
+	{
+		$this->_notifyUserOfSuccess($successMessage);
+		$this->_redirectUser($url);
 	}
 
 	/**
@@ -64,6 +80,28 @@ class CrudHelper
 	{
 		$this->_notifyUserOfFailure($record);
 		$this->_forwardUserToNewPage($record);
+	}
+
+	/**
+	 * Notifies user of successful record creation
+	 *
+	 * @param    string   $successMessage   Create sucess message
+	 * @return   void
+	 */
+	protected function _notifyUserOfSuccess($successMessage)
+	{
+		$this->_notify->success($successMessage);
+	}
+
+	/**
+	 * Redirects user to given URL
+	 *
+	 * @param    string   $url   URL to redirect user to
+	 * @return   void
+	 */
+	protected function _redirectUser($url)
+	{
+		$this->_router->redirect($url);
 	}
 
 	/**

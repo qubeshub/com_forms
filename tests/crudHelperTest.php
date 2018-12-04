@@ -41,6 +41,50 @@ use Components\Forms\Helpers\CrudHelper;
 class CrudHelperTest extends Basic
 {
 
+	public function testSuccessfulCreateInvokesSuccess()
+	{
+		$controller = $this->getMockBuilder('SiteController')->getMock();
+		$notify = $this->getMockBuilder('NotifyWrapper')
+			->setMethods(['success'])
+			->getMock();
+		$router = $this->getMockBuilder('AppWrapper')
+			->setMethods(['redirect'])
+			->getMock();
+		$crudHelper = new CrudHelper([
+			'controller' => $controller,
+			'notify' => $notify,
+			'router' => $router
+		]);
+
+		$notify->expects($this->once())
+			->method('success');
+
+		$crudHelper->successfulCreate('message', 'url');
+	}
+
+	public function testSuccessfulCreateInvokesRedirect()
+	{
+		$url = 'url';
+		$controller = $this->getMockBuilder('SiteController')->getMock();
+		$notify = $this->getMockBuilder('NotifyWrapper')
+			->setMethods(['success'])
+			->getMock();
+		$router = $this->getMockBuilder('AppWrapper')
+			->setMethods(['redirect'])
+			->getMock();
+		$crudHelper = new CrudHelper([
+			'controller' => $controller,
+			'notify' => $notify,
+			'router' => $router
+		]);
+
+		$router->expects($this->once())
+			->method('redirect')
+			->with($this->equalTo($url));
+
+		$crudHelper->successfulCreate('message', $url);
+	}
+
 	public function testFailedCreateInvokesGetErrors()
 	{
 		$controller = $this->getMockBuilder('SiteController')

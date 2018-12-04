@@ -49,8 +49,9 @@ class CrudHelper
 	 */
 	public function __construct($args = [])
 	{
-		$this->controller = $args['controller'];
-		$this->notify = Arr::getValue($args, 'notify', new NotifyWrapper());
+		$this->_controller = $args['controller'];
+		$this->_errorSummary = Arr::getValue($args, 'errorSummary', '');
+		$this->_notify = Arr::getValue($args, 'notify', new NotifyWrapper());
 	}
 
 	/**
@@ -59,19 +60,55 @@ class CrudHelper
 	 * @param    object   $record   Record that failed to be created
 	 * @return   void
 	 */
-	public function failedCreate($record, $errorSummary)
+	public function failedCreate($record)
 	{
-		$errorMessage = "$errorSummary <br/>";
+		$this->_notifyUserOfFailure($record);
+		$this->_forwardUserToNewPage($record);
+	}
 
-		foreach ($record->getErrors() as $error)
+	/**
+	 * Notifies user of failed record creation
+	 *
+	 * @param    object   $record   Record that failed to be created
+	 * @return   void
+	 */
+	protected function _notifyUserOfFailure($record)
+	{
+		$errors = $record->getErrors();
+
+		$errorMessage = $this->_generateErrorMessage($errors);
+
+		$this->_notify->error($errorMessage);
+	}
+
+	/**
+	 * Forwards user to new record creation page
+	 *
+	 * @param    object   $record   Record that failed to be created
+	 * @return   void
+	 */
+	protected function _forwardUserToNewPage($record)
+	{
+		$this->_controller->setView(null, 'new');
+		$this->_controller->newTask($record);
+	}
+
+	/**
+	 * Generates record creation error message
+	 *
+	 * @param    array    $errors   Record's errors
+	 * @return   void
+	 */
+	protected function _generateErrorMessage($errors)
+	{
+		$errorMessage = "$this->_errorSummary <br/>";
+
+		foreach ($errors as $error)
 		{
 			$errorMessage .= "<br/>• $error";
 		}
 
-		$this->notify->error($errorMessage);
-
-		$this->controller->setView(null, 'new');
-		$this->controller->newTask($record);
+		return $errorMessage;
 	}
 
 }

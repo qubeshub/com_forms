@@ -150,4 +150,13 @@ class QueryTest extends Basic
 		$this->assertEquals($state['namespace'], $namespace);
 	}
 
+	public function testNewQueryReturnsEmptyErrorsArray()
+	{
+		$query = new Query();
+
+		$errors = $query->getErrors();
+
+		$this->assertEquals([], $errors);
+	}
+
 }

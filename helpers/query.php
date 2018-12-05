@@ -136,7 +136,7 @@ class Query
 	 */
 	protected function _isValid()
 	{
-		$isValid = empty($this->_getErrors());
+		$isValid = empty($this->getErrors());
 
 		return $isValid;
 	}
@@ -159,7 +159,7 @@ class Query
 	 *
 	 * @return   array
 	 */
-	protected function _getErrors()
+	public function getErrors()
 	{
 		$errors = $this->_errors;
 

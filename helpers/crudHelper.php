@@ -67,7 +67,7 @@ class CrudHelper
 	public function successfulCreate($url, $successMessage = '')
 	{
 		$this->_notifyUserOfSuccess($successMessage);
-		$this->_redirectUser($url);
+		$this->_router->redirect($url);
 	}
 
 	/**
@@ -94,17 +94,6 @@ class CrudHelper
 		{
 			$this->_notify->success($successMessage);
 		}
-	}
-
-	/**
-	 * Redirects user to given URL
-	 *
-	 * @param    string   $url   URL to redirect user to
-	 * @return   void
-	 */
-	protected function _redirectUser($url)
-	{
-		$this->_router->redirect($url);
 	}
 
 	/**

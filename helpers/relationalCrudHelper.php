@@ -31,41 +31,40 @@
 
 namespace Components\Forms\Helpers;
 
-use Hubzero\Utility\Arr;
-
 $componentPath = Component::path('com_forms');
 
-require_once "$componentPath/helpers/appWrapper.php";
-require_once "$componentPath/helpers/notifyWrapper.php";
+require_once "$componentPath/helpers/crudHelper.php";
 
-use Components\Forms\Helpers\AppWrapper;
-use Components\Forms\Helpers\NotifyWrapper;
+use Components\Forms\Helpers\CrudHelper;
 
-class CrudHelper
+class RelationalCrudHelper extends CrudHelper
 {
 
 	/**
-	 * Constructs CrudHelper instance
+	 * Constructs RelationalCrudHelper instance
 	 *
 	 * @param    array   $args   Instantiation state
 	 * @return   void
 	 */
 	public function __construct($args = [])
 	{
-		$this->_errorSummary = Arr::getValue($args, 'errorSummary', '');
-		$this->_notify = Arr::getValue($args, 'notify', new NotifyWrapper());
-		$this->_router = Arr::getValue($args, 'router', new AppWrapper());
+		$this->_controller = $args['controller'];
+
+		parent::__construct($args);
 	}
 
 	/**
 	 * Handles successful creation of record based on user inputs
 	 *
-	 * @param    string   $url   URL to redirect user to
+	 * @param    string   $successMessage   Create sucess message
+	 * @param    string   $url              URL to redirect user to
 	 * @return   void
 	 */
-	public function successfulCreate($url)
+	public function successfulCreate($url, $successMessage = '')
 	{
-		$this->_router->redirect($url);
+		$this->_notifyUserOfSuccess($successMessage);
+
+		parent::successfulCreate($url);
 	}
 
 	/**
@@ -76,40 +75,35 @@ class CrudHelper
 	 */
 	public function failedCreate($record)
 	{
-		$this->_notifyUserOfFailure($record);
+		$this->_forwardUserToNewPage($record);
+
+		parent::failedCreate($record);
 	}
 
 	/**
-	 * Notifies user of failed record creation
+	 * Notifies user of successful record creation
+	 *
+	 * @param    string   $successMessage   Create sucess message
+	 * @return   void
+	 */
+	protected function _notifyUserOfSuccess($successMessage)
+	{
+		if (!empty($successMessage))
+		{
+			$this->_notify->success($successMessage);
+		}
+	}
+
+	/**
+	 * Forwards user to new record creation page
 	 *
 	 * @param    object   $record   Record that failed to be created
 	 * @return   void
 	 */
-	protected function _notifyUserOfFailure($record)
+	protected function _forwardUserToNewPage($record)
 	{
-		$errors = $record->getErrors();
-
-		$errorMessage = $this->_generateErrorMessage($errors);
-
-		$this->_notify->error($errorMessage);
-	}
-
-	/**
-	 * Generates record creation error message
-	 *
-	 * @param    array    $errors   Record's errors
-	 * @return   void
-	 */
-	protected function _generateErrorMessage($errors)
-	{
-		$errorMessage = "$this->_errorSummary <br/>";
-
-		foreach ($errors as $error)
-		{
-			$errorMessage .= "<br/>• $error";
-		}
-
-		return $errorMessage;
+		$this->_controller->setView(null, 'new');
+		$this->_controller->newTask($record);
 	}
 
 }

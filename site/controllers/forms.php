@@ -35,13 +35,13 @@ namespace Components\Forms\Site\Controllers;
 $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/componentRouter.php";
-require_once "$componentPath/helpers/crudHelper.php";
+require_once "$componentPath/helpers/relationalCrudHelper.php";
 require_once "$componentPath/helpers/pageBouncer.php";
 require_once "$componentPath/helpers/query.php";
 require_once "$componentPath/models/form.php";
 
 use Components\Forms\Helpers\ComponentRouter;
-use Components\Forms\Helpers\CrudHelper;
+use Components\Forms\Helpers\RelationalCrudHelper as CrudHelper;
 use Components\Forms\Helpers\PageBouncer;
 use Components\Forms\Helpers\Query;
 use Components\Forms\Models\Form;

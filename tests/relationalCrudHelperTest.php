@@ -33,17 +33,16 @@ namespace Components\Forms\Tests;
 
 $componentPath = Component::path('com_forms');
 
-require_once "$componentPath/helpers/crudHelper.php";
+require_once "$componentPath/helpers/relationalCrudHelper.php";
 
 use Hubzero\Test\Basic;
-use Components\Forms\Helpers\CrudHelper;
+use Components\Forms\Helpers\RelationalCrudHelper as CrudHelper;
 
-class CrudHelperTest extends Basic
+class RelationalCrudHelperTest extends Basic
 {
 
-	public function testSuccessfulCreateInvokesRedirect()
+	public function testSuccessfulCreateDoesNotInvokeSuccessIfNoMessage()
 	{
-		$url = 'url';
 		$controller = $this->getMockBuilder('SiteController')->getMock();
 		$notify = $this->getMockBuilder('NotifyWrapper')
 			->setMethods(['success'])
@@ -57,42 +56,39 @@ class CrudHelperTest extends Basic
 			'router' => $router
 		]);
 
-		$router->expects($this->once())
-			->method('redirect')
-			->with($this->equalTo($url));
+		$notify->expects($this->never())
+			->method('success');
+
+		$crudHelper->successfulCreate('url');
+	}
+
+	public function testSuccessfulCreateInvokesSuccess()
+	{
+		$controller = $this->getMockBuilder('SiteController')->getMock();
+		$notify = $this->getMockBuilder('NotifyWrapper')
+			->setMethods(['success'])
+			->getMock();
+		$router = $this->getMockBuilder('AppWrapper')
+			->setMethods(['redirect'])
+			->getMock();
+		$crudHelper = new CrudHelper([
+			'controller' => $controller,
+			'notify' => $notify,
+			'router' => $router
+		]);
+
+		$notify->expects($this->once())
+			->method('success');
 
 		$crudHelper->successfulCreate('url', 'message');
 	}
 
-	public function testFailedCreateInvokesGetErrors()
+	public function testFailedCreateInvokesSetView()
 	{
 		$controller = $this->getMockBuilder('SiteController')
 			->setMethods(['setView', 'newTask'])
 			->getMock();
-		$notify = $this->getMockBuilder('NotifyWrapper')
-			->setMethods(['error'])
-			->getMock();
-		$record = $this->getMockBuilder('Relational')
-			->setMethods(['getErrors'])
-			->getMock();
-		$record->method('getErrors')->willReturn(['']);
-		$crudHelper = new CrudHelper([
-			'controller' => $controller,
-			'notify' => $notify
-		]);
-
-		$record->expects($this->once())
-			->method('getErrors');
-
-		$crudHelper->failedCreate($record, '');
-	}
-
-	public function testFailedCreateInvokesError()
-	{
-		$controller = $this->getMockBuilder('SiteController')
-			->setMethods(['setView', 'newTask'])
-			->getMock();
-		$notify = $this->getMockBuilder('NotifyWrapper')
+		$notify = $this->getMockBuilder('Notify')
 			->setMethods(['error'])
 			->getMock();
 		$record = $this->getMockBuilder('Relational')
@@ -104,8 +100,38 @@ class CrudHelperTest extends Basic
 			'notify' => $notify
 		]);
 
-		$notify->expects($this->once())
-			->method('error');
+		$controller->expects($this->once())
+			->method('setView')
+			->with(
+				$this->equalTo(null),
+				$this->equalTo('new')
+			);
+
+		$crudHelper->failedCreate($record, '');
+	}
+
+	public function testFailedCreateInvokesNewTask()
+	{
+		$controller = $this->getMockBuilder('SiteController')
+			->setMethods(['setView', 'newTask'])
+			->getMock();
+		$notify = $this->getMockBuilder('Notify')
+			->setMethods(['error'])
+			->getMock();
+		$record = $this->getMockBuilder('Relational')
+			->setMethods(['getErrors'])
+			->getMock();
+		$record->method('getErrors')->willReturn([]);
+		$crudHelper = new CrudHelper([
+			'controller' => $controller,
+			'notify' => $notify
+		]);
+
+		$controller->expects($this->once())
+			->method('newTask')
+			->with(
+				$this->equalTo($record)
+			);
 
 		$crudHelper->failedCreate($record, '');
 	}

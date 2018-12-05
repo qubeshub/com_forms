@@ -33,9 +33,9 @@ namespace Components\Forms\Helpers;
 
 $componentPath = Component::path('com_forms');
 
-require_once "$componentPath/helpers/requestWrapper.php";
+require_once "$componentPath/helpers/mockProxy.php";
 
-use Components\Forms\Helpers\RequestWrapper;
+use Components\Forms\Helpers\MockProxy;
 use Hubzero\Utility\Arr;
 
 class Params
@@ -51,7 +51,7 @@ class Params
 	 */
 	public function __construct($args = [])
 	{
-		$this->_request = Arr::getValue($args, 'request', new RequestWrapper());
+		$this->_request = Arr::getValue($args, 'request', new MockProxy(['class' => 'Request']));
 		$this->_whitelist = $args['whitelist'];
 	}
 

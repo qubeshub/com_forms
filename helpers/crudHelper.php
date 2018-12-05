@@ -35,11 +35,9 @@ use Hubzero\Utility\Arr;
 
 $componentPath = Component::path('com_forms');
 
-require_once "$componentPath/helpers/appWrapper.php";
-require_once "$componentPath/helpers/notifyWrapper.php";
+require_once "$componentPath/helpers/mockProxy.php";
 
-use Components\Forms\Helpers\AppWrapper;
-use Components\Forms\Helpers\NotifyWrapper;
+use Components\Forms\Helpers\MockProxy;
 
 class CrudHelper
 {
@@ -53,8 +51,8 @@ class CrudHelper
 	public function __construct($args = [])
 	{
 		$this->_errorSummary = Arr::getValue($args, 'errorSummary', '');
-		$this->_notify = Arr::getValue($args, 'notify', new NotifyWrapper());
-		$this->_router = Arr::getValue($args, 'router', new AppWrapper());
+		$this->_notify = Arr::getValue($args, 'notify', new MockProxy(['class' => 'Notify']));
+		$this->_router = Arr::getValue($args, 'router', new MockProxy(['class' => 'App']));
 	}
 
 	/**

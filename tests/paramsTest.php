@@ -44,7 +44,7 @@ class ParamsTest extends Basic
 	public function testGetInvokesGetArrayWithGivenKey()
 	{
 		$key = 'test';
-		$request = $this->getMockBuilder('RequestWrapper')
+		$request = $this->getMockBuilder('MockProxy')
 			->setMethods(['getArray'])
 			->getMock();
 		$request->method('getArray')->willReturn([]);
@@ -63,7 +63,7 @@ class ParamsTest extends Basic
 	public function testGetFiltersKeysCorrectly()
 	{
 		$whitelist = ['a', 'b'];
-		$request = $this->getMockBuilder('RequestWrapper')
+		$request = $this->getMockBuilder('MockProxy')
 			->setMethods(['getArray'])
 			->getMock();
 		$request->method('getArray')->willReturn([

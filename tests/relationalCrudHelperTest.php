@@ -44,10 +44,10 @@ class RelationalCrudHelperTest extends Basic
 	public function testSuccessfulCreateDoesNotInvokeSuccessIfNoMessage()
 	{
 		$controller = $this->getMockBuilder('SiteController')->getMock();
-		$notify = $this->getMockBuilder('NotifyWrapper')
+		$notify = $this->getMockBuilder('MockProxy')
 			->setMethods(['success'])
 			->getMock();
-		$router = $this->getMockBuilder('AppWrapper')
+		$router = $this->getMockBuilder('MockProxy')
 			->setMethods(['redirect'])
 			->getMock();
 		$crudHelper = new CrudHelper([
@@ -65,10 +65,10 @@ class RelationalCrudHelperTest extends Basic
 	public function testSuccessfulCreateInvokesSuccess()
 	{
 		$controller = $this->getMockBuilder('SiteController')->getMock();
-		$notify = $this->getMockBuilder('NotifyWrapper')
+		$notify = $this->getMockBuilder('MockProxy')
 			->setMethods(['success'])
 			->getMock();
-		$router = $this->getMockBuilder('AppWrapper')
+		$router = $this->getMockBuilder('MockProxy')
 			->setMethods(['redirect'])
 			->getMock();
 		$crudHelper = new CrudHelper([

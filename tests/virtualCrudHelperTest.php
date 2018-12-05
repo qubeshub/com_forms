@@ -44,14 +44,14 @@ class VirtualCrudHelperTest extends Basic
 	public function testfailedCreateInvokesRedirect()
 	{
 		$url = 'url';
-		$notify = $this->getMockBuilder('NotifyWrapper')
+		$notify = $this->getMockBuilder('MockProxy')
 			->setMethods(['error'])
 			->getMock();
 		$record = $this->getMockBuilder('Relational')
 			->setMethods(['getErrors'])
 			->getMock();
 		$record->method('getErrors')->willReturn([]);
-		$router = $this->getMockBuilder('AppWrapper')
+		$router = $this->getMockBuilder('MockProxy')
 			->setMethods(['redirect'])
 			->getMock();
 		$crudHelper = new CrudHelper([

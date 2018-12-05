@@ -45,10 +45,10 @@ class CrudHelperTest extends Basic
 	{
 		$url = 'url';
 		$controller = $this->getMockBuilder('SiteController')->getMock();
-		$notify = $this->getMockBuilder('NotifyWrapper')
+		$notify = $this->getMockBuilder('MockProxy')
 			->setMethods(['success'])
 			->getMock();
-		$router = $this->getMockBuilder('AppWrapper')
+		$router = $this->getMockBuilder('MockProxy')
 			->setMethods(['redirect'])
 			->getMock();
 		$crudHelper = new CrudHelper([
@@ -69,7 +69,7 @@ class CrudHelperTest extends Basic
 		$controller = $this->getMockBuilder('SiteController')
 			->setMethods(['setView', 'newTask'])
 			->getMock();
-		$notify = $this->getMockBuilder('NotifyWrapper')
+		$notify = $this->getMockBuilder('MockProxy')
 			->setMethods(['error'])
 			->getMock();
 		$record = $this->getMockBuilder('Relational')
@@ -92,7 +92,7 @@ class CrudHelperTest extends Basic
 		$controller = $this->getMockBuilder('SiteController')
 			->setMethods(['setView', 'newTask'])
 			->getMock();
-		$notify = $this->getMockBuilder('NotifyWrapper')
+		$notify = $this->getMockBuilder('MockProxy')
 			->setMethods(['error'])
 			->getMock();
 		$record = $this->getMockBuilder('Relational')

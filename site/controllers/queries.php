@@ -35,13 +35,13 @@ $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/appWrapper.php";
 require_once "$componentPath/helpers/componentRouter.php";
-require_once "$componentPath/helpers/crudHelper.php";
+require_once "$componentPath/helpers/virtualCrudHelper.php";
 require_once "$componentPath/helpers/pageBouncer.php";
 require_once "$componentPath/helpers/query.php";
 
 use Components\Forms\Helpers\AppWrapper as Router;
 use Components\Forms\Helpers\ComponentRouter;
-use Components\Forms\Helpers\CrudHelper;
+use Components\Forms\Helpers\VirtualCrudHelper as CrudHelper;
 use Components\Forms\Helpers\PageBouncer;
 use Components\Forms\Helpers\Query;
 use Hubzero\Component\SiteController;
@@ -86,25 +86,12 @@ class Queries extends SiteController
 			'component' => $this->_option
 		]);
 		$this->crudHelper = new CrudHelper([
-			'controller' => $this,
-			'errorSummary' => Lang::txt('COM_FORMS_QUERY_SAVE_ERROR')
+			'errorSummary' => Lang::txt('COM_FORMS_QUERY_UPDATE_ERROR')
 		]);
 		$this->router = new Router();
 		$this->routes = new ComponentRouter();
 
 		parent::execute();
-	}
-
-	/**
-	 * Redirects user to form list page
-	 *
-	 * @return   void
-	 */
-	public function newTask()
-	{
-		$formListUrl = $this->routes->formListUrl();
-
-		$this->router->redirect($formListUrl);
 	}
 
 	/**
@@ -117,6 +104,7 @@ class Queries extends SiteController
 		Request::checkToken();
 		$this->bouncer->redirectUnlessAuthorized('core.create');
 
+		$forwardingUrl = $this->routes->formListUrl();
 		$queryData = Request::getArray('query', []);
 		$queryData = Arr::filterKeys($queryData, self::$_paramWhitelist);
 
@@ -125,12 +113,11 @@ class Queries extends SiteController
 
 		if ($query->save())
 		{
-			$forwardingUrl = $this->routes->formListUrl();
 			$this->crudHelper->successfulCreate($forwardingUrl);
 		}
 		else
 		{
-			$this->crudHelper->failedCreate($query);
+			$this->crudHelper->failedCreate($query, $forwardingUrl);
 		}
 	}
 

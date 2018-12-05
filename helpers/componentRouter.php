@@ -94,6 +94,34 @@ class ComponentRouter
 	}
 
 	/**
+	 * Generates form list URL
+	 *
+	 * @return   string
+	 */
+	public function formListUrl()
+	{
+		$segments = ['forms', 'list'];
+
+		$url = $this->_generateUrl($segments);
+
+		return $url;
+	}
+
+	/**
+	 * Generates search update url
+	 *
+	 * @return   string
+	 */
+	public function queryUpdateUrl()
+	{
+		$segments = ['queries', 'update'];
+
+		$url = $this->_generateUrl($segments);
+
+		return $url;
+	}
+
+	/**
 	 * Generates URL based on given segments
 	 *
 	 * @param    array    $segments   URL segments

@@ -73,4 +73,24 @@ class ComponentRouterTest extends Basic
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
 
+	public function testFormListUrlCorrectUrl()
+	{
+		$componentRouter = new ComponentRouter();
+		$expectedUrl = '/forms/forms/list';
+
+		$generatedUrl = $componentRouter->formListUrl();
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
+	public function testQueryUpdateUrlReturnsCorrectUrl()
+	{
+		$componentRouter = new ComponentRouter();
+		$expectedUrl = '/forms/queries/update';
+
+		$generatedUrl = $componentRouter->queryUpdateUrl();
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
 }

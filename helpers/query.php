@@ -136,7 +136,7 @@ class Query
 	 */
 	protected function _isValid()
 	{
-		$isValid = empty($this->getErrors());
+		$isValid = empty($this->_getErrors());
 
 		return $isValid;
 	}

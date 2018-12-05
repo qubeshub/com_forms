@@ -105,10 +105,12 @@ class Forms extends SiteController
 	{
 		$this->bouncer->redirectUnlessAuthorized('core.create');
 
+		$searchFormAction = $this->router->queryUpdateUrl();
 		$query = Query::load();
 
 		$this->view
 			->set('query', $query)
+			->set('searchFormAction', $searchFormAction)
 			->display();
 	}
 
@@ -140,7 +142,7 @@ class Forms extends SiteController
 	{
 		$this->bouncer->redirectUnlessAuthorized('core.create');
 
-		$formData = Request::getArray('form', [], null);
+		$formData = Request::getArray('form', []);
 		$formData = Arr::filterKeys($formData, self::$_paramWhitelist);
 		$formData['created'] = Date::toSql();
 		$formData['created_by'] = User::get('id');
@@ -151,9 +153,9 @@ class Forms extends SiteController
 		if ($form->save())
 		{
 			$formId = $form->get('id');
-			$successMessage = Lang::txt('COM_FORMS_FORM_SAVE_SUCCESS');
 			$forwardingUrl = $this->router->formsEditUrl($formId);
-			$this->crudHelper->successfulCreate($successMessage, $forwardingUrl);
+			$successMessage = Lang::txt('COM_FORMS_FORM_SAVE_SUCCESS');
+			$this->crudHelper->successfulCreate($forwardingUrl, $successMessage);
 		}
 		else
 		{

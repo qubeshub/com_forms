@@ -59,7 +59,28 @@ class CrudHelperTest extends Basic
 		$notify->expects($this->once())
 			->method('success');
 
-		$crudHelper->successfulCreate('message', 'url');
+		$crudHelper->successfulCreate('url', 'message');
+	}
+
+	public function testSuccessfulCreateDoesNotInvokeSuccessIfNoMessage()
+	{
+		$controller = $this->getMockBuilder('SiteController')->getMock();
+		$notify = $this->getMockBuilder('NotifyWrapper')
+			->setMethods(['success'])
+			->getMock();
+		$router = $this->getMockBuilder('AppWrapper')
+			->setMethods(['redirect'])
+			->getMock();
+		$crudHelper = new CrudHelper([
+			'controller' => $controller,
+			'notify' => $notify,
+			'router' => $router
+		]);
+
+		$notify->expects($this->never())
+			->method('success');
+
+		$crudHelper->successfulCreate('url');
 	}
 
 	public function testSuccessfulCreateInvokesRedirect()
@@ -82,7 +103,7 @@ class CrudHelperTest extends Basic
 			->method('redirect')
 			->with($this->equalTo($url));
 
-		$crudHelper->successfulCreate('message', $url);
+		$crudHelper->successfulCreate('url', 'message');
 	}
 
 	public function testFailedCreateInvokesGetErrors()

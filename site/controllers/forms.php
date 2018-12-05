@@ -46,6 +46,7 @@ use Components\Forms\Helpers\PageBouncer;
 use Components\Forms\Helpers\Query;
 use Components\Forms\Models\Form;
 use Hubzero\Component\SiteController;
+use Hubzero\Utility\Arr;
 use \Date;
 use \User;
 
@@ -59,6 +60,21 @@ class Forms extends SiteController
 	 */
 	protected $_taskMap = [
 		'__default' => 'list'
+	];
+
+	/**
+	 * Parameter whitelist
+	 *
+	 * @var  array
+	 */
+	protected static $_paramWhitelist = [
+		'archived',
+		'closing_time',
+		'description',
+		'disabled',
+		'name',
+		'opening_time',
+		'responses_locked',
 	];
 
 	/**
@@ -124,7 +140,8 @@ class Forms extends SiteController
 	{
 		$this->bouncer->redirectUnlessAuthorized('core.create');
 
-		$formData = Request::getArray('form', []);
+		$formData = Request::getArray('form', [], null);
+		$formData = Arr::filterKeys($formData, self::$_paramWhitelist);
 		$formData['created'] = Date::toSql();
 		$formData['created_by'] = User::get('id');
 

@@ -44,14 +44,16 @@ class PageBouncerTest extends Basic
 
 	public function testRedirectUnlessAuthorizedInvokesAuthorize()
 	{
-		$this->markTestSkipped('mocking static functions currently unavailable');
-
-		$permitter = $this->getMockBuilder('User')
+		$permitter = $this->getMockBuilder('MockProxy')
 			->setMethods(['authorize'])
+			->getMock();
+		$router = $this->getMockBuilder('MockProxy')
+			->setMethods(['redirect'])
 			->getMock();
 		$bouncer = new PageBouncer([
 			'component' => 'com_forms',
-			'permitter' => $permitter
+			'permitter' => $permitter,
+			'router' => $router
 		]);
 
 		$permitter->expects($this->once())
@@ -62,13 +64,15 @@ class PageBouncerTest extends Basic
 
 	public function testRedirectUnlessAuthorizedInvokesRedirect()
 	{
-		$this->markTestSkipped('mocking static functions currently unavailable');
-
-		$router = $this->getMockBuilder('User')
+		$permitter = $this->getMockBuilder('MockProxy')
+			->setMethods(['authorize'])
+			->getMock();
+		$router = $this->getMockBuilder('MockProxy')
 			->setMethods(['redirect'])
 			->getMock();
 		$bouncer = new PageBouncer([
 			'component' => 'com_forms',
+			'permitter' => $permitter,
 			'router' => $router
 		]);
 

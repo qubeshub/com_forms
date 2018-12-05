@@ -32,9 +32,10 @@
 
 namespace Components\Forms\Helpers;
 
+$componentPath = Component::path('com_forms');
+
+use Components\Forms\Helpers\MockProxy;
 use Hubzero\Utility\Arr;
-use App;
-use User;
 
 class PageBouncer
 {
@@ -69,8 +70,8 @@ class PageBouncer
 	public function __construct($args = [])
 	{
 		$this->_componentName = $args['component'];
-		$this->_permitter = Arr::getValue($args, 'permitter', 'User');
-		$this->_router = Arr::getValue($args, 'router', 'App');
+		$this->_permitter = Arr::getValue($args, 'permitter', new MockProxy(['class' => 'User']));
+		$this->_router = Arr::getValue($args, 'router', new MockProxy(['class' => 'App']));
 	}
 
 	/**
@@ -79,13 +80,13 @@ class PageBouncer
 	 * @param    string   $permission   Permission name
 	 * @return   void
 	 */
-	public function redirectUnlessAuthorized($permission)
+	public function redirectUnlessAuthorized($permission, $url = '/')
 	{
 		$isAuthorized = $this->_currentIsAuthorized($permission);
 
 		if (!$isAuthorized)
 		{
-			$this->_redirectTo('/');
+			$this->_router->redirect($url);
 		}
 	}
 
@@ -98,24 +99,10 @@ class PageBouncer
 	protected function _currentIsAuthorized($permission)
 	{
 		$component = $this->_componentName;
-		$permitter = $this->_permitter;
 
-		$isAuthorized = $permitter::authorize($permission, $component);
+		$isAuthorized = $this->_permitter->authorize($permission, $component);
 
 		return $isAuthorized;
-	}
-
-	/**
-	 * Redirects user to given URL
-	 *
-	 * @param    string   $url   URL to redirect to
-	 * @return   void
-	 */
-	protected function _redirectTo($url)
-	{
-		$router = $this->_router;
-
-		$router::redirect($url);
 	}
 
 }

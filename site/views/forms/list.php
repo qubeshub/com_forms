@@ -40,6 +40,7 @@ $breadcrumbs = [
 ];
 $page = 'Forms list';
 $query = $this->query;
+$searchFormAction = $this->searchFormAction;
 
 $this->view('_breadcrumbs', 'shared')
 	->set('breadcrumbs', $breadcrumbs)
@@ -54,6 +55,7 @@ $this->view('_breadcrumbs', 'shared')
 			<?php
 				$this->view('_landing_sidebar')
 					->set('query', $query)
+					->set('searchFormAction', $searchFormAction)
 					->display();
 			?>
 		</div>

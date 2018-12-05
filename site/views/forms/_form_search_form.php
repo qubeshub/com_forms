@@ -36,10 +36,19 @@ defined('_HZEXEC_') or die();
 $this->css('formSearchForm');
 $this->js('searchForm');
 
+$action = $this->action;
 $query = $this->query;
+$queryArchived = $query->get('archived');
+$queryClosingTime = $query->get('closing_time');
+$queryClosingTimeRelative = $query->get('closing_time_relative_operator');
+$queryDisabled = $query->get('disabled');
+$queryLocked = $query->get('responses_locked');
+$queryName = $query->get('name');
+$queryOpeningTime = $query->get('opening_time');
+$queryOpeningTimeRelative = $query->get('opening_time_relative_operator');
 ?>
 
-<form class="search-form" method="post">
+<form class="search-form" method="post" action="<?php echo $action; ?>">
 
 	<div class="row">
 		<span class="header">
@@ -57,7 +66,7 @@ $query = $this->query;
 				->display();
 		?>
 		<div class="content">
-			<input type="text" name="query[name]">
+			<input type="text" name="query[name]" value="<?php echo $queryName; ?>">
 		</div>
 		<hr>
 	</div>
@@ -73,7 +82,9 @@ $query = $this->query;
 			<?php
 				$this->view('_relative_date_fields', 'shared')
 					->set('selectFieldName', 'query[opening_time_relative_operator]')
+					->set('relativeOperatorValue', $queryOpeningTimeRelative)
 					->set('dateFieldName', 'query[opening_time]')
+					->set('dateValue', $queryOpeningTime)
 					->display();
 			?>
 		</div>
@@ -91,7 +102,9 @@ $query = $this->query;
 			<?php
 				$this->view('_relative_date_fields', 'shared')
 					->set('selectFieldName', 'query[closing_time_relative_operator]')
+					->set('relativeOperatorValue', $queryClosingTimeRelative)
 					->set('dateFieldName', 'query[closing_time]')
+					->set('dateValue', $queryClosingTime)
 					->display();
 			?>
 		</div>
@@ -109,7 +122,7 @@ $query = $this->query;
 			<?php
 				$this->view('_binary_inline_radio_list', 'shared')
 					->set('falseTextKey', 'COM_FORMS_FIELDS_RESPONSES_EDITABLE')
-					->set('flag', $query->get('responses_locked'))
+					->set('flag', $queryLocked )
 					->set('name', 'query[responses_locked]')
 					->set('trueTextKey', 'COM_FORMS_FIELDS_RESPONSES_LOCKED')
 					->display();
@@ -128,7 +141,7 @@ $query = $this->query;
 		<div class="content">
 			<?php
 				$this->view('_binary_inline_radio_list', 'shared')
-					->set('flag', $query->get('disabled'))
+					->set('flag', $queryDisabled)
 					->set('name', 'query[disabled]')
 					->display();
 			?>
@@ -146,7 +159,7 @@ $query = $this->query;
 		<div class="content">
 			<?php
 				$this->view('_binary_inline_radio_list', 'shared')
-					->set('flag', $query->get('archived'))
+					->set('flag', $queryArchived)
 					->set('name', 'query[archived]')
 					->display();
 			?>
@@ -155,6 +168,7 @@ $query = $this->query;
 	</div>
 
 	<div class="row">
+			<?php echo Html::input('token'); ?>
 			<input class="btn" type="submit"
 				value="<?php echo Lang::txt('COM_FORMS_FIELDS_SEARCH'); ?>">
 	</div>

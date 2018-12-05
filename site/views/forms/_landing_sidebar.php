@@ -34,6 +34,7 @@
 defined('_HZEXEC_') or die();
 
 $query = $this->query;
+$searchFormAction = $this->searchFormAction;
 ?>
 
 <div class="landing-sidebar">
@@ -41,6 +42,7 @@ $query = $this->query;
 		<?php
 			$this->view('_form_search_form')
 				->set('query', $query)
+				->set('action', $searchFormAction)
 				->display();
 		?>
 	</div>

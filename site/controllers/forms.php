@@ -35,15 +35,17 @@ namespace Components\Forms\Site\Controllers;
 $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/componentRouter.php";
-require_once "$componentPath/helpers/relationalCrudHelper.php";
 require_once "$componentPath/helpers/pageBouncer.php";
+require_once "$componentPath/helpers/params.php";
 require_once "$componentPath/helpers/query.php";
+require_once "$componentPath/helpers/relationalCrudHelper.php";
 require_once "$componentPath/models/form.php";
 
 use Components\Forms\Helpers\ComponentRouter;
-use Components\Forms\Helpers\RelationalCrudHelper as CrudHelper;
 use Components\Forms\Helpers\PageBouncer;
+use Components\Forms\Helpers\Params;
 use Components\Forms\Helpers\Query;
+use Components\Forms\Helpers\RelationalCrudHelper as CrudHelper;
 use Components\Forms\Models\Form;
 use Hubzero\Component\SiteController;
 use Hubzero\Utility\Arr;
@@ -87,6 +89,9 @@ class Forms extends SiteController
 		$this->bouncer = new PageBouncer([
 			'component' => $this->_option
 		]);
+		$this->params = new Params(
+			['whitelist' => self::$_paramWhitelist]
+		);
 		$this->router = new ComponentRouter();
 		$this->crudHelper = new CrudHelper([
 			'controller' => $this,
@@ -142,8 +147,7 @@ class Forms extends SiteController
 	{
 		$this->bouncer->redirectUnlessAuthorized('core.create');
 
-		$formData = Request::getArray('form', []);
-		$formData = Arr::filterKeys($formData, self::$_paramWhitelist);
+		$formData = $this->params->get('form');
 		$formData['created'] = Date::toSql();
 		$formData['created_by'] = User::get('id');
 

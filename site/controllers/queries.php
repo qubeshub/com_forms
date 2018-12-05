@@ -35,15 +35,17 @@ $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/appWrapper.php";
 require_once "$componentPath/helpers/componentRouter.php";
-require_once "$componentPath/helpers/virtualCrudHelper.php";
 require_once "$componentPath/helpers/pageBouncer.php";
+require_once "$componentPath/helpers/params.php";
 require_once "$componentPath/helpers/query.php";
+require_once "$componentPath/helpers/virtualCrudHelper.php";
 
 use Components\Forms\Helpers\AppWrapper as Router;
 use Components\Forms\Helpers\ComponentRouter;
-use Components\Forms\Helpers\VirtualCrudHelper as CrudHelper;
 use Components\Forms\Helpers\PageBouncer;
+use Components\Forms\Helpers\Params;
 use Components\Forms\Helpers\Query;
+use Components\Forms\Helpers\VirtualCrudHelper as CrudHelper;
 use Hubzero\Component\SiteController;
 use Hubzero\Utility\Arr;
 
@@ -88,6 +90,9 @@ class Queries extends SiteController
 		$this->crudHelper = new CrudHelper([
 			'errorSummary' => Lang::txt('COM_FORMS_QUERY_UPDATE_ERROR')
 		]);
+		$this->params = new Params(
+			['whitelist' => self::$_paramWhitelist]
+		);
 		$this->router = new Router();
 		$this->routes = new ComponentRouter();
 
@@ -105,8 +110,7 @@ class Queries extends SiteController
 		$this->bouncer->redirectUnlessAuthorized('core.create');
 
 		$forwardingUrl = $this->routes->formListUrl();
-		$queryData = Request::getArray('query', []);
-		$queryData = Arr::filterKeys($queryData, self::$_paramWhitelist);
+		$queryData = $this->params->get('query');
 
 		$query = new Query();
 		$query->setAssociative($queryData);

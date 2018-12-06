@@ -52,13 +52,6 @@ class Query
 	 */
 	static $defaultNamespace = 'forms';
 
-	/*
-	 * Default session namespace for query
-	 *
-	 * @var   string
-	 */
-	static $session = 'Session';
-
 	public $name, $namespace;
 
 	protected $_data, $_errors, $_session;
@@ -74,6 +67,7 @@ class Query
 		$this->namespace = Arr::getValue($args, 'namespace', static::$defaultNamespace);
 		$this->_data = [];
 		$this->_errors = [];
+		$this->_session = Arr::getValue($args, 'session', new MockProxy(['class' => 'Session']));
 	}
 
 	/*
@@ -100,9 +94,8 @@ class Query
 	{
 		$namespace = $this->namespace;
 		$name = $this->name;
-		$session = static::$session;
 
-		$savedData = $session::get($name, [], $namespace);
+		$savedData = $this->_session->get($name, [], $namespace);
 
 		return $savedData;
 	}
@@ -115,10 +108,9 @@ class Query
 	public function save()
 	{
 		$data = $this->toArray();
-		$session = static::$session;
 
 		try {
-			$session::set($this->name, $data, $this->namespace);
+			$this->_session->set($this->name, $data, $this->namespace);
 		}
 		catch (Exception $e) {
 			$this->_addError('COM_FORMS_QUERY_SAVE_ERROR');

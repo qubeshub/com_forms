@@ -36,34 +36,37 @@ $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/query.php";
 
+use Exception;
 use Hubzero\Test\Basic;
 use Components\Forms\Helpers\Query;
 
 class QueryTest extends Basic
 {
 
-	public function testLoadReturnsQueryInstance()
-	{
-		/*
-		 * Expect Query::Load to return instance of Query,
-		 * but session returns error stating headers already sent
-		 */
-	}
-
-	public function testSavedAddsErrorWhenSessionSetFails()
-	{
-		/*
-		 * expect error to be added when mock throws exception, but
-		 * PHPUnit 4.8 unable to mock static functions
-		 */
-	}
-
 	public function testSavedInvokesSetOnSession()
 	{
-		/*
-		 * expect to invoke set on Session, but
-		 * PHPUnit 4.8 unable to mock static functions
-		 */
+		$session = $this->getMockBuilder('Session')
+			->setMethods(['set'])
+			->getMock();
+		$query = new Query(['session' => $session]);
+
+		$session->expects($this->once())
+			->method('set');
+
+		$query->save();
+	}
+
+	public function testLoadReturnsQueryInstance()
+	{
+		$session = $this->getMockBuilder('Session')
+			->setMethods(['get'])
+			->getMock();
+		$session->method('get')->willReturn([]);
+
+		$query = Query::load(['session' => $session]);
+		$queryClass = get_class($query);
+
+		$this->assertEquals('Components\Forms\Helpers\Query', $queryClass);
 	}
 
 	public function testToArray()

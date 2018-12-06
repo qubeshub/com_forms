@@ -43,7 +43,7 @@ $queryClosingTime = $query->get('closing_time');
 $queryClosingTimeRelative = $query->get('closing_time_relative_operator');
 $queryDisabled = $query->get('disabled');
 $queryLocked = $query->get('responses_locked');
-$queryName = $query->get('name');
+$queryName = $query->getValue('name');
 $queryOpeningTime = $query->get('opening_time');
 $queryOpeningTimeRelative = $query->get('opening_time_relative_operator');
 ?>
@@ -66,7 +66,13 @@ $queryOpeningTimeRelative = $query->get('opening_time_relative_operator');
 				->display();
 		?>
 		<div class="content">
-			<input type="text" name="query[name]" value="<?php echo $queryName; ?>">
+			<?php
+				$this->view('_search_text_field', 'shared')
+					->set('name', 'name')
+					->set('operator', '=')
+					->set('value', $queryName)
+					->display();
+			?>
 		</div>
 		<hr>
 	</div>
@@ -80,11 +86,9 @@ $queryOpeningTimeRelative = $query->get('opening_time_relative_operator');
 		?>
 		<div class="content">
 			<?php
-				$this->view('_relative_date_fields', 'shared')
-					->set('selectFieldName', 'query[opening_time_relative_operator]')
-					->set('relativeOperatorValue', $queryOpeningTimeRelative)
-					->set('dateFieldName', 'query[opening_time]')
-					->set('dateValue', $queryOpeningTime)
+				$this->view('_search_relative_date_fields', 'shared')
+					->set('data', $queryOpeningTime)
+					->set('name', 'opening_time')
 					->display();
 			?>
 		</div>
@@ -100,11 +104,9 @@ $queryOpeningTimeRelative = $query->get('opening_time_relative_operator');
 		?>
 		<div class="content">
 			<?php
-				$this->view('_relative_date_fields', 'shared')
-					->set('selectFieldName', 'query[closing_time_relative_operator]')
-					->set('relativeOperatorValue', $queryClosingTimeRelative)
-					->set('dateFieldName', 'query[closing_time]')
-					->set('dateValue', $queryClosingTime)
+				$this->view('_search_relative_date_fields', 'shared')
+					->set('data', $queryClosingTime)
+					->set('name', 'closing_time')
 					->display();
 			?>
 		</div>
@@ -120,10 +122,11 @@ $queryOpeningTimeRelative = $query->get('opening_time_relative_operator');
 		?>
 		<div class="content">
 			<?php
-				$this->view('_binary_inline_radio_list', 'shared')
+				$this->view('_search_binary_radio_set', 'shared')
+					->set('data', $queryLocked)
 					->set('falseTextKey', 'COM_FORMS_FIELDS_RESPONSES_EDITABLE')
-					->set('flag', $queryLocked )
-					->set('name', 'query[responses_locked]')
+					->set('name', 'responses_locked')
+					->set('operator', '=')
 					->set('trueTextKey', 'COM_FORMS_FIELDS_RESPONSES_LOCKED')
 					->display();
 			?>
@@ -140,9 +143,10 @@ $queryOpeningTimeRelative = $query->get('opening_time_relative_operator');
 		?>
 		<div class="content">
 			<?php
-				$this->view('_binary_inline_radio_list', 'shared')
-					->set('flag', $queryDisabled)
-					->set('name', 'query[disabled]')
+				$this->view('_search_binary_radio_set', 'shared')
+					->set('data', $queryDisabled)
+					->set('name', 'disabled')
+					->set('operator', '=')
 					->display();
 			?>
 		</div>
@@ -158,9 +162,10 @@ $queryOpeningTimeRelative = $query->get('opening_time_relative_operator');
 		?>
 		<div class="content">
 			<?php
-				$this->view('_binary_inline_radio_list', 'shared')
-					->set('flag', $queryArchived)
-					->set('name', 'query[archived]')
+				$this->view('_search_binary_radio_set', 'shared')
+					->set('data', $queryArchived)
+					->set('name', 'archived')
+					->set('operator', '=')
 					->display();
 			?>
 		</div>

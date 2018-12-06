@@ -42,3 +42,20 @@
 	cursor: pointer;
 }
 
+/*
+ * Form list styles
+ */
+.form-list {
+	list-style: none;
+	font-size: 1.5em;
+}
+
+.form-list .form-item {
+	border: 2px solid #d6d6d6;
+	box-shadow: 1px 1px 5px rgba(0,0,0,0.09);
+	font-size: 1.25em;
+	line-height: 3em;
+	overflow: hidden;
+	padding: 0 0 0 1em;
+	white-space: nowrap;
+}

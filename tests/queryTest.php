@@ -112,6 +112,28 @@ class QueryTest extends Basic
 		$this->assertEquals($expectedValue, $actualValue);
 	}
 
+	public function testGetValueReturnsCorrectValue()
+	{
+		$expectedValue = 'test';
+		$key = 'a';
+		$query = new Query();
+
+		$query->set($key, ['value' => $expectedValue]);
+		$actualValue = $query->getValue($key);
+
+		$this->assertEquals($expectedValue, $actualValue);
+	}
+
+	public function testGetValueReturnsNullIfAttributeAbsent()
+	{
+		$query = new Query();
+
+		$actualValue = $query->getValue('absent');
+
+		$this->assertEquals(null, $actualValue);
+	}
+
+
 	public function testConstructSetsDefaultName()
 	{
 		$query = new Query();

@@ -179,7 +179,7 @@ class Query
 	}
 
 	/*
-	 * Retrieves given value from data
+	 * Retrieves value for given key from data
 	 *
 	 * @param    string   $attribute   Name of attribute
 	 * @return   void
@@ -187,6 +187,25 @@ class Query
 	public function get($attribute)
 	{
 		$value = Arr::getValue($this->_data, $attribute, null);
+
+		return $value;
+	}
+
+	/*
+	 * Retrieves value within attribute array from data
+	 *
+	 * @param    string   $attribute   Name of attribute
+	 * @return   void
+	 */
+	public function getValue($attribute)
+	{
+		$attributeArray = Arr::getValue($this->_data, $attribute, null);
+		$value = null;
+
+		if ($attributeArray)
+		{
+			$value = Arr::getValue($attributeArray, 'value');
+		}
 
 		return $value;
 	}

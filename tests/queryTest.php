@@ -97,15 +97,6 @@ class QueryTest extends Basic
 		$this->assertEquals($testCriteria, $queryArray);
 	}
 
-	public function testGetReturnsNullIfAttributeAbsent()
-	{
-		$query = new Query();
-
-		$actualValue = $query->get('a');
-
-		$this->assertEquals(null, $actualValue);
-	}
-
 	public function testSetAssociative()
 	{
 		$criteriaData = [
@@ -147,6 +138,16 @@ class QueryTest extends Basic
 		$actualValue = $query->get('a');
 
 		$this->assertEquals($expectedValue, $actualValue);
+	}
+
+	public function testGetReturnsCriterionIfKeyMissing()
+	{
+		$query = new Query();
+
+		$getResult = $query->get('missing');
+		$getResultClass = get_class($getResult);
+
+		$this->assertEquals('Components\Forms\Helpers\Criterion', $getResultClass);
 	}
 
 	public function testGetValueReturnsCorrectValue()

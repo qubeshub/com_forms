@@ -199,7 +199,8 @@ class Query
 	 */
 	public function get($attribute)
 	{
-		$value = Arr::getValue($this->_criteria, $attribute, null);
+		$nullCriterion = new Criterion();
+		$value = Arr::getValue($this->_criteria, $attribute, $nullCriterion);
 
 		return $value;
 	}

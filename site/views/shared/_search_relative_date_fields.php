@@ -32,12 +32,10 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-use Hubzero\Utility\Arr;
-
 $name = $this->name;
 $data = $this->data;
-$operatorValue = Arr::getValue($data, 'operator');
-$dateValue = Arr::getValue($data, 'value');
+$operatorValue = $data->operator;
+$dateValue = $data->value;
 
 $this->view('_relative_date_fields', 'shared')
 	->set('selectFieldName', "query[$name][operator]")

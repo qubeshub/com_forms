@@ -32,15 +32,13 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-use Hubzero\Utility\Arr;
-
 $name = $this->name;
 
 $data = $this->data;
 $falseTextKey = isset($this->falseTextKey) ? $this->falseTextKey : 'COM_FORMS_FIELDS_RESPONSES_NO';
-$operator = Arr::getValue($data, 'operator');
+$operator = $data->operator;
 $trueTextKey = isset($this->trueTextKey) ? $this->trueTextKey : 'COM_FORMS_FIELDS_RESPONSES_YES';
-$value = Arr::getValue($data, 'value');
+$value = $data->value;
 
 $this->view('_binary_inline_radio_list', 'shared')
 	->set('falseTextKey', $falseTextKey)
@@ -51,4 +49,4 @@ $this->view('_binary_inline_radio_list', 'shared')
 ?>
 
 <input type="hidden" name="query[<?php echo $name; ?>][operator]"
-	value="<?php echo $operator; ?>">
+	value="=">

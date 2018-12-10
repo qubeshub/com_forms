@@ -34,10 +34,12 @@ namespace Components\Forms\Tests;
 
 $componentPath = Component::path('com_forms');
 
+require_once "$componentPath/helpers/criterion.php";
 require_once "$componentPath/helpers/query.php";
 
 use Exception;
 use Hubzero\Test\Basic;
+use Components\Forms\Helpers\Criterion;
 use Components\Forms\Helpers\Query;
 
 class QueryTest extends Basic
@@ -71,17 +73,28 @@ class QueryTest extends Basic
 
 	public function testToArray()
 	{
-		$testAttributes = ['a' => 1, 'b' => 2];
+		$testCriteria = [
+			'name' => new Criterion([
+				'name' => 'name',
+				'operator' => '=',
+				'value' => 'a'
+			]),
+			'number' => new Criterion([
+				'name' => 'number',
+				'operator' => '>',
+				'value' => 3
+			])
+		];
 		$query = new Query();
 
-		foreach ($testAttributes as $attribute => $value)
+		foreach ($testCriteria as $criterion)
 		{
-			$query->set($attribute, $value);
+			$query->set($criterion->name, $criterion->toArray());
 		}
 
 		$queryArray = $query->toArray();
 
-		$this->assertEquals($testAttributes, $queryArray);
+		$this->assertEquals($testCriteria, $queryArray);
 	}
 
 	public function testGetReturnsNullIfAttributeAbsent()
@@ -95,21 +108,42 @@ class QueryTest extends Basic
 
 	public function testSetAssociative()
 	{
-		$testAttributes = ['a' => 1, 'b' => 2];
+		$criteriaData = [
+			'name' => [
+				'name' => 'name',
+				'operator' => '=',
+				'value' => 'a'
+			],
+			'number' =>	[
+				'name' => 'number',
+				'operator' => '>',
+				'value' => 3
+			]
+		];
+		$expectedCriteria = array_map(function($criterionData) use($criteriaData) {
+			return new Criterion($criterionData);
+		}, $criteriaData);
 		$query = new Query();
 
-		$query->setAssociative($testAttributes);
-		$actualValues = $query->toArray();
+		$query->setAssociative($criteriaData);
+		$queryArray = $query->toArray();
 
-		$this->assertEquals($testAttributes, $actualValues);
+		$this->assertEquals($expectedCriteria, $queryArray);
 	}
 
-	public function testSetAndGet()
+	public function testGetReturnsCriterion()
 	{
 		$query = new Query();
-		$expectedValue = 1;
+		$key = 'a';
+		$criterionData = [
+			'operator' => '<=',
+			'value' => 49,
+		];
+		$expectedValue = new Criterion(
+			array_merge(['name' => $key], $criterionData)
+		);
 
-		$query->set('a', $expectedValue);
+		$query->set($key, $criterionData);
 		$actualValue = $query->get('a');
 
 		$this->assertEquals($expectedValue, $actualValue);
@@ -120,8 +154,12 @@ class QueryTest extends Basic
 		$expectedValue = 'test';
 		$key = 'a';
 		$query = new Query();
+		$criterionData = [
+			'operator' => '',
+			'value' => $expectedValue
+		];
 
-		$query->set($key, ['value' => $expectedValue]);
+		$query->set($key, $criterionData);
 		$actualValue = $query->getValue($key);
 
 		$this->assertEquals($expectedValue, $actualValue);

@@ -32,6 +32,11 @@
 
 namespace Components\Forms\Helpers;
 
+$componentPath = Component::path('com_forms');
+
+require_once "$componentPath/helpers/criterion.php";
+
+use Components\Forms\Helpers\Criterion;
 use Hubzero\Session;
 use Hubzero\Utility\Arr;
 
@@ -54,7 +59,7 @@ class Query
 
 	public $name, $namespace;
 
-	protected $_data, $_errors, $_session;
+	protected $_criteria, $_errors, $_session;
 
 	/*
 	 * Create a Query instance
@@ -65,7 +70,7 @@ class Query
 	{
 		$this->name = Arr::getValue($args, 'name', static::$defaultName);
 		$this->namespace = Arr::getValue($args, 'namespace', static::$defaultNamespace);
-		$this->_data = [];
+		$this->_criteria = [];
 		$this->_errors = [];
 		$this->_session = Arr::getValue($args, 'session', new MockProxy(['class' => 'Session']));
 	}
@@ -107,10 +112,10 @@ class Query
 	 */
 	public function save()
 	{
-		$data = $this->toArray();
+		$criteria = $this->_toSimpleArray();
 
 		try {
-			$this->_session->set($this->name, $data, $this->namespace);
+			$this->_session->set($this->name, $criteria, $this->namespace);
 		}
 		catch (Exception $e) {
 			$this->_addError('COM_FORMS_QUERY_SAVE_ERROR');
@@ -165,9 +170,25 @@ class Query
 	 */
 	public function toArray()
 	{
-		$queryArray = $this->_data;
+		$thisAsArray = $this->_criteria;
 
-		return $queryArray;
+		return $thisAsArray;
+	}
+
+	/**
+	 *
+	 *
+	 */
+	protected function _toSimpleArray()
+	{
+		$thisAsSimpleArray = [];
+
+		foreach ($this->_criteria as $criterion)
+		{
+			$thisAsSimpleArray[$criterion->name] = $criterion->toArray();
+		}
+
+		return $thisAsSimpleArray;
 	}
 
 	/*
@@ -178,7 +199,7 @@ class Query
 	 */
 	public function get($attribute)
 	{
-		$value = Arr::getValue($this->_data, $attribute, null);
+		$value = Arr::getValue($this->_criteria, $attribute, null);
 
 		return $value;
 	}
@@ -191,12 +212,12 @@ class Query
 	 */
 	public function getValue($attribute)
 	{
-		$attributeArray = Arr::getValue($this->_data, $attribute, null);
+		$criterion = Arr::getValue($this->_criteria, $attribute, null);
 		$value = null;
 
-		if ($attributeArray)
+		if ($criterion)
 		{
-			$value = Arr::getValue($attributeArray, 'value');
+			$value = $criterion->value;
 		}
 
 		return $value;
@@ -225,7 +246,13 @@ class Query
 	 */
 	public function set($attribute, $value)
 	{
-		$this->_data[$attribute] = $value;
+		$criterion = new Criterion([
+			'name' => $attribute,
+			'operator' => $value['operator'],
+			'value'  => $value['value']
+		]);
+
+		$this->_criteria[$attribute] = $criterion;
 	}
 
 }

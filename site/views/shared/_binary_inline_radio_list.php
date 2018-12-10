@@ -46,7 +46,7 @@ $radios = [
 		'value' => 1
 	],
 	[
-		'checked' => ($flag !== null && !$flag),
+		'checked' => ($flag != null && !$flag),
 		'name' => $name,
 		'text' => Lang::txt($falseTextKey),
 		'value' => 0

@@ -29,36 +29,51 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-// No direct access
-defined('_HZEXEC_') or die();
+namespace Components\Forms\Tests;
 
-$this->css('formForm');
+$componentPath = Component::path('com_forms');
 
-$breadcrumbs = [
-	'Forms' => '/forms',
-	'Edit' => '/edit'
-];
-$form = $this->form;
-$formAction = $this->formAction;
-$page = 'Edit Form';
-$submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_UPDATE_FORM');
+require_once "$componentPath/helpers/criterion.php";
+require_once "$componentPath/helpers/relationalSearch.php";
 
-$this->view('_breadcrumbs', 'shared')
-	->set('breadcrumbs', $breadcrumbs)
-	->set('page', $page)
-	->display();
-?>
+use Hubzero\Test\Basic;
+use Components\Forms\Helpers\Criterion;
+use Components\Forms\Helpers\RelationalSearch;
 
-<section class="main section">
-	<div class="grid">
+class RelationalSearchTest extends Basic
+{
 
-		<?php
-			$this->view('_form_form')
-				->set('action', $formAction)
-				->set('form', $form)
-				->set('submitValue', $submitValue)
-				->display();
-		?>
+	public function testFindBy()
+	{
+		$criteria = [
+			new Criterion([
+				'name' => 'disabled',
+				'operator' => '=',
+				'value' => 1
+			]),
+			new Criterion([
+				'name' => 'priority',
+				'operator' => '>',
+				'value' => 4
+			])
+		];
+		$relational = $this->getMockBuilder('Relational')
+			->setMethods(['all', 'where'])
+			->getMock();
+		$relational->method('all')->willReturn($relational);
+		$search = new RelationalSearch(['class' => $relational]);
 
-	</div>
-</section>
+		$relational->expects($this->once())
+			->method('all');
+
+		$relational->expects($this->exactly(2))
+			->method('where')
+			->withConsecutive(
+				[$this->equalTo('disabled'), $this->equalTo('='), $this->equalTo(1)],
+				[$this->equalTo('priority'), $this->equalTo('>'), $this->equalTo(4)]
+			);
+
+		$search->findBy($criteria);
+	}
+
+}

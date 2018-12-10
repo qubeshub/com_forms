@@ -29,36 +29,64 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-// No direct access
-defined('_HZEXEC_') or die();
+namespace Components\Forms\Helpers;
 
-$this->css('formForm');
+class RelationalSearch
+{
 
-$breadcrumbs = [
-	'Forms' => '/forms',
-	'Edit' => '/edit'
-];
-$form = $this->form;
-$formAction = $this->formAction;
-$page = 'Edit Form';
-$submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_UPDATE_FORM');
+	protected $_class;
 
-$this->view('_breadcrumbs', 'shared')
-	->set('breadcrumbs', $breadcrumbs)
-	->set('page', $page)
-	->display();
-?>
+	/**
+	 * Constructs RelationalSearch instance
+	 *
+	 * @param    array   $args   Instantiation state
+	 * @return   void
+	 */
+	public function __construct($args = [])
+	{
+		$this->_class = $args['class'];
+	}
 
-<section class="main section">
-	<div class="grid">
+	/**
+	 * Returns records matching given criteria
+	 *
+	 * @param    array    $criteria   Criteria to match records to
+	 * @return   object
+	 */
+	public function findBy($criteria)
+	{
+		$records = $this->_class->all();
 
-		<?php
-			$this->view('_form_form')
-				->set('action', $formAction)
-				->set('form', $form)
-				->set('submitValue', $submitValue)
-				->display();
-		?>
+		$this->_filterBy($records, $criteria);
 
-	</div>
-</section>
+		return $records;
+	}
+
+	/**
+	 * Filters records based on given criteria
+	 *
+	 * @param    object   $records    Type records
+	 * @param    array    $criteria   Criteria to match records to
+	 * @return   void
+	 */
+	protected function _filterBy($records, $criteria)
+	{
+		foreach ($criteria as $criterion)
+		{
+			$this->_addFilter($records, $criterion);
+		}
+	}
+
+	protected function _addFilter($records, $criterion)
+	{
+		if ($criterion->isValid())
+		{
+			$name = $criterion->name;
+			$operator = $criterion->operator;
+			$value = $criterion->value;
+
+			$records->where($name, $operator, $value);
+		}
+	}
+
+}

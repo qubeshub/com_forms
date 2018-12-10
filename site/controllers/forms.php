@@ -35,17 +35,21 @@ namespace Components\Forms\Site\Controllers;
 $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/componentRouter.php";
+require_once "$componentPath/helpers/mockProxy.php";
 require_once "$componentPath/helpers/pageBouncer.php";
 require_once "$componentPath/helpers/params.php";
 require_once "$componentPath/helpers/query.php";
 require_once "$componentPath/helpers/relationalCrudHelper.php";
+require_once "$componentPath/helpers/relationalSearch.php";
 require_once "$componentPath/models/form.php";
 
 use Components\Forms\Helpers\ComponentRouter;
+use Components\Forms\Helpers\MockProxy;
 use Components\Forms\Helpers\PageBouncer;
 use Components\Forms\Helpers\Params;
 use Components\Forms\Helpers\Query;
 use Components\Forms\Helpers\RelationalCrudHelper as CrudHelper;
+use Components\Forms\Helpers\RelationalSearch as Search;
 use Components\Forms\Models\Form;
 use Hubzero\Component\SiteController;
 use Hubzero\Utility\Arr;
@@ -89,13 +93,16 @@ class Forms extends SiteController
 		$this->bouncer = new PageBouncer([
 			'component' => $this->_option
 		]);
+		$this->crudHelper = new CrudHelper([
+			'controller' => $this,
+			'errorSummary' => Lang::txt('COM_FORMS_FORM_CREATE_ERROR')
+		]);
 		$this->params = new Params(
 			['whitelist' => self::$_paramWhitelist]
 		);
 		$this->router = new ComponentRouter();
-		$this->crudHelper = new CrudHelper([
-			'controller' => $this,
-			'errorSummary' => Lang::txt('COM_FORMS_FORM_CREATE_ERROR')
+		$this->search = new Search([
+			'class' => new MockProxy(['class' => 'Components\Forms\Models\Form'])
 		]);
 
 		parent::execute();
@@ -110,10 +117,16 @@ class Forms extends SiteController
 	{
 		$this->bouncer->redirectUnlessAuthorized('core.create');
 
+		$formListUrl = $this->router->formListUrl();
 		$searchFormAction = $this->router->queryUpdateUrl();
 		$query = Query::load();
 
+		$forms = $this->search->findBy($query->toArray());
+		$forms = $forms->paginated('limitstart', 'limit');
+
 		$this->view
+			->set('formListUrl', $formListUrl)
+			->set('forms', $forms)
 			->set('query', $query)
 			->set('searchFormAction', $searchFormAction)
 			->display();

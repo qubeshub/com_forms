@@ -39,6 +39,9 @@ $breadcrumbs = [
 	'Forms' => '/forms'
 ];
 $page = 'Forms list';
+
+$formListUrl = $this->formListUrl;
+$forms = $this->forms;
 $query = $this->query;
 $searchFormAction = $this->searchFormAction;
 
@@ -58,6 +61,18 @@ $this->view('_breadcrumbs', 'shared')
 					->set('searchFormAction', $searchFormAction)
 					->display();
 			?>
+		</div>
+
+		<div class="col span10 omega">
+			<?php
+				$this->view('_form_list')
+					->set('forms', $forms)
+					->display();
+			?>
+
+			<form method="POST" action="<?php echo $formListUrl; ?>">
+				<?php echo $forms->pagination; ?>
+			</form>
 		</div>
 
 	</div>

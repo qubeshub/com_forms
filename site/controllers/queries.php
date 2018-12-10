@@ -110,7 +110,7 @@ class Queries extends SiteController
 		$this->bouncer->redirectUnlessAuthorized('core.create');
 
 		$forwardingUrl = $this->routes->formListUrl();
-		$queryData = $this->params->get('query');
+		$queryData = $this->_getNonEmptyCriteria();
 
 		$query = new Query();
 		$query->setAssociative($queryData);
@@ -123,6 +123,25 @@ class Queries extends SiteController
 		{
 			$this->crudHelper->failedCreate($query, $forwardingUrl);
 		}
+	}
+
+	/**
+	 * Filters out criteria without operator or value data
+	 *
+	 * @return
+	 */
+	protected function _getNonEmptyCriteria()
+	{
+		$criteria = $this->params->get('query');
+
+		$filteredCriteria = array_filter($criteria, function($criterion) use($criteria) {
+			$operatorPresent = $criterion['operator'] !== '';
+			$valuePresent = $criterion['value'] !== '';
+
+			return $operatorPresent && $valuePresent;
+		});
+
+		return $filteredCriteria;
 	}
 
 }

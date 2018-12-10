@@ -31,66 +31,35 @@
 
 namespace Components\Forms\Helpers;
 
+$componentPath = Component::path('com_forms');
+
+require_once "$componentPath/helpers/criterion.php";
+require_once "$componentPath/helpers/likeCriterion.php";
+
+use Components\Forms\Helpers\Criterion;
+use Components\Forms\Helpers\LikeCriterion;
 use Hubzero\Utility\Arr;
 
-class Criterion
+class CriterionFactory
 {
 
-	public $name, $operator, $value;
-
 	/**
-	 * Constructs Criterion instance
+	 * Instantiates Criterion of appropriate type
 	 *
-	 * @param    array   $args   Instantiation state
-	 * @return   void
+	 * @param    array    $args   Criterion instantiation state
+	 * @return   object
 	 */
-	public function __construct($args = [])
+	public function one($args = [])
 	{
-		$this->name = Arr::getValue($args, 'name', null);
-		$this->operator = Arr::getValue($args, 'operator', null);
-		$this->value = Arr::getValue($args, 'value', null);
-	}
+		$operator = Arr::getValue($args, 'operator');
 
-	/**
-	 * Returns array representation of criterion
-	 *
-	 * @return   array
-	 */
-	public function toArray()
-	{
-		$thisAsArray = [
-			'name' => $this->name,
-			'operator' => $this->operator,
-			'value' => $this->value
-		];
-
-		return $thisAsArray;
-	}
-
-	/**
-	 * Indiciates if criterion should be used for filtering
-	 *
-	 * @return   bool
-	 */
-	public function isValid()
-	{
-		$isValid = $this->name !== null;
-		$isValid = $isValid && !empty($this->operator);
-		$isValid = $isValid && $this->value !== null;
-
-		return $isValid;
-	}
-
-	/**
-	 * Generates SQL statement from criterion data
-	 *
-	 * @return   string
-	 */
-	public function toSql()
-	{
-		$thisAsSql = "$this->name $this->operator $this->value";
-
-		return $thisAsSql;
+		switch($operator)
+		{
+			case 'like':
+				return new LikeCriterion($args);
+			default:
+				return new Criterion($args);
+		}
 	}
 
 }

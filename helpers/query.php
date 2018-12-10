@@ -34,9 +34,9 @@ namespace Components\Forms\Helpers;
 
 $componentPath = Component::path('com_forms');
 
-require_once "$componentPath/helpers/criterion.php";
+require_once "$componentPath/helpers/criterionFactory.php";
 
-use Components\Forms\Helpers\Criterion;
+use Components\Forms\Helpers\CriterionFactory;
 use Hubzero\Session;
 use Hubzero\Utility\Arr;
 
@@ -71,6 +71,7 @@ class Query
 		$this->name = Arr::getValue($args, 'name', static::$defaultName);
 		$this->namespace = Arr::getValue($args, 'namespace', static::$defaultNamespace);
 		$this->_criteria = [];
+		$this->_criterionFactory = new CriterionFactory();
 		$this->_errors = [];
 		$this->_session = Arr::getValue($args, 'session', new MockProxy(['class' => 'Session']));
 	}
@@ -199,7 +200,7 @@ class Query
 	 */
 	public function get($attribute)
 	{
-		$nullCriterion = new Criterion();
+		$nullCriterion = $this->_newCriterion();
 		$value = Arr::getValue($this->_criteria, $attribute, $nullCriterion);
 
 		return $value;
@@ -247,13 +248,26 @@ class Query
 	 */
 	public function set($attribute, $value)
 	{
-		$criterion = new Criterion([
+		$criterion = $this->_newCriterion([
 			'name' => $attribute,
 			'operator' => $value['operator'],
 			'value'  => $value['value']
 		]);
 
 		$this->_criteria[$attribute] = $criterion;
+	}
+
+	/**
+	 * Instantiates Criterion using given data
+	 *
+	 * @param    array    $args   Criterion instantiation state
+	 * @return   object
+	 */
+	protected function _newCriterion($args = [])
+	{
+		$criterion = $this->_criterionFactory->one($args);
+
+		return $criterion;
 	}
 
 }

@@ -81,11 +81,11 @@ class RelationalSearch
 	{
 		if ($criterion->isValid())
 		{
-			$name = $criterion->name;
-			$operator = $criterion->operator;
-			$value = $criterion->value;
-
-			$records->where($name, $operator, $value);
+			$records->where(
+				$criterion->name,
+				$criterion->operator,
+				$criterion->value
+			);
 		}
 	}
 

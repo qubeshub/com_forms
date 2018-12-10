@@ -29,68 +29,41 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Forms\Helpers;
+namespace Components\Forms\Tests;
 
-use Hubzero\Utility\Arr;
+$componentPath = Component::path('com_forms');
 
-class Criterion
+require_once "$componentPath/helpers/criterionFactory.php";
+
+use Hubzero\Test\Basic;
+use Components\Forms\Helpers\CriterionFactory;
+
+class CriterionFactoryTest extends Basic
 {
 
-	public $name, $operator, $value;
-
-	/**
-	 * Constructs Criterion instance
-	 *
-	 * @param    array   $args   Instantiation state
-	 * @return   void
-	 */
-	public function __construct($args = [])
+	public function testOneReturnsCriterionWhenNoOperator()
 	{
-		$this->name = Arr::getValue($args, 'name', null);
-		$this->operator = Arr::getValue($args, 'operator', null);
-		$this->value = Arr::getValue($args, 'value', null);
+		// AF: todo
 	}
 
-	/**
-	 * Returns array representation of criterion
-	 *
-	 * @return   array
-	 */
-	public function toArray()
+	public function testOneReturnsCriterionWhenEqualityOperator()
 	{
-		$thisAsArray = [
-			'name' => $this->name,
-			'operator' => $this->operator,
-			'value' => $this->value
-		];
-
-		return $thisAsArray;
+		// AF: todo
 	}
 
-	/**
-	 * Indiciates if criterion should be used for filtering
-	 *
-	 * @return   bool
-	 */
-	public function isValid()
+	public function testOneReturnsCriterionWhenInequalityOperator()
 	{
-		$isValid = $this->name !== null;
-		$isValid = $isValid && !empty($this->operator);
-		$isValid = $isValid && $this->value !== null;
-
-		return $isValid;
+		// AF: todo
 	}
 
-	/**
-	 * Generates SQL statement from criterion data
-	 *
-	 * @return   string
-	 */
-	public function toSql()
+	public function testOneReturnsCriterionWhenGTOperator()
 	{
-		$thisAsSql = "$this->name $this->operator $this->value";
+		// AF: todo
+	}
 
-		return $thisAsSql;
+	public function testOneReturnsCriterionWhenLTOperator()
+	{
+		// AF: todo
 	}
 
 }

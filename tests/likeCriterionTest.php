@@ -29,68 +29,29 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Forms\Helpers;
+namespace Components\Forms\Tests;
 
-use Hubzero\Utility\Arr;
+$componentPath = Component::path('com_forms');
 
-class Criterion
+require_once "$componentPath/helpers/likeCriterion.php";
+
+use Hubzero\Test\Basic;
+use Components\Forms\Helpers\LikeCriterion;
+
+class LikeCriterionTest extends Basic
 {
 
-	public $name, $operator, $value;
-
-	/**
-	 * Constructs Criterion instance
-	 *
-	 * @param    array   $args   Instantiation state
-	 * @return   void
-	 */
-	public function __construct($args = [])
+	public function testToSqlWhenFuzzyEndAddsPercent()
 	{
-		$this->name = Arr::getValue($args, 'name', null);
-		$this->operator = Arr::getValue($args, 'operator', null);
-		$this->value = Arr::getValue($args, 'value', null);
-	}
+		$criterion = new LikeCriterion([
+			'name' => 'name',
+			'value' => 'foo',
+			'fuzzyEnd' => true
+		]);
 
-	/**
-	 * Returns array representation of criterion
-	 *
-	 * @return   array
-	 */
-	public function toArray()
-	{
-		$thisAsArray = [
-			'name' => $this->name,
-			'operator' => $this->operator,
-			'value' => $this->value
-		];
+		$sql = $criterion->toSql();
 
-		return $thisAsArray;
-	}
-
-	/**
-	 * Indiciates if criterion should be used for filtering
-	 *
-	 * @return   bool
-	 */
-	public function isValid()
-	{
-		$isValid = $this->name !== null;
-		$isValid = $isValid && !empty($this->operator);
-		$isValid = $isValid && $this->value !== null;
-
-		return $isValid;
-	}
-
-	/**
-	 * Generates SQL statement from criterion data
-	 *
-	 * @return   string
-	 */
-	public function toSql()
-	{
-		$thisAsSql = "$this->name $this->operator $this->value";
-
-		return $thisAsSql;
+		$this->assertEquals('name like foo%', $sql);
 	}
 
 }

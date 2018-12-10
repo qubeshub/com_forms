@@ -31,54 +31,30 @@
 
 namespace Components\Forms\Helpers;
 
+$componentPath = Component::path('com_forms');
+
+require_once "$componentPath/helpers/criterion.php";
+
+use Components\Forms\Helpers\Criterion;
 use Hubzero\Utility\Arr;
 
-class Criterion
+class LikeCriterion extends Criterion
 {
 
-	public $name, $operator, $value;
+	protected $_fuzzyEnd;
 
 	/**
-	 * Constructs Criterion instance
+	 * Constructs LikeCriterion instance
 	 *
 	 * @param    array   $args   Instantiation state
 	 * @return   void
 	 */
 	public function __construct($args = [])
 	{
-		$this->name = Arr::getValue($args, 'name', null);
-		$this->operator = Arr::getValue($args, 'operator', null);
-		$this->value = Arr::getValue($args, 'value', null);
-	}
+		parent::__construct($args);
 
-	/**
-	 * Returns array representation of criterion
-	 *
-	 * @return   array
-	 */
-	public function toArray()
-	{
-		$thisAsArray = [
-			'name' => $this->name,
-			'operator' => $this->operator,
-			'value' => $this->value
-		];
-
-		return $thisAsArray;
-	}
-
-	/**
-	 * Indiciates if criterion should be used for filtering
-	 *
-	 * @return   bool
-	 */
-	public function isValid()
-	{
-		$isValid = $this->name !== null;
-		$isValid = $isValid && !empty($this->operator);
-		$isValid = $isValid && $this->value !== null;
-
-		return $isValid;
+		$this->operator = 'like';
+		$this->_fuzzyEnd = Arr::getValue($args, 'fuzzyEnd', 0);
 	}
 
 	/**
@@ -88,7 +64,12 @@ class Criterion
 	 */
 	public function toSql()
 	{
-		$thisAsSql = "$this->name $this->operator $this->value";
+		$thisAsSql = parent::toSql();
+
+		if ($this->_fuzzyEnd)
+		{
+			$thisAsSql .= '%';
+		}
 
 		return $thisAsSql;
 	}

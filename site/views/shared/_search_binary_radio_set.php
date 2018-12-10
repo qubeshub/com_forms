@@ -36,9 +36,9 @@ $name = $this->name;
 
 $data = $this->data;
 $falseTextKey = isset($this->falseTextKey) ? $this->falseTextKey : 'COM_FORMS_FIELDS_RESPONSES_NO';
-$operator = $data->operator;
+$operator = $data->getOperator();
 $trueTextKey = isset($this->trueTextKey) ? $this->trueTextKey : 'COM_FORMS_FIELDS_RESPONSES_YES';
-$value = $data->value;
+$value = $data->getValue();
 ?>
 
 <input type="hidden" name="query[<?php echo $name; ?>][value]"

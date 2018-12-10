@@ -68,6 +68,7 @@ $queryOpeningTimeRelative = $query->get('opening_time_relative_operator');
 		<div class="content">
 			<?php
 				$this->view('_search_text_field', 'shared')
+					->set('fuzzyEnd', '1')
 					->set('name', 'name')
 					->set('operator', 'like')
 					->set('value', $queryName)

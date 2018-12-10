@@ -58,7 +58,7 @@ class RelationalSearchTest extends Basic
 			])
 		];
 		$relational = $this->getMockBuilder('Relational')
-			->setMethods(['all', 'whereRaw'])
+			->setMethods(['all', 'where'])
 			->getMock();
 		$relational->method('all')->willReturn($relational);
 		$search = new RelationalSearch(['class' => $relational]);
@@ -67,7 +67,19 @@ class RelationalSearchTest extends Basic
 			->method('all');
 
 		$relational->expects($this->exactly(2))
-			->method('whereRaw');
+			->method('where')
+			->withConsecutive(
+				[
+					$this->equalTo($criteria[0]->getName()),
+					$this->equalTo($criteria[0]->getOperator()),
+					$this->equalTo($criteria[0]->getValue())
+				],
+				[
+					$this->equalTo($criteria[1]->getName()),
+					$this->equalTo($criteria[1]->getOperator()),
+					$this->equalTo($criteria[1]->getValue())
+				]
+			);
 
 		$search->findBy($criteria);
 	}

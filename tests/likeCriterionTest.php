@@ -41,17 +41,27 @@ use Components\Forms\Helpers\LikeCriterion;
 class LikeCriterionTest extends Basic
 {
 
-	public function testToSqlWhenFuzzyEndAddsPercent()
+	public function testGetSqlValueWhenFuzzyEndTrue()
 	{
 		$criterion = new LikeCriterion([
-			'name' => 'name',
 			'value' => 'foo',
-			'fuzzyEnd' => true
+			'fuzzy_end' => true
 		]);
 
-		$sql = $criterion->toSql();
+		$value = $criterion->getSqlValue();
 
-		$this->assertEquals('name like foo%', $sql);
+		$this->assertEquals('foo%', $value);
+	}
+
+	public function testToArrayIncludesFuzzyEnd()
+	{
+		$criterion = new LikeCriterion([
+			'fuzzy_end' => true
+		]);
+
+		$criterionArray = $criterion->toArray();
+
+		$this->assertEquals($criterionArray['fuzzy_end'], 1);
 	}
 
 }

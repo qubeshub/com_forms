@@ -36,7 +36,7 @@ use Hubzero\Utility\Arr;
 class Criterion
 {
 
-	public $name, $operator, $value;
+	protected $_name, $_operator, $_value;
 
 	/**
 	 * Constructs Criterion instance
@@ -46,9 +46,9 @@ class Criterion
 	 */
 	public function __construct($args = [])
 	{
-		$this->name = Arr::getValue($args, 'name', null);
-		$this->operator = Arr::getValue($args, 'operator', null);
-		$this->value = Arr::getValue($args, 'value', null);
+		$this->_name = Arr::getValue($args, 'name', null);
+		$this->_operator = Arr::getValue($args, 'operator', null);
+		$this->_value = Arr::getValue($args, 'value', null);
 	}
 
 	/**
@@ -59,9 +59,9 @@ class Criterion
 	public function toArray()
 	{
 		$thisAsArray = [
-			'name' => $this->name,
-			'operator' => $this->operator,
-			'value' => $this->value
+			'name' => $this->_name,
+			'operator' => $this->_operator,
+			'value' => $this->_value
 		];
 
 		return $thisAsArray;
@@ -74,23 +74,51 @@ class Criterion
 	 */
 	public function isValid()
 	{
-		$isValid = $this->name !== null;
-		$isValid = $isValid && !empty($this->operator);
-		$isValid = $isValid && $this->value !== null;
+		$isValid = $this->_name !== null;
+		$isValid = $isValid && !empty($this->_operator);
+		$isValid = $isValid && $this->_value !== null;
 
 		return $isValid;
 	}
 
 	/**
-	 * Generates SQL statement from criterion data
+	 * Returns instances name value
 	 *
 	 * @return   string
 	 */
-	public function toSql()
+	public function getName()
 	{
-		$thisAsSql = "$this->name $this->operator $this->value";
+		return $this->_name;
+	}
 
-		return $thisAsSql;
+	/**
+	 * Returns instances operator value
+	 *
+	 * @return   string
+	 */
+	public function getOperator()
+	{
+		return $this->_operator;
+	}
+
+	/**
+	 * Returns instances value value
+	 *
+	 * @return   string
+	 */
+	public function getValue()
+	{
+		return $this->_value;
+	}
+
+	/**
+	 * Returns instances value to use when creating SQL statement
+	 *
+	 * @return   string
+	 */
+	public function getSqlValue()
+	{
+		return $this->getValue();
 	}
 
 }

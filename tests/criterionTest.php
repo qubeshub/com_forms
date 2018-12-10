@@ -96,10 +96,10 @@ class CriterionTest extends Basic
 	{
 		$name = 'foo';
 		$criterion = new Criterion([
-			'name' => 'foo'
+			'name' => $name
 		]);
 
-		$actualName = $criterion->name;
+		$actualName = $criterion->getName();
 
 		$this->assertEquals($name, $actualName);
 	}
@@ -108,10 +108,10 @@ class CriterionTest extends Basic
 	{
 		$operator = '>';
 		$criterion = new Criterion([
-			'operator' => $operator,
+			'operator' => $operator
 		]);
 
-		$actualOperator = $criterion->operator;
+		$actualOperator = $criterion->getOperator();
 
 		$this->assertEquals($operator, $actualOperator);
 	}
@@ -120,10 +120,10 @@ class CriterionTest extends Basic
 	{
 		$value = '$';
 		$criterion = new Criterion([
-			'value' => '$',
+			'value' => $value
 		]);
 
-		$actualValue = $criterion->value;
+		$actualValue = $criterion->getValue();
 
 		$this->assertEquals($value, $actualValue);
 	}

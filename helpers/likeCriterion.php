@@ -53,25 +53,40 @@ class LikeCriterion extends Criterion
 	{
 		parent::__construct($args);
 
-		$this->operator = 'like';
-		$this->_fuzzyEnd = Arr::getValue($args, 'fuzzyEnd', 0);
+		$this->_operator = 'like';
+		$this->_fuzzyEnd = Arr::getValue($args, 'fuzzy_end', 0);
 	}
 
 	/**
-	 * Generates SQL statement from criterion data
+	 * Returns instances value to use when creating SQL statement
 	 *
 	 * @return   string
 	 */
-	public function toSql()
+	public function getSqlValue()
 	{
-		$thisAsSql = parent::toSql();
+		$value = parent::getSqlValue();
 
 		if ($this->_fuzzyEnd)
 		{
-			$thisAsSql .= '%';
+			$value .= '%';
 		}
 
-		return $thisAsSql;
+		return $value;
 	}
+
+	/**
+	 * Returns array representation of criterion
+	 *
+	 * @return   array
+	 */
+	public function toArray()
+	{
+		$thisAsArray = parent::toArray();
+
+		$thisAsArray['fuzzy_end'] = $this->_fuzzyEnd;
+
+		return $thisAsArray;
+	}
+
 
 }

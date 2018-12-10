@@ -34,8 +34,8 @@ defined('_HZEXEC_') or die();
 
 $name = $this->name;
 $data = $this->data;
-$operatorValue = $data->operator;
-$dateValue = $data->value;
+$operatorValue = $data->getOperator();
+$dateValue = $data->getValue();
 
 $this->view('_relative_date_fields', 'shared')
 	->set('selectFieldName', "query[$name][operator]")

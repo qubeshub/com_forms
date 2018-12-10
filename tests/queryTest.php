@@ -89,7 +89,7 @@ class QueryTest extends Basic
 
 		foreach ($testCriteria as $criterion)
 		{
-			$query->set($criterion->name, $criterion->toArray());
+			$query->set($criterion->getName(), $criterion->toArray());
 		}
 
 		$queryArray = $query->toArray();

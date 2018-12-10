@@ -186,7 +186,7 @@ class Query
 
 		foreach ($this->_criteria as $criterion)
 		{
-			$thisAsSimpleArray[$criterion->name] = $criterion->toArray();
+			$thisAsSimpleArray[$criterion->getName()] = $criterion->toArray();
 		}
 
 		return $thisAsSimpleArray;
@@ -219,7 +219,7 @@ class Query
 
 		if ($criterion)
 		{
-			$value = $criterion->value;
+			$value = $criterion->getValue();
 		}
 
 		return $value;
@@ -233,26 +233,24 @@ class Query
 	 */
 	public function setAssociative($criteria)
 	{
-		foreach ($criteria as $attribute => $value)
+		foreach ($criteria as $attribute => $restrictions)
 		{
-			$this->set($attribute, $value);
+			$this->set($attribute, $restrictions);
 		}
 	}
 
 	/*
 	 * Adds given key & value to data
 	 *
-	 * @param    string   $attribute   Name of attribute
-	 * @param    mixed    $value       Value of attribute
+	 * @param    string   $attribute      Name of attribute
+	 * @param    mixed    $restrictions   Restrictions on attribute
 	 * @return   void
 	 */
-	public function set($attribute, $value)
+	public function set($attribute, $restrictions)
 	{
-		$criterion = $this->_newCriterion([
-			'name' => $attribute,
-			'operator' => $value['operator'],
-			'value'  => $value['value']
-		]);
+		$restrictions['name'] = $attribute;
+
+		$criterion = $this->_newCriterion($restrictions);
 
 		$this->_criteria[$attribute] = $criterion;
 	}

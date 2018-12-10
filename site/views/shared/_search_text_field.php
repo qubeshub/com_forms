@@ -33,6 +33,8 @@
 defined('_HZEXEC_') or die();
 
 $name = $this->name;
+
+$fuzzyEnd = $this->fuzzyEnd;
 $operator = $this->operator;
 $value = $this->value;
 ?>
@@ -42,3 +44,6 @@ $value = $this->value;
 
 <input type="hidden" name="query[<?php echo $name; ?>][operator]"
 	value="<?php echo $operator; ?>">
+
+<input type="hidden" name="query[<?php echo $name; ?>][fuzzy_end]"
+	value="<?php echo $fuzzyEnd; ?>">

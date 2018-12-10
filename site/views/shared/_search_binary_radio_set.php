@@ -39,13 +39,18 @@ $falseTextKey = isset($this->falseTextKey) ? $this->falseTextKey : 'COM_FORMS_FI
 $operator = $data->operator;
 $trueTextKey = isset($this->trueTextKey) ? $this->trueTextKey : 'COM_FORMS_FIELDS_RESPONSES_YES';
 $value = $data->value;
+?>
 
-$this->view('_binary_inline_radio_list', 'shared')
-	->set('falseTextKey', $falseTextKey)
-	->set('flag', $value)
-	->set('name', "query[$name][value]")
-	->set('trueTextKey', $trueTextKey)
-	->display();
+<input type="hidden" name="query[<?php echo $name; ?>][value]"
+	value="">
+
+<?php
+	$this->view('_binary_inline_radio_list', 'shared')
+		->set('falseTextKey', $falseTextKey)
+		->set('flag', $value)
+		->set('name', "query[$name][value]")
+		->set('trueTextKey', $trueTextKey)
+		->display();
 ?>
 
 <input type="hidden" name="query[<?php echo $name; ?>][operator]"

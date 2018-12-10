@@ -67,10 +67,11 @@ class CriterionTest extends Basic
 		$this->assertEquals(false, $isValid);
 	}
 
-	public function testIsValidReturnsFalseIfOperatorNull()
+	public function testIsValidReturnsFalseIfOperatorEmpty()
 	{
 		$criterion = new Criterion([
 			'name' => 'name',
+			'operator' => '',
 			'value' => 'value'
 		]);
 

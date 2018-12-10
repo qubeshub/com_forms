@@ -227,12 +227,12 @@ class Query
 	/*
 	 * Adds given keys and corresponding values to data
 	 *
-	 * @param    array   $attributes   Key value pairs
+	 * @param    array   $criteria   Key value pairs
 	 * @return   void
 	 */
-	public function setAssociative($attributes)
+	public function setAssociative($criteria)
 	{
-		foreach ($attributes as $attribute => $value)
+		foreach ($criteria as $attribute => $value)
 		{
 			$this->set($attribute, $value);
 		}

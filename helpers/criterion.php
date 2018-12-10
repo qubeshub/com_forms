@@ -58,11 +58,11 @@ class Criterion
 
 	public function isValid()
 	{
-		$isNotValid = (
-			$this->name === null || $this->operator === null || $this->value === null
-		);
+		$isValid = $this->name !== null;
+		$isValid = $isValid && !empty($this->operator);
+		$isValid = $isValid && $this->value !== null;
 
-		return !$isNotValid;
+		return $isValid;
 	}
 
 }

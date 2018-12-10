@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * HUBzero CMS
  *
  * Copyright 2005-2015 HUBzero Foundation, LLC.
@@ -25,7 +25,6 @@
  * HUBzero is a registered trademark of Purdue University.
  *
  * @package   hubzero-cms
- * @author    Anthony Fuentes <fuentesa@purdue.edu>
  * @copyright Copyright 2005-2015 HUBzero Foundation, LLC.
  * @license   http://opensource.org/licenses/MIT MIT
  */
@@ -33,31 +32,15 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$query = $this->query;
-$searchFormAction = $this->searchFormAction;
+$action = $this->action;
 ?>
 
-<div class="landing-sidebar">
-	<div class="row">
-		<?php
-			$this->view('_form_search_form')
-				->set('query', $query)
-				->set('action', $searchFormAction)
-				->display();
-		?>
-	</div>
+<form method="post" action="<?php echo $action; ?>">
 
 	<div class="row">
-		<?php
-			$this->view('_clear_filters_form')
-				->set('action', $searchFormAction)
-				->display();
-		?>
+			<?php echo Html::input('token'); ?>
+			<input class="btn btn-warning" type="submit"
+				value="<?php echo Lang::txt('COM_FORMS_FIELDS_CLEAR_SEARCH'); ?>">
 	</div>
 
-	<div class="row">
-		<a href="<?php echo Route::url('/forms/forms/new'); ?>">
-			<?php echo Lang::txt('COM_FORMS_LINKS_CREATE_FORM'); ?>
-		</a>
-	</div>
-</div>
+</form>

@@ -69,7 +69,7 @@ $queryOpeningTimeRelative = $query->get('opening_time_relative_operator');
 			<?php
 				$this->view('_search_text_field', 'shared')
 					->set('name', 'name')
-					->set('operator', '=')
+					->set('operator', 'like')
 					->set('value', $queryName)
 					->display();
 			?>

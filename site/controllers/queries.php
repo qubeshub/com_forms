@@ -68,6 +68,7 @@ class Queries extends SiteController
 	 */
 	protected static $_paramWhitelist = [
 		'archived',
+		'fuzzy_end',
 		'name',
 		'closing_time',
 		'closing_time_relative_operator',

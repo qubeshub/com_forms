@@ -55,13 +55,47 @@ class CriterionTest extends Basic
 		$this->assertEquals($expectedState, $criterionAsArray);
 	}
 
+	public function testIsValidReturnsFalseIfNameNull()
+	{
+		$criterion = new Criterion([
+			'operator' => 'operator',
+			'value' => 'value'
+		]);
+
+		$isValid = $criterion->isValid();
+
+		$this->assertEquals(false, $isValid);
+	}
+
+	public function testIsValidReturnsFalseIfOperatorNull()
+	{
+		$criterion = new Criterion([
+			'name' => 'name',
+			'value' => 'value'
+		]);
+
+		$isValid = $criterion->isValid();
+
+		$this->assertEquals(false, $isValid);
+	}
+
+	public function testIsValidReturnsFalseIfValueNull()
+	{
+		$criterion = new Criterion([
+			'name' => 'name',
+			'operator' => 'operator'
+		]);
+
+		$isValid = $criterion->isValid();
+
+		$this->assertEquals(false, $isValid);
+	}
+
 	public function testConstructSetsName()
 	{
 		$name = 'foo';
 		$criterion = new Criterion([
-			'name' => 'foo',
-			'operator' => '',
-			'value' => '',
+			'name' => 'foo'
 		]);
 
 		$actualName = $criterion->name;
@@ -73,9 +107,7 @@ class CriterionTest extends Basic
 	{
 		$operator = '>';
 		$criterion = new Criterion([
-			'name' => '',
 			'operator' => $operator,
-			'value' => '',
 		]);
 
 		$actualOperator = $criterion->operator;
@@ -87,8 +119,6 @@ class CriterionTest extends Basic
 	{
 		$value = '$';
 		$criterion = new Criterion([
-			'name' => '',
-			'operator' => '',
 			'value' => '$',
 		]);
 

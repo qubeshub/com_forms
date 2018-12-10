@@ -31,6 +31,8 @@
 
 namespace Components\Forms\Helpers;
 
+use Hubzero\Utility\Arr;
+
 class Criterion
 {
 
@@ -38,9 +40,9 @@ class Criterion
 
 	public function __construct($args = [])
 	{
-		$this->name = $args['name'];
-		$this->operator = $args['operator'];
-		$this->value = $args['value'];
+		$this->name = Arr::getValue($args, 'name', null);
+		$this->operator = Arr::getValue($args, 'operator', null);
+		$this->value = Arr::getValue($args, 'value', null);
 	}
 
 	public function toArray()
@@ -56,7 +58,11 @@ class Criterion
 
 	public function isValid()
 	{
-		// AF: implement
+		$isNotValid = (
+			$this->name === null || $this->operator === null || $this->value === null
+		);
+
+		return !$isNotValid;
 	}
 
 }

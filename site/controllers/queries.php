@@ -40,7 +40,7 @@ require_once "$componentPath/helpers/params.php";
 require_once "$componentPath/helpers/query.php";
 require_once "$componentPath/helpers/virtualCrudHelper.php";
 
-use Components\Forms\Helpers\ComponentRouter;
+use Components\Forms\Helpers\FormsRouter as RoutesHelper;
 use Components\Forms\Helpers\MockProxy;
 use Components\Forms\Helpers\PageBouncer;
 use Components\Forms\Helpers\Params;
@@ -95,7 +95,7 @@ class Queries extends SiteController
 			['whitelist' => self::$_paramWhitelist]
 		);
 		$this->router = new MockProxy(['class' => 'App']);
-		$this->routes = new ComponentRouter();
+		$this->routes = new RoutesHelper();
 
 		parent::execute();
 	}

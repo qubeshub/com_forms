@@ -33,17 +33,17 @@ namespace Components\Forms\Tests;
 
 $componentPath = Component::path('com_forms');
 
-require_once "$componentPath/helpers/componentRouter.php";
+require_once "$componentPath/helpers/formsRouter.php";
 
 use Hubzero\Test\Basic;
-use Components\Forms\Helpers\ComponentRouter;
+use Components\Forms\Helpers\FormsRouter;
 
-class ComponentRouterTest extends Basic
+class FormsRouterTest extends Basic
 {
 
 	public function testFormsCreateUrlReturnsCorrectUrl()
 	{
-		$componentRouter = new ComponentRouter();
+		$componentRouter = new FormsRouter();
 		$expectedUrl = '/forms/forms/create';
 
 		$generatedUrl = $componentRouter->formsCreateUrl();
@@ -53,7 +53,7 @@ class ComponentRouterTest extends Basic
 
 	public function testFormsEditUrlReturnsCorrectUrl()
 	{
-		$componentRouter = new ComponentRouter();
+		$componentRouter = new FormsRouter();
 		$testId = 99;
 		$expectedUrl = "/forms/forms/$testId/edit";
 
@@ -64,7 +64,7 @@ class ComponentRouterTest extends Basic
 
 	public function testFormsUpdateUrlReturnsCorrectUrl()
 	{
-		$componentRouter = new ComponentRouter();
+		$componentRouter = new FormsRouter();
 		$testId = 99;
 		$expectedUrl = "/forms/forms/$testId/update";
 
@@ -75,7 +75,7 @@ class ComponentRouterTest extends Basic
 
 	public function testFormListUrlCorrectUrl()
 	{
-		$componentRouter = new ComponentRouter();
+		$componentRouter = new FormsRouter();
 		$expectedUrl = '/forms/forms/list';
 
 		$generatedUrl = $componentRouter->formListUrl();
@@ -85,7 +85,7 @@ class ComponentRouterTest extends Basic
 
 	public function testQueryUpdateUrlReturnsCorrectUrl()
 	{
-		$componentRouter = new ComponentRouter();
+		$componentRouter = new FormsRouter();
 		$expectedUrl = '/forms/queries/update';
 
 		$generatedUrl = $componentRouter->queryUpdateUrl();
@@ -95,7 +95,7 @@ class ComponentRouterTest extends Basic
 
 	public function testFormDisplayUrlReturnsCorrectUrl()
 	{
-		$componentRouter = new ComponentRouter();
+		$componentRouter = new FormsRouter();
 		$testId = 99;
 		$expectedUrl = "/forms/forms/$testId/display";
 

@@ -34,12 +34,12 @@ defined('_HZEXEC_') or die();
 
 $componentPath = Component::path('com_forms');
 
-require_once "$componentPath/helpers/componentRouter.php";
+require_once "$componentPath/helpers/formsRouter.php";
 
-use Components\Forms\Helpers\ComponentRouter;
+use Components\Forms\Helpers\FormsRouter as RoutesHelper;
 
 $forms = $this->forms;
-$router = new ComponentRouter();
+$router = new RoutesHelper();
 ?>
 
 <ul class="form-list">

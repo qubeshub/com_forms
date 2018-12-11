@@ -31,11 +31,7 @@
 
 namespace Components\Forms\Helpers;
 
-$componentPath = Component::path('com_forms');
-
-use Hubzero\Utility\Arr;
-
-class ComponentRouter
+class FormsRouter
 {
 
 	/**

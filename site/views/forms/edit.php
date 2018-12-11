@@ -32,7 +32,6 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('formEdit');
 $this->css('formForm');
 
 $breadcrumbs = [
@@ -57,7 +56,7 @@ $this->view('_breadcrumbs', 'shared')
 		<div class="row">
 			<div class="col span12 omega">
 				<?php
-					$this->view('_form_edit_nav')
+					$this->view('_form_edit_nav', 'shared')
 						->set('current', 'Form Info')
 						->set('formId', $formId)
 						->display();

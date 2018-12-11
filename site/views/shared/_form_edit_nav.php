@@ -32,6 +32,8 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('formEditNav');
+
 $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/formsRouter.php";

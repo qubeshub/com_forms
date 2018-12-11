@@ -93,4 +93,15 @@ class ComponentRouterTest extends Basic
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
 
+	public function testFormDisplayUrlReturnsCorrectUrl()
+	{
+		$componentRouter = new ComponentRouter();
+		$testId = 99;
+		$expectedUrl = "/forms/forms/$testId/display";
+
+		$generatedUrl = $componentRouter->formDisplayUrl($testId);
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
 }

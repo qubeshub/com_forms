@@ -122,6 +122,21 @@ class ComponentRouter
 	}
 
 	/**
+	 * Generates search update url
+	 *
+	 * @param    int      $formId   ID of form to edit
+	 * @return   string
+	 */
+	public function formDisplayUrl($formId)
+	{
+		$segments = ['forms', $formId, 'display'];
+
+		$url = $this->_generateUrl($segments);
+
+		return $url;
+	}
+
+	/**
 	 * Generates URL based on given segments
 	 *
 	 * @param    array    $segments   URL segments

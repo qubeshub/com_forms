@@ -37,27 +37,31 @@ $form = $this->form;
 $name = $form->get('name');
 $closingTime = new DateTime($form->get('closing_time'));
 $formattedClosingTime = $closingTime->format('F j, Y');
+$formDisplayUrl = $this->formDisplayUrl;
+$formId = $form->get('id');
 $disabled = $form->get('disabled');
 $openingTime = new DateTime($form->get('closing_time'));
 $formattedOpeningTime = $closingTime->format('F j, Y');
 ?>
 
 <li class="form-item">
-	<span class="grid">
+	<a href="<?php echo $formDisplayUrl; ?>">
+		<span class="grid">
 
-		<span class="col span4"><?php echo $name; ?></span>
+			<span class="col span4"><?php echo $name; ?></span>
 
-		<span class="col span3">
-			<?php echo $formattedOpeningTime; ?>
+			<span class="col span3">
+				<?php echo $formattedOpeningTime; ?>
+			</span>
+
+			<span class="col span3">
+				<?php echo $formattedClosingTime; ?>
+			</span>
+
+			<span class="col span2 omega">
+				<?php echo ($disabled) ? 'Disabled' : 'Enabled'; ?>
+			</span>
+
 		</span>
-
-		<span class="col span3">
-			<?php echo $formattedClosingTime; ?>
-		</span>
-
-		<span class="col span2 omega">
-			<?php echo ($disabled) ? 'Disabled' : 'Enabled'; ?>
-		</span>
-
-	</span>
+	</a>
 </li>

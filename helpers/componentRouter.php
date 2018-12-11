@@ -71,7 +71,7 @@ class ComponentRouter
 	 */
 	public function formsEditUrl($formId)
 	{
-		$segments = ['forms', 'edit', $formId];
+		$segments = ['forms', $formId, 'edit'];
 
 		$url = $this->_generateUrl($segments);
 
@@ -86,7 +86,7 @@ class ComponentRouter
 	 */
 	public function formsUpdateUrl($formId)
 	{
-		$segments = ['forms', 'update', $formId];
+		$segments = ['forms', $formId, 'update'];
 
 		$url = $this->_generateUrl($segments);
 

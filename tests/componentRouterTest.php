@@ -55,7 +55,7 @@ class ComponentRouterTest extends Basic
 	{
 		$componentRouter = new ComponentRouter();
 		$testId = 99;
-		$expectedUrl = "/forms/forms/edit/$testId";
+		$expectedUrl = "/forms/forms/$testId/edit";
 
 		$generatedUrl = $componentRouter->formsEditUrl($testId);
 
@@ -66,7 +66,7 @@ class ComponentRouterTest extends Basic
 	{
 		$componentRouter = new ComponentRouter();
 		$testId = 99;
-		$expectedUrl = "/forms/forms/update/$testId";
+		$expectedUrl = "/forms/forms/$testId/update";
 
 		$generatedUrl = $componentRouter->formsUpdateUrl($testId);
 

@@ -52,7 +52,6 @@ use Components\Forms\Helpers\RelationalCrudHelper as CrudHelper;
 use Components\Forms\Helpers\RelationalSearch as Search;
 use Components\Forms\Models\Form;
 use Hubzero\Component\SiteController;
-use Hubzero\Utility\Arr;
 use \Date;
 use \User;
 
@@ -110,7 +109,7 @@ class Forms extends SiteController
 	}
 
 	/**
-	 * Returns searchable list of forms
+	 * Renders searchable list of forms
 	 *
 	 * @return   void
 	 */

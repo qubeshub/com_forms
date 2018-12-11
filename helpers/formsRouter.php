@@ -133,18 +133,76 @@ class FormsRouter
 	}
 
 	/**
-	 * Generates URL based on given segments
+	 * Generates search update url
 	 *
-	 * @param    array    $segments   URL segments
+	 * @param    int      $formId   ID of form associated with pages
 	 * @return   string
 	 */
-	protected function _generateUrl($segments)
+	public function formsPagesUrl($formId)
+	{
+		$segments = ['pages'];
+		$parameters = ['form_id' => $formId];
+
+		$url = $this->_generateUrl($segments, $parameters);
+
+		return $url;
+	}
+
+	/**
+	 * Generates URL based on given segments
+	 *
+	 * @param    array    $segments     URL segments
+	 * @param    array    $parameters   URL parameters
+	 * @return   string
+	 */
+	protected function _generateUrl($segments, $parameters = [])
 	{
 		$url = $this->_baseUrl;
 
+		$url = $this->_addSegments($url, $segments);
+		$url = $this->_addParameters($url, $parameters);
+
+		return $url;
+	}
+
+	/**
+	 * Adds segments to URL
+	 *
+	 * @param    string   $url        URL
+	 * @param    array    $segments   URL segments
+	 * @return   string
+	 */
+	protected function _addSegments($url, $segments)
+	{
 		foreach ($segments as $segment)
 		{
 			$url .= "/$segment";
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Adds parameters to URL
+	 *
+	 * @param    string   $url          URL
+	 * @param    array    $parameters   URL parameters
+	 * @return   string
+	 */
+	protected function _addParameters($url, $parameters)
+	{
+		$count = 0;
+
+		foreach ($parameters as $name => $value)
+		{
+			if ($count === 0)
+			{
+				$url .= "?$name=$value";
+			}
+			else
+			{
+				$url .= "&$name=$value";
+			}
 		}
 
 		return $url;

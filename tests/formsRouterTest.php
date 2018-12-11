@@ -104,4 +104,15 @@ class FormsRouterTest extends Basic
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
 
+	public function testFormsPagesUrlReturnsCorrectUrl()
+	{
+		$routes = new FormsRouter();
+		$testId = 99;
+		$expectedUrl = "/forms/pages?form_id=$testId";
+
+		$generatedUrl = $routes->formsPagesUrl($testId);
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
 }

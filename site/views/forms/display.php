@@ -32,24 +32,33 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$componentPath = Component::path('com_forms');
+$form = $this->form;
+$formId = $form->get('id');
+$formName = $form->get('name');
 
-require_once "$componentPath/helpers/componentRouter.php";
+$breadcrumbs = [
+	'Forms' => '/forms',
+	$formName => "$formId/display"
+];
 
-use Components\Forms\Helpers\ComponentRouter;
-
-$forms = $this->forms;
-$router = new ComponentRouter();
+$this->view('_breadcrumbs', 'shared')
+	->set('breadcrumbs', $breadcrumbs)
+	->set('page', $formName)
+	->display();
 ?>
 
-<ul class="form-list">
-	<?php
-		foreach ($forms as $form)
-		{
-			$this->view('_form_item')
-				->set('form', $form)
-				->set('formDisplayUrl', $router->formDisplayUrl($form->get('id')))
-				->display();
-		}
-	?>
-</ul>
+<section class="main section">
+	<div class="grid">
+		<div class="row">
+
+			<div class="col span6">
+				<?php
+					$this->view('_form_overview')
+						->set('form', $form)
+						->display();
+				?>
+			</div>
+
+		</div>
+	</div>
+</section>

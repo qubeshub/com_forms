@@ -198,4 +198,19 @@ class Forms extends SiteController
 			->display();
 	}
 
+	/**
+	 * Renders form display page
+	 *
+	 * @return   void
+	 */
+	public function displayTask()
+	{
+		$formId = Request::getInt('id');
+		$form = Form::oneOrFail($formId);
+
+		$this->view
+			->set('form', $form)
+			->display();
+	}
+
 }

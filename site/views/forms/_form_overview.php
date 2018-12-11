@@ -32,24 +32,18 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$componentPath = Component::path('com_forms');
-
-require_once "$componentPath/helpers/componentRouter.php";
-
-use Components\Forms\Helpers\ComponentRouter;
-
-$forms = $this->forms;
-$router = new ComponentRouter();
+$form = $this->form;
+$formName = $form->get('name');
 ?>
 
-<ul class="form-list">
-	<?php
-		foreach ($forms as $form)
-		{
-			$this->view('_form_item')
-				->set('form', $form)
-				->set('formDisplayUrl', $router->formDisplayUrl($form->get('id')))
-				->display();
-		}
-	?>
-</ul>
+<div class="grid">
+
+	<div class="row">
+		<div class="col span12 omega">
+			<h2>
+				<?php echo  $formName; ?>
+			</h2>
+		</div>
+	</div>
+
+</div>

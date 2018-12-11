@@ -34,12 +34,10 @@ defined('_HZEXEC_') or die();
 
 $componentPath = Component::path('com_forms');
 
-require_once "$componentPath/helpers/componentRouter.php";
-
-use Components\Forms\Helpers\ComponentRouter;
+use Components\Forms\Helpers\FormsRouter as RoutesHelper;
 
 $forms = $this->forms;
-$router = new ComponentRouter();
+$routes = new RoutesHelper();
 ?>
 
 <ul class="form-list">
@@ -48,7 +46,7 @@ $router = new ComponentRouter();
 		{
 			$this->view('_form_item')
 				->set('form', $form)
-				->set('formDisplayUrl', $router->formDisplayUrl($form->get('id')))
+				->set('formDisplayUrl', $routes->formDisplayUrl($form->get('id')))
 				->display();
 		}
 	?>

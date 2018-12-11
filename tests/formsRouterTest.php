@@ -33,73 +33,73 @@ namespace Components\Forms\Tests;
 
 $componentPath = Component::path('com_forms');
 
-require_once "$componentPath/helpers/componentRouter.php";
+require_once "$componentPath/helpers/formsRouter.php";
 
 use Hubzero\Test\Basic;
-use Components\Forms\Helpers\ComponentRouter;
+use Components\Forms\Helpers\FormsRouter;
 
-class ComponentRouterTest extends Basic
+class FormsRouterTest extends Basic
 {
 
 	public function testFormsCreateUrlReturnsCorrectUrl()
 	{
-		$componentRouter = new ComponentRouter();
+		$routes = new FormsRouter();
 		$expectedUrl = '/forms/forms/create';
 
-		$generatedUrl = $componentRouter->formsCreateUrl();
+		$generatedUrl = $routes->formsCreateUrl();
 
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
 
 	public function testFormsEditUrlReturnsCorrectUrl()
 	{
-		$componentRouter = new ComponentRouter();
+		$routes = new FormsRouter();
 		$testId = 99;
 		$expectedUrl = "/forms/forms/$testId/edit";
 
-		$generatedUrl = $componentRouter->formsEditUrl($testId);
+		$generatedUrl = $routes->formsEditUrl($testId);
 
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
 
 	public function testFormsUpdateUrlReturnsCorrectUrl()
 	{
-		$componentRouter = new ComponentRouter();
+		$routes = new FormsRouter();
 		$testId = 99;
 		$expectedUrl = "/forms/forms/$testId/update";
 
-		$generatedUrl = $componentRouter->formsUpdateUrl($testId);
+		$generatedUrl = $routes->formsUpdateUrl($testId);
 
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
 
 	public function testFormListUrlCorrectUrl()
 	{
-		$componentRouter = new ComponentRouter();
+		$routes = new FormsRouter();
 		$expectedUrl = '/forms/forms/list';
 
-		$generatedUrl = $componentRouter->formListUrl();
+		$generatedUrl = $routes->formListUrl();
 
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
 
 	public function testQueryUpdateUrlReturnsCorrectUrl()
 	{
-		$componentRouter = new ComponentRouter();
+		$routes = new FormsRouter();
 		$expectedUrl = '/forms/queries/update';
 
-		$generatedUrl = $componentRouter->queryUpdateUrl();
+		$generatedUrl = $routes->queryUpdateUrl();
 
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
 
 	public function testFormDisplayUrlReturnsCorrectUrl()
 	{
-		$componentRouter = new ComponentRouter();
+		$routes = new FormsRouter();
 		$testId = 99;
 		$expectedUrl = "/forms/forms/$testId/display";
 
-		$generatedUrl = $componentRouter->formDisplayUrl($testId);
+		$generatedUrl = $routes->formDisplayUrl($testId);
 
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}

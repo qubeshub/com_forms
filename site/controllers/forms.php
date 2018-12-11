@@ -34,7 +34,7 @@ namespace Components\Forms\Site\Controllers;
 
 $componentPath = Component::path('com_forms');
 
-require_once "$componentPath/helpers/componentRouter.php";
+require_once "$componentPath/helpers/formsRouter.php";
 require_once "$componentPath/helpers/mockProxy.php";
 require_once "$componentPath/helpers/pageBouncer.php";
 require_once "$componentPath/helpers/params.php";
@@ -43,7 +43,7 @@ require_once "$componentPath/helpers/relationalCrudHelper.php";
 require_once "$componentPath/helpers/relationalSearch.php";
 require_once "$componentPath/models/form.php";
 
-use Components\Forms\Helpers\ComponentRouter;
+use Components\Forms\Helpers\FormsRouter as RoutesHelper;
 use Components\Forms\Helpers\MockProxy;
 use Components\Forms\Helpers\PageBouncer;
 use Components\Forms\Helpers\Params;
@@ -100,7 +100,7 @@ class Forms extends SiteController
 		$this->params = new Params(
 			['whitelist' => self::$_paramWhitelist]
 		);
-		$this->router = new ComponentRouter();
+		$this->routes = new RoutesHelper();
 		$this->search = new Search([
 			'class' => new MockProxy(['class' => 'Components\Forms\Models\Form'])
 		]);
@@ -115,8 +115,8 @@ class Forms extends SiteController
 	 */
 	public function listTask()
 	{
-		$formListUrl = $this->router->formListUrl();
-		$searchFormAction = $this->router->queryUpdateUrl();
+		$formListUrl = $this->routes->formListUrl();
+		$searchFormAction = $this->routes->queryUpdateUrl();
 		$query = Query::load();
 
 		$forms = $this->search->findBy($query->toArray());
@@ -140,7 +140,7 @@ class Forms extends SiteController
 	{
 		$this->bouncer->redirectUnlessAuthorized('core.create');
 
-		$createTaskUrl = $this->router->formsCreateUrl();
+		$createTaskUrl = $this->routes->formsCreateUrl();
 		$form = $form ? $form : Form::blank();
 
 		$this->view
@@ -168,7 +168,7 @@ class Forms extends SiteController
 		if ($form->save())
 		{
 			$formId = $form->get('id');
-			$forwardingUrl = $this->router->formsEditUrl($formId);
+			$forwardingUrl = $this->routes->formsEditUrl($formId);
 			$successMessage = Lang::txt('COM_FORMS_FORM_SAVE_SUCCESS');
 			$this->crudHelper->successfulCreate($forwardingUrl, $successMessage);
 		}
@@ -190,7 +190,7 @@ class Forms extends SiteController
 		$formId = Request::getInt('id');
 		$form = Form::one($formId);
 
-		$updateTaskUrl = $this->router->formsUpdateUrl($formId);
+		$updateTaskUrl = $this->routes->formsUpdateUrl($formId);
 
 		$this->view
 			->set('formAction', $updateTaskUrl)

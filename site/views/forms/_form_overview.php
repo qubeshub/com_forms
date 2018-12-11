@@ -33,32 +33,17 @@
 defined('_HZEXEC_') or die();
 
 $form = $this->form;
-$formId = $form->get('id');
 $formName = $form->get('name');
-
-$breadcrumbs = [
-	'Forms' => '/forms',
-	$formName => "$formId/display"
-];
-
-$this->view('_breadcrumbs', 'shared')
-	->set('breadcrumbs', $breadcrumbs)
-	->set('page', $formName)
-	->display();
 ?>
 
-<section class="main section">
-	<div class="grid">
-		<div class="row">
+<div class="grid">
 
-			<div class="col span6">
-				<?php
-					$this->view('_form_overview')
-						->set('form', $form)
-						->display();
-				?>
-			</div>
-
+	<div class="row">
+		<div class="col span12 omega">
+			<h2>
+				<?php echo  $formName; ?>
+			</h2>
 		</div>
 	</div>
-</section>
+
+</div>

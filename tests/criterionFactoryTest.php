@@ -41,29 +41,24 @@ use Components\Forms\Helpers\CriterionFactory;
 class CriterionFactoryTest extends Basic
 {
 
-	public function testOneReturnsCriterionWhenNoOperator()
+	public function testOneReturnsLikeCriterionWhenLikeOperator()
 	{
-		// AF: todo
+		$factory = new CriterionFactory();
+
+		$criterion = $factory->one(['operator' => 'like']);
+		$criterionClass = get_class($criterion);
+
+		$this->assertEquals('Components\Forms\Helpers\LikeCriterion', $criterionClass);
 	}
 
-	public function testOneReturnsCriterionWhenEqualityOperator()
+	public function testOneReturnsCriterionByDefault()
 	{
-		// AF: todo
-	}
+		$factory = new CriterionFactory();
 
-	public function testOneReturnsCriterionWhenInequalityOperator()
-	{
-		// AF: todo
-	}
+		$criterion = $factory->one(['operator' => 'unkown']);
+		$criterionClass = get_class($criterion);
 
-	public function testOneReturnsCriterionWhenGTOperator()
-	{
-		// AF: todo
-	}
-
-	public function testOneReturnsCriterionWhenLTOperator()
-	{
-		// AF: todo
+		$this->assertEquals('Components\Forms\Helpers\Criterion', $criterionClass);
 	}
 
 }

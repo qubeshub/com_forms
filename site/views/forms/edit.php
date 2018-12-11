@@ -34,15 +34,18 @@ defined('_HZEXEC_') or die();
 
 $this->css('formForm');
 
-$breadcrumbs = [
-	'Forms' => '/forms',
-	'Edit' => '/edit'
-];
 $form = $this->form;
-$formAction = $this->formAction;
+$action = $this->formAction;
 $formId = $form->get('id');
+$formName = $form->get('name');
 $page = 'Edit Form';
 $submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_UPDATE_FORM');
+
+$breadcrumbs = [
+	'Forms' => '/forms',
+	 $formName => "/forms/forms/$formId/display",
+	'Edit' => ''
+];
 
 $this->view('_breadcrumbs', 'shared')
 	->set('breadcrumbs', $breadcrumbs)
@@ -68,7 +71,7 @@ $this->view('_breadcrumbs', 'shared')
 			<div class="col span12 omega">
 				<?php
 					$this->view('_form_form')
-						->set('action', $formAction)
+						->set('action', $action)
 						->set('form', $form)
 						->set('submitValue', $submitValue)
 						->display();

@@ -36,12 +36,9 @@ defined('_HZEXEC_') or die();
 $breadcrumbs = $this->breadcrumbs;
 $page = $this->page;
 
-$cumulativePath = '';
-
 foreach ($breadcrumbs as $text => $url)
 {
-	$cumulativePath .= $url;
-	Pathway::append($text, $cumulativePath);
+	Pathway::append($text, $url);
 }
 
 Document::setTitle($page);

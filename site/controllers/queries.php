@@ -133,7 +133,7 @@ class Queries extends SiteController
 	 */
 	protected function _getNonEmptyCriteria()
 	{
-		$criteria = $this->params->get('query');
+		$criteria = $this->params->getArray('query');
 
 		$filteredCriteria = array_filter($criteria, function($criterion) use($criteria) {
 			$operatorPresent = $criterion['operator'] !== '';

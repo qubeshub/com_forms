@@ -55,13 +55,34 @@ class Params
 		$this->_whitelist = $args['whitelist'];
 	}
 
-	public function get($key, $default = [])
+	/**
+	 * Retrieves array data from request
+	 *
+	 * @param    string   $key       Key to retrieve data
+	 * @param    array    $default   Default values
+	 * @return   array
+	 */
+	public function getArray($key, $default = [])
 	{
 		$params = $this->_request->getArray($key, $default);
 
 		$filteredParams = Arr::filterKeys($params, $this->_whitelist);
 
 		return $filteredParams;
+	}
+
+	/**
+	 * Retrieves datum from request
+	 *
+	 * @param    string   $key       Key to retrieve datum
+	 * @param    array    $default   Default value
+	 * @return   mixed
+	 */
+	public function get($key, $default = null)
+	{
+		$param = $this->_request->get($key, $default);
+
+		return $param;
 	}
 
 }

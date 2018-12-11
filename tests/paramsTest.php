@@ -41,7 +41,7 @@ use Components\Forms\Helpers\Params;
 class ParamsTest extends Basic
 {
 
-	public function testGetInvokesGetArrayWithGivenKey()
+	public function testGetArrayInvokesGetArrayWithGivenKey()
 	{
 		$key = 'test';
 		$request = $this->getMockBuilder('MockProxy')
@@ -57,10 +57,10 @@ class ParamsTest extends Basic
 			->method('getArray')
 			->with($this->equalTo($key));
 
-		$params->get($key);
+		$params->getArray($key);
 	}
 
-	public function testGetFiltersKeysCorrectly()
+	public function testGetArrayFiltersKeysCorrectly()
 	{
 		$whitelist = ['a', 'b'];
 		$request = $this->getMockBuilder('MockProxy')
@@ -77,10 +77,46 @@ class ParamsTest extends Basic
 			'whitelist' => $whitelist
 		]);
 
-		$filteredParams = $params->get('');
+		$filteredParams = $params->getArray('');
 		$filteredParamsKeys = array_keys($filteredParams);
 
 		$this->assertEquals($whitelist, $filteredParamsKeys);
+	}
+
+	public function testGetInvokesGetWithGivenKey()
+	{
+		$key = 'test';
+		$request = $this->getMockBuilder('MockProxy')
+			->setMethods(['get'])
+			->getMock();
+		$params = new Params([
+			'request' => $request,
+			'whitelist' => []
+		]);
+
+		$request->expects($this->once())
+			->method('get')
+			->with($this->equalTo($key));
+
+		$params->get($key);
+	}
+
+	public function testGetInvokesGetReturnsGivenValue()
+	{
+		$key = 'test';
+		$sentData = 'sent data';
+		$request = $this->getMockBuilder('MockProxy')
+			->setMethods(['get'])
+			->getMock();
+		$request->method('get')->willReturn($sentData);
+		$params = new Params([
+			'request' => $request,
+			'whitelist' => []
+		]);
+
+		$param = $params->get($key);
+
+		$this->assertEquals($sentData, $param);
 	}
 
 }

@@ -78,6 +78,7 @@ class Forms extends SiteController
 		'closing_time',
 		'description',
 		'disabled',
+		'id',
 		'name',
 		'opening_time',
 		'responses_locked',
@@ -158,7 +159,7 @@ class Forms extends SiteController
 	{
 		$this->bouncer->redirectUnlessAuthorized('core.create');
 
-		$formData = $this->params->get('form');
+		$formData = $this->params->getArray('form');
 		$formData['created'] = Date::toSql();
 		$formData['created_by'] = User::get('id');
 
@@ -196,6 +197,35 @@ class Forms extends SiteController
 			->set('formAction', $updateTaskUrl)
 			->set('form', $form)
 			->display();
+	}
+
+	/**
+	 * Handles updating of given form using provided data
+	 *
+	 * @return   void
+	 */
+	public function updateTask()
+	{
+		$this->bouncer->redirectUnlessAuthorized('core.create');
+
+		$formId = $this->params->get('id');
+		$formData = $this->params->getArray('form');
+		$formData['modified'] = Date::toSql();
+		$formData['modified_by'] = User::get('id');
+
+		$form = Form::oneOrFail($formId);
+		$form->set($formData);
+
+		if ($form->save())
+		{
+			$forwardingUrl = $this->routes->formsEditUrl($formId);
+			$successMessage = Lang::txt('COM_FORMS_FORM_SAVE_SUCCESS');
+			$this->crudHelper->successfulUpdate($forwardingUrl, $successMessage);
+		}
+		else
+		{
+			$this->crudHelper->failedUpdate($form);
+		}
 	}
 
 	/**

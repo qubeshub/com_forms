@@ -56,7 +56,29 @@ class CrudHelper
 	}
 
 	/**
-	 * Handles successful creation of record based on user inputs
+	 * Handles successful update of record
+	 *
+	 * @param    string   $url   URL to redirect user to
+	 * @return   void
+	 */
+	public function successfulUpdate($url)
+	{
+		$this->_router->redirect($url);
+	}
+
+	/**
+	 * Handles failed update of record
+	 *
+	 * @param    object   $record   Record that failed to update
+	 * @return   void
+	 */
+	public function failedUpdate($record)
+	{
+		$this->_notifyUserOfFailure($record);
+	}
+
+	/**
+	 * Handles successful creation of record
 	 *
 	 * @param    string   $url   URL to redirect user to
 	 * @return   void
@@ -67,7 +89,7 @@ class CrudHelper
 	}
 
 	/**
-	 * Handles failed creation of record based on user inputs
+	 * Handles failed creation of record
 	 *
 	 * @param    object   $record   Record that failed to be created
 	 * @return   void

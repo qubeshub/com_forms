@@ -110,4 +110,57 @@ class CrudHelperTest extends Basic
 		$crudHelper->failedCreate($record, '');
 	}
 
+	public function testSuccessfulUpdateInvokesRedirect()
+	{
+		$router = $this->getMockBuilder('App')
+			->setMethods(['redirect'])
+			->getMock();
+		$crudHelper = new CrudHelper([
+			'router' => $router
+		]);
+
+		$router->expects($this->once())
+			->method('redirect');
+
+		$crudHelper->successfulUpdate('url');
+	}
+
+	public function testFailedUpdateInvokesGetErrors()
+	{
+		$notify = $this->getMockBuilder('Notify')
+			->setMethods(['error'])
+			->getMock();
+		$record = $this->getMockBuilder('Relational')
+			->setMethods(['getErrors'])
+			->getMock();
+		$record->method('getErrors')->willReturn(['']);
+		$crudHelper = new CrudHelper([
+			'notify' => $notify
+		]);
+
+		$record->expects($this->once())
+			->method('getErrors');
+
+		$crudHelper->failedUpdate($record);
+	}
+
+	public function testFailedUpdateInvokesError()
+	{
+		$notify = $this->getMockBuilder('Notify')
+			->setMethods(['error'])
+			->getMock();
+		$record = $this->getMockBuilder('Relational')
+			->setMethods(['getErrors'])
+			->getMock();
+		$record->method('getErrors')->willReturn(['']);
+		$crudHelper = new CrudHelper([
+			'notify' => $notify
+		]);
+
+		$notify->expects($this->once())
+			->method('error');
+
+		$crudHelper->failedUpdate($record);
+	}
+
 }

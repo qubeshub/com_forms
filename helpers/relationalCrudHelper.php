@@ -54,7 +54,46 @@ class RelationalCrudHelper extends CrudHelper
 	}
 
 	/**
-	 * Handles successful creation of record based on user inputs
+	 * Handles successful update of record
+	 *
+	 * @param    string   $successMessage   Create sucess message
+	 * @param    string   $url              URL to redirect user to
+	 * @return   void
+	 */
+	public function successfulUpdate($url, $successMessage = '')
+	{
+		$this->_notifyUserOfSuccess($successMessage);
+
+		parent::successfulUpdate($url);
+	}
+
+	/**
+	 * Handles failed update of record
+	 *
+	 * @param    object   $record
+	 * @return   void
+	 */
+	public function failedUpdate($record)
+	{
+		$this->_forwardUserToEditPage($record);
+
+		parent::failedUpdate($record);
+	}
+
+	/**
+	 * Forwards user to record edit page
+	 *
+	 * @param    object   $record   Record that failed to be created
+	 * @return   void
+	 */
+	protected function _forwardUserToEditPage($record)
+	{
+		$this->_controller->setView(null, 'edit');
+		$this->_controller->editTask($record);
+	}
+
+	/**
+	 * Handles successful creation of record
 	 *
 	 * @param    string   $successMessage   Create sucess message
 	 * @param    string   $url              URL to redirect user to
@@ -68,7 +107,7 @@ class RelationalCrudHelper extends CrudHelper
 	}
 
 	/**
-	 * Handles failed creation of record based on user inputs
+	 * Handles failed creation of record
 	 *
 	 * @param    object   $record   Record that failed to be created
 	 * @return   void

@@ -136,4 +136,99 @@ class RelationalCrudHelperTest extends Basic
 		$crudHelper->failedCreate($record, '');
 	}
 
+	public function testSuccessfulUpdateInvokesSuccessWhenGivenMessage()
+	{
+		$controller = $this->getMockBuilder('SiteController')
+			->getMock();
+		$notify = $this->getMockBuilder('Notify')
+			->setMethods(['success'])
+			->getMock();
+		$router = $this->getMockBuilder('App')
+			->setMethods(['redirect'])
+			->getMock();
+		$crudHelper = new CrudHelper([
+			'controller' => $controller,
+			'notify' => $notify,
+			'router' => $router
+		]);
+
+		$notify->expects($this->once())
+			->method('success');
+
+		$crudHelper->successfulUpdate('url', 'not empty');
+	}
+
+	public function testSuccessfulUpdateInvokesSuccessWhenMessageEmpty()
+	{
+		$controller = $this->getMockBuilder('SiteController')
+			->getMock();
+		$notify = $this->getMockBuilder('Notify')
+			->setMethods(['success'])
+			->getMock();
+		$router = $this->getMockBuilder('App')
+			->setMethods(['redirect'])
+			->getMock();
+		$crudHelper = new CrudHelper([
+			'controller' => $controller,
+			'notify' => $notify,
+			'router' => $router
+		]);
+
+		$notify->expects($this->never())
+			->method('success');
+
+		$crudHelper->successfulUpdate('url', '');
+	}
+
+	public function testfailedUpdateInvokesSetView()
+	{
+		$controller = $this->getMockBuilder('SiteController')
+			->setMethods(['setView', 'editTask'])
+			->getMock();
+		$notify = $this->getMockBuilder('Notify')
+			->setMethods(['error'])
+			->getMock();
+		$record = $this->getMockBuilder('Relational')
+			->setMethods(['getErrors'])
+			->getMock();
+		$record->method('getErrors')->willReturn([]);
+		$crudHelper = new CrudHelper([
+			'controller' => $controller,
+			'notify' => $notify
+		]);
+
+		$controller->expects($this->once())
+			->method('setView')
+			->with(
+				$this->equalTo(null),
+				$this->equalTo('edit')
+			);
+
+		$crudHelper->failedUpdate($record);
+	}
+
+	public function testfailedUpdateInvokesEditTask()
+	{
+		$controller = $this->getMockBuilder('SiteController')
+			->setMethods(['setView', 'editTask'])
+			->getMock();
+		$notify = $this->getMockBuilder('Notify')
+			->setMethods(['error'])
+			->getMock();
+		$record = $this->getMockBuilder('Relational')
+			->setMethods(['getErrors'])
+			->getMock();
+		$record->method('getErrors')->willReturn([]);
+		$crudHelper = new CrudHelper([
+			'controller' => $controller,
+			'notify' => $notify
+		]);
+
+		$controller->expects($this->once())
+			->method('editTask')
+			->with($this->equalTo($record));
+
+		$crudHelper->failedUpdate($record);
+	}
+
 }

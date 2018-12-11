@@ -96,7 +96,7 @@ class Forms extends SiteController
 		]);
 		$this->crudHelper = new CrudHelper([
 			'controller' => $this,
-			'errorSummary' => Lang::txt('COM_FORMS_FORM_CREATE_ERROR')
+			'errorSummary' => Lang::txt('COM_FORMS_FORM_SAVE_ERROR')
 		]);
 		$this->params = new Params(
 			['whitelist' => self::$_paramWhitelist]

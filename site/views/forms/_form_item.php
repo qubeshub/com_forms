@@ -37,7 +37,7 @@ $form = $this->form;
 $name = $form->get('name');
 $closingTime = new DateTime($form->get('closing_time'));
 $formattedClosingTime = $closingTime->format('F j, Y');
-$formDisplayUrl = $this->formDisplayUrl;
+$displayUrl = $this->displayUrl;
 $formId = $form->get('id');
 $disabled = $form->get('disabled');
 $openingTime = new DateTime($form->get('closing_time'));
@@ -45,7 +45,7 @@ $formattedOpeningTime = $closingTime->format('F j, Y');
 ?>
 
 <li class="form-item">
-	<a href="<?php echo $formDisplayUrl; ?>">
+	<a href="<?php echo $displayUrl; ?>">
 		<span class="grid">
 
 			<span class="col span4"><?php echo $name; ?></span>

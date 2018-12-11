@@ -46,7 +46,7 @@ $routes = new RoutesHelper();
 		{
 			$this->view('_form_item')
 				->set('form', $form)
-				->set('formDisplayUrl', $routes->formDisplayUrl($form->get('id')))
+				->set('displayUrl', $routes->formDisplayUrl($form->get('id')))
 				->display();
 		}
 	?>

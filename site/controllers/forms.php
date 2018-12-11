@@ -115,8 +115,6 @@ class Forms extends SiteController
 	 */
 	public function listTask()
 	{
-		$this->bouncer->redirectUnlessAuthorized('core.create');
-
 		$formListUrl = $this->router->formListUrl();
 		$searchFormAction = $this->router->queryUpdateUrl();
 		$query = Query::load();

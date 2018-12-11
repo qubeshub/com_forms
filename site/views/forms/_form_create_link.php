@@ -25,7 +25,6 @@
  * HUBzero is a registered trademark of Purdue University.
  *
  * @package   hubzero-cms
- * @author    Anthony Fuentes <fuentesa@purdue.edu>
  * @copyright Copyright 2005-2015 HUBzero Foundation, LLC.
  * @license   http://opensource.org/licenses/MIT MIT
  */
@@ -33,32 +32,18 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$query = $this->query;
-$searchFormAction = $this->searchFormAction;
+$componentPath = \Component::path('com_forms');
+
+require_once "$componentPath/helpers/formsAuth.php";
+
+use Components\Forms\Helpers\FormsAuth;
+
+$formsAuth = new FormsAuth();
+$currentCanCreate = $formsAuth->currentCanCreate();
 ?>
 
-<div class="landing-sidebar">
-	<div class="row">
-		<?php
-			$this->view('_form_search_form')
-				->set('query', $query)
-				->set('action', $searchFormAction)
-				->display();
-		?>
-	</div>
-
-	<div class="row">
-		<?php
-			$this->view('_clear_filters_form')
-				->set('action', $searchFormAction)
-				->display();
-		?>
-	</div>
-
-	<div class="row">
-		<?php
-			$this->view('_form_create_link')
-				->display();
-		?>
-	</div>
-</div>
+<?php if ($currentCanCreate): ?>
+	<a href="<?php echo Route::url('/forms/forms/new'); ?>">
+		<?php echo Lang::txt('COM_FORMS_LINKS_CREATE_FORM'); ?>
+	</a>
+<?php endif; ?>

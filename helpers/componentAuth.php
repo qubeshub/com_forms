@@ -25,61 +25,59 @@
  * HUBzero is a registered trademark of Purdue University.
  *
  * @package   hubzero-cms
- * @author    Anthony Fuentes <fuentesa@purdue.edu>
  * @copyright Copyright 2005-2015 HUBzero Foundation, LLC.
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Forms\Tests;
+namespace Components\Forms\Helpers;
 
-$componentPath = Component::path('com_forms');
+use Components\Forms\Helpers\MockProxy;
+use Hubzero\Utility\Arr;
 
-require_once "$componentPath/helpers/pageBouncer.php";
-
-use Hubzero\Test\Basic;
-use Components\Forms\Helpers\PageBouncer;
-
-class PageBouncerTest extends Basic
+class ComponentAuth
 {
 
-	public function testRedirectUnlessAuthorizedInvokesAuthorize()
+	protected $_componentName, $_permitter;
+
+	protected static $_CREATE_PERMISSION = 'core.create';
+
+	/**
+	 * Constructs ComponentAuth instance
+	 *
+	 * @param    array   $args   Instantiation state
+	 * @return   void
+	 */
+	public function __construct($args = [])
 	{
-		$permitter = $this->getMockBuilder('FormsAuth')
-			->setMethods(['currentIsAuthorized'])
-			->getMock();
-		$router = $this->getMockBuilder('Router')
-			->setMethods(['redirect'])
-			->getMock();
-		$bouncer = new PageBouncer([
-			'component' => 'com_forms',
-			'permitter' => $permitter,
-			'router' => $router
-		]);
-
-		$permitter->expects($this->once())
-			->method('currentIsAuthorized');
-
-		$bouncer->redirectUnlessAuthorized('test');
+		$this->_componentName = $args['component'];
+		$this->_permitter = Arr::getValue($args, 'permitter', new MockProxy(['class' => 'User']));
 	}
 
-	public function testRedirectUnlessAuthorizedInvokesRedirect()
+	/**
+	 * Determines if current user has necessary permission
+	 *
+	 * @param    string   $permission   Permission name
+	 * @return   bool
+	 */
+	public function currentIsAuthorized($permission)
 	{
-		$permitter = $this->getMockBuilder('FormsAuth')
-			->setMethods(['currentIsAuthorized'])
-			->getMock();
-		$router = $this->getMockBuilder('Router')
-			->setMethods(['redirect'])
-			->getMock();
-		$bouncer = new PageBouncer([
-			'component' => 'com_forms',
-			'permitter' => $permitter,
-			'router' => $router
-		]);
+		$isAuthorized = $this->_permitter->authorize(
+			$permission, $this->_componentName
+		);
 
-		$router->expects($this->once())
-			->method('redirect');
+		return $isAuthorized;
+	}
 
-		$bouncer->redirectUnlessAuthorized('test');
+	/**
+	 * Determines if current user has component create permissions
+	 *
+	 * @return   bool
+	 */
+	public function currentCanCreate()
+	{
+		$currentCanCreate = $this->currentIsAuthorized(self::$_CREATE_PERMISSION);
+
+		return $currentCanCreate;
 	}
 
 }

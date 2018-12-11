@@ -25,7 +25,6 @@
  * HUBzero is a registered trademark of Purdue University.
  *
  * @package   hubzero-cms
- * @author    Anthony Fuentes <fuentesa@purdue.edu>
  * @copyright Copyright 2005-2015 HUBzero Foundation, LLC.
  * @license   http://opensource.org/licenses/MIT MIT
  */
@@ -34,52 +33,45 @@ namespace Components\Forms\Tests;
 
 $componentPath = Component::path('com_forms');
 
-require_once "$componentPath/helpers/pageBouncer.php";
+require_once "$componentPath/helpers/componentAuth.php";
 
 use Hubzero\Test\Basic;
-use Components\Forms\Helpers\PageBouncer;
+use Components\Forms\Helpers\ComponentAuth;
 
-class PageBouncerTest extends Basic
+class ComponentAuthTest extends Basic
 {
 
-	public function testRedirectUnlessAuthorizedInvokesAuthorize()
+	public function testCurrentIsAuthorizedInvokesAuthorize()
 	{
-		$permitter = $this->getMockBuilder('FormsAuth')
-			->setMethods(['currentIsAuthorized'])
+		$permitter = $this->getMockBuilder('User')
+			->setMethods(['authorize'])
 			->getMock();
-		$router = $this->getMockBuilder('Router')
-			->setMethods(['redirect'])
-			->getMock();
-		$bouncer = new PageBouncer([
+		$auth = new ComponentAuth([
 			'component' => 'com_forms',
-			'permitter' => $permitter,
-			'router' => $router
+			'permitter' => $permitter
 		]);
 
 		$permitter->expects($this->once())
-			->method('currentIsAuthorized');
+			->method('authorize');
 
-		$bouncer->redirectUnlessAuthorized('test');
+		$auth->currentIsAuthorized('test');
 	}
 
-	public function testRedirectUnlessAuthorizedInvokesRedirect()
+	public function testCurrentCanCreateInvokesAuthorize()
 	{
-		$permitter = $this->getMockBuilder('FormsAuth')
-			->setMethods(['currentIsAuthorized'])
+		$permitter = $this->getMockBuilder('User')
+			->setMethods(['authorize'])
 			->getMock();
-		$router = $this->getMockBuilder('Router')
-			->setMethods(['redirect'])
-			->getMock();
-		$bouncer = new PageBouncer([
+		$auth = new ComponentAuth([
 			'component' => 'com_forms',
-			'permitter' => $permitter,
-			'router' => $router
+			'permitter' => $permitter
 		]);
 
-		$router->expects($this->once())
-			->method('redirect');
+		$permitter->expects($this->once())
+			->method('authorize')
+			->with('core.create');
 
-		$bouncer->redirectUnlessAuthorized('test');
+		$auth->currentCanCreate();
 	}
 
 }

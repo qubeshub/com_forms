@@ -25,61 +25,32 @@
  * HUBzero is a registered trademark of Purdue University.
  *
  * @package   hubzero-cms
- * @author    Anthony Fuentes <fuentesa@purdue.edu>
  * @copyright Copyright 2005-2015 HUBzero Foundation, LLC.
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Forms\Tests;
+namespace Components\Forms\Helpers;
 
 $componentPath = Component::path('com_forms');
 
-require_once "$componentPath/helpers/pageBouncer.php";
+require_once "$componentPath/helpers/componentAuth.php";
 
-use Hubzero\Test\Basic;
-use Components\Forms\Helpers\PageBouncer;
+use Components\Forms\Helpers\ComponentAuth;
 
-class PageBouncerTest extends Basic
+class FormsAuth extends ComponentAuth
 {
 
-	public function testRedirectUnlessAuthorizedInvokesAuthorize()
+	/**
+	 * Constructs FormsAuth instance
+	 *
+	 * @param    array   $args   Instantiation state
+	 * @return   void
+	 */
+	public function __construct($args = [])
 	{
-		$permitter = $this->getMockBuilder('FormsAuth')
-			->setMethods(['currentIsAuthorized'])
-			->getMock();
-		$router = $this->getMockBuilder('Router')
-			->setMethods(['redirect'])
-			->getMock();
-		$bouncer = new PageBouncer([
-			'component' => 'com_forms',
-			'permitter' => $permitter,
-			'router' => $router
-		]);
+		$args['component'] = 'com_forms';
 
-		$permitter->expects($this->once())
-			->method('currentIsAuthorized');
-
-		$bouncer->redirectUnlessAuthorized('test');
-	}
-
-	public function testRedirectUnlessAuthorizedInvokesRedirect()
-	{
-		$permitter = $this->getMockBuilder('FormsAuth')
-			->setMethods(['currentIsAuthorized'])
-			->getMock();
-		$router = $this->getMockBuilder('Router')
-			->setMethods(['redirect'])
-			->getMock();
-		$bouncer = new PageBouncer([
-			'component' => 'com_forms',
-			'permitter' => $permitter,
-			'router' => $router
-		]);
-
-		$router->expects($this->once())
-			->method('redirect');
-
-		$bouncer->redirectUnlessAuthorized('test');
+		parent::__construct($args);
 	}
 
 }

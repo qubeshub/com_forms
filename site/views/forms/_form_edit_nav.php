@@ -32,50 +32,27 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('formEdit');
-$this->css('formForm');
+$componentPath = Component::path('com_forms');
 
-$breadcrumbs = [
-	'Forms' => '/forms',
-	'Edit' => '/edit'
+require_once "$componentPath/helpers/formsRouter.php";
+
+use Components\Forms\Helpers\FormsRouter as Routes;
+
+$current = $this->current;
+$formId = $this->formId;
+$routes = new Routes();
+
+$steps = [
+	'Form Info' => $routes->formsEditUrl($formId),
+	'Pages' => "",
+	'Steps' => "",
+	'Products' => "",
+	'Payments' => "",
+	'Responses' => ""
 ];
-$form = $this->form;
-$formAction = $this->formAction;
-$formId = $form->get('id');
-$page = 'Edit Form';
-$submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_UPDATE_FORM');
 
-$this->view('_breadcrumbs', 'shared')
-	->set('breadcrumbs', $breadcrumbs)
-	->set('page', $page)
+$this->view('_ul_nav', 'shared')
+	->set('current', $current)
+	->set('steps', $steps)
 	->display();
-?>
 
-<section class="main section">
-	<div class="grid">
-
-		<div class="row">
-			<div class="col span12 omega">
-				<?php
-					$this->view('_form_edit_nav')
-						->set('current', 'Form Info')
-						->set('formId', $formId)
-						->display();
-				?>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col span12 omega">
-				<?php
-					$this->view('_form_form')
-						->set('action', $formAction)
-						->set('form', $form)
-						->set('submitValue', $submitValue)
-						->display();
-				?>
-			</div>
-		</div>
-
-	</div>
-</section>

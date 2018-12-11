@@ -32,50 +32,18 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('formEdit');
-$this->css('formForm');
-
-$breadcrumbs = [
-	'Forms' => '/forms',
-	'Edit' => '/edit'
-];
-$form = $this->form;
-$formAction = $this->formAction;
-$formId = $form->get('id');
-$page = 'Edit Form';
-$submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_UPDATE_FORM');
-
-$this->view('_breadcrumbs', 'shared')
-	->set('breadcrumbs', $breadcrumbs)
-	->set('page', $page)
-	->display();
+$current = $this->current;
+$steps = $this->steps;
 ?>
 
-<section class="main section">
-	<div class="grid">
+<ul class="ul-nav">
+	<?php foreach ($steps as $text => $url): ?>
 
-		<div class="row">
-			<div class="col span12 omega">
-				<?php
-					$this->view('_form_edit_nav')
-						->set('current', 'Form Info')
-						->set('formId', $formId)
-						->display();
-				?>
-			</div>
-		</div>
+		<li <?php if ($current == $text) echo 'class="current"'; ?>>
+			<a href="<?php echo $url; ?>">
+				<?php echo $text; ?>
+			</a>
+		</li>
 
-		<div class="row">
-			<div class="col span12 omega">
-				<?php
-					$this->view('_form_form')
-						->set('action', $formAction)
-						->set('form', $form)
-						->set('submitValue', $submitValue)
-						->display();
-				?>
-			</div>
-		</div>
-
-	</div>
-</section>
+	<?php endforeach; ?>
+</ul>

@@ -31,8 +31,14 @@
 
 namespace Components\Forms\Helpers;
 
+$componentPath = Component::path('com_forms');
+
+require_once "$componentPath/helpers/urlBuilder.php";
+
 class FormsRouter
 {
+
+	protected $_baseSegment, $_urlBuilder;
 
 	/**
 	 * Constructs ComponentRouter instance
@@ -42,7 +48,8 @@ class FormsRouter
 	 */
 	public function __construct($args = [])
 	{
-		$this->_baseUrl = '/forms';
+		$this->_urlBuilder = new UrlBuilder();
+		$this->_baseSegment = 'forms';
 	}
 
 	/**
@@ -196,7 +203,7 @@ class FormsRouter
 	}
 
 	/**
-	 * Generates URL based on given segments
+	 * Generates URL based on given segments and parameters
 	 *
 	 * @param    array    $segments     URL segments
 	 * @param    array    $parameters   URL parameters
@@ -204,53 +211,9 @@ class FormsRouter
 	 */
 	protected function _generateUrl($segments, $parameters = [])
 	{
-		$url = $this->_baseUrl;
+		array_unshift($segments, $this->_baseSegment);
 
-		$url = $this->_addSegments($url, $segments);
-		$url = $this->_addParameters($url, $parameters);
-
-		return $url;
-	}
-
-	/**
-	 * Adds segments to URL
-	 *
-	 * @param    string   $url        URL
-	 * @param    array    $segments   URL segments
-	 * @return   string
-	 */
-	protected function _addSegments($url, $segments)
-	{
-		foreach ($segments as $segment)
-		{
-			$url .= "/$segment";
-		}
-
-		return $url;
-	}
-
-	/**
-	 * Adds parameters to URL
-	 *
-	 * @param    string   $url          URL
-	 * @param    array    $parameters   URL parameters
-	 * @return   string
-	 */
-	protected function _addParameters($url, $parameters)
-	{
-		$count = 0;
-
-		foreach ($parameters as $name => $value)
-		{
-			if ($count === 0)
-			{
-				$url .= "?$name=$value";
-			}
-			else
-			{
-				$url .= "&$name=$value";
-			}
-		}
+		$url = $this->_urlBuilder->generateUrl($segments, $parameters);
 
 		return $url;
 	}

@@ -183,12 +183,12 @@ class Forms extends SiteController
 	 *
 	 * @return   void
 	 */
-	public function editTask()
+	public function editTask($form = false)
 	{
 		$this->bouncer->redirectUnlessAuthorized('core.create');
 
 		$formId = Request::getInt('id');
-		$form = Form::one($formId);
+		$form = $form ? $form : Form::one($formId);
 
 		$updateTaskUrl = $this->routes->formsUpdateUrl($formId);
 

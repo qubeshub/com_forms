@@ -128,14 +128,12 @@ class FormPages extends SiteController
 
 		$formId = $this->_params->get('form_id');
 		$form = Form::oneOrFail($formId);
-		$formsDisplayUrl = $this->_routes->formsDisplayUrl($formId);
 
 		$page = $page ? $page : FormPage::blank();
 		$createTaskUrl = $this->_routes->formsPagesCreateUrl($formId);
 
 		$this->view
 			->set('form', $form)
-			->set('formsDisplayUrl', $formsDisplayUrl)
 			->set('action', $createTaskUrl)
 			->set('page', $page)
 			->display();

@@ -34,30 +34,21 @@ defined('_HZEXEC_') or die();
 
 $this->css('pageForm');
 
-$componentPath = Component::path('com_forms');
-
-require_once "$componentPath/helpers/formsRouter.php";
-
-use Components\Forms\Helpers\FormsRouter as Routes;
-
 $action = $this->action;
 $form = $this->form;
 $formId = $form->get('id');
 $formName = $form->get('name');
 $page = $this->page;
 $pageId = $page->get('id');
-$routes = new Routes();
 $submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_UPDATE_PAGE');
 
 $breadcrumbs = [
-	'Forms' => '/forms',
-	 $formName => $routes->formsDisplayUrl($formId),
-	'Edit' => $routes->formsEditUrl($formId),
-	'Pages' => $routes->formsPagesUrl($formId),
-	$pageId => $routes->pagesEditUrl($pageId)
+	$formName => ['formsDisplayUrl', [$formId]],
+	'Edit' => ['formsEditUrl', [$formId]],
+	'Pages' => ['formsPagesUrl', [$formId]],
+	$pageId => ['pagesEditUrl', [$pageId]]
 ];
-
-$this->view('_breadcrumbs', 'shared')
+$this->view('_forms_breadcrumbs', 'shared')
 	->set('breadcrumbs', $breadcrumbs)
 	->set('page', 'Edit Page')
 	->display();

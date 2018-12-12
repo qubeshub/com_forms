@@ -36,13 +36,8 @@ $form = $this->form;
 $formId = $form->get('id');
 $formName = $form->get('name');
 
-$breadcrumbs = [
-	'Forms' => '/forms',
-	$formName => "$formId/display"
-];
-
-$this->view('_breadcrumbs', 'shared')
-	->set('breadcrumbs', $breadcrumbs)
+$this->view('_forms_breadcrumbs', 'shared')
+	->set('breadcrumbs', [$formName => ['formsDisplayUrl', [$formId]]])
 	->set('page', $formName)
 	->display();
 ?>

@@ -34,18 +34,13 @@ defined('_HZEXEC_') or die();
 
 $this->css('formForm');
 
-$breadcrumbs = [
-	'Forms' => '/forms',
-	'New' => '/new'
-];
 $form = $this->form;
 $formAction = $this->formAction;
-$page = 'New Form';
 $submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_CREATE_FORM');
 
-$this->view('_breadcrumbs', 'shared')
-	->set('breadcrumbs', $breadcrumbs)
-	->set('page', $page)
+$this->view('_forms_breadcrumbs', 'shared')
+	->set('breadcrumbs', ['New' => ['formsNewUrl']])
+	->set('page', 'New Form')
 	->display();
 ?>
 

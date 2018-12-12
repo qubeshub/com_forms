@@ -35,19 +35,14 @@ defined('_HZEXEC_') or die();
 
 $this->css('formList');
 
-$breadcrumbs = [
-	'Forms' => '/forms'
-];
-$page = 'Forms list';
-
 $formListUrl = $this->formListUrl;
 $forms = $this->forms;
 $query = $this->query;
 $searchFormAction = $this->searchFormAction;
 
-$this->view('_breadcrumbs', 'shared')
-	->set('breadcrumbs', $breadcrumbs)
-	->set('page', $page)
+$this->view('_forms_breadcrumbs', 'shared')
+	->set('breadcrumbs', [])
+	->set('page', 'Forms list')
 	->display();
 ?>
 

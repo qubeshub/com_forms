@@ -32,49 +32,30 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('formForm');
+$componentPath = Component::path('com_forms');
 
-$form = $this->form;
-$action = $this->formAction;
-$formId = $form->get('id');
-$formName = $form->get('name');
-$submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_UPDATE_FORM');
+require_once "$componentPath/helpers/formsRouter.php";
 
-$breadcrumbs = [
-	 $formName => ['formsDisplayUrl', [$formId]],
-	'Edit' => ['formsEditUrl', [$formId]]
+use Components\Forms\Helpers\FormsRouter as Routes;
+
+$breadcrumbs = $this->breadcrumbs;
+$page = $this->page;
+
+$finalBreadcrumbs = [
+	'Forms' => '/forms'
 ];
-$this->view('_forms_breadcrumbs', 'shared')
-	->set('breadcrumbs', $breadcrumbs)
-	->set('page', 'Edit Form')
+$routes = new Routes();
+
+foreach ($breadcrumbs as $text => $functionAndArgs)
+{
+	$function = $functionAndArgs[0];
+	$args = isset($functionAndArgs[1]) ? $functionAndArgs[1] : [];
+
+	$finalBreadcrumbs[$text] = $routes->$function(...$args);
+}
+
+
+$this->view('_breadcrumbs', 'shared')
+	->set('breadcrumbs', $finalBreadcrumbs)
+	->set('page', $page)
 	->display();
-?>
-
-<section class="main section">
-	<div class="grid">
-
-		<div class="row">
-			<div class="col span12 omega">
-				<?php
-					$this->view('_form_edit_nav', 'shared')
-						->set('current', 'Form Info')
-						->set('formId', $formId)
-						->display();
-				?>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col span12 omega">
-				<?php
-					$this->view('_form_form')
-						->set('action', $action)
-						->set('form', $form)
-						->set('submitValue', $submitValue)
-						->display();
-				?>
-			</div>
-		</div>
-
-	</div>
-</section>

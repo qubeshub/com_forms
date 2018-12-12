@@ -40,16 +40,13 @@ $formName = $form->get('name');
 $pages = $this->pages;
 
 $breadcrumbs = [
-	'Forms' => '/forms',
-	 $formName => "/forms/forms/$formId/display",
-	'Edit' => "/forms/forms/$formId/edit",
-	'Pages' => ''
+	 $formName => ['formsDisplayUrl', [$formId]],
+	'Edit' => ['formsEditUrl', [$formId]],
+	'Pages' => ['formsPagesUrl', [$formId]]
 ];
-$page = "Form's Pages";
-
-$this->view('_breadcrumbs', 'shared')
+$this->view('_forms_breadcrumbs', 'shared')
 	->set('breadcrumbs', $breadcrumbs)
-	->set('page', $page)
+	->set('page', "Form's Pages")
 	->display();
 ?>
 

@@ -36,20 +36,18 @@ $this->css('pageForm');
 
 $action = $this->action;
 $form = $this->form;
+$formId = $form->get('id');
 $formName = $form->get('name');
-$formsDisplayUrl = $this->formsDisplayUrl;
 $page = $this->page;
-$webPageTitle = 'New Page';
 $submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_CREATE_PAGE');
 
 $breadcrumbs = [
-	'Forms' => '/forms',
-	$formName => $formsDisplayUrl,
-	'New Page' => ''
+	$formName => ['formsDisplayUrl', [$formId]],
+	'New Page' => ['formsPagesNewUrl', [$formId]]
 ];
-$this->view('_breadcrumbs', 'shared')
+$this->view('_forms_breadcrumbs', 'shared')
 	->set('breadcrumbs', $breadcrumbs)
-	->set('page', $webPageTitle)
+	->set('page', 'New Page')
 	->display();
 ?>
 

@@ -128,14 +128,14 @@ class FormPages extends SiteController
 
 		$formId = $this->_params->get('form_id');
 		$form = Form::oneOrFail($formId);
-		$formDisplayUrl = $this->_routes->formDisplayUrl($formId);
+		$formsDisplayUrl = $this->_routes->formsDisplayUrl($formId);
 
 		$page = $page ? $page : FormPage::blank();
 		$createTaskUrl = $this->_routes->formsPagesCreateUrl($formId);
 
 		$this->view
 			->set('form', $form)
-			->set('formDisplayUrl', $formDisplayUrl)
+			->set('formsDisplayUrl', $formsDisplayUrl)
 			->set('action', $createTaskUrl)
 			->set('page', $page)
 			->display();
@@ -169,6 +169,28 @@ class FormPages extends SiteController
 		{
 			$this->_crudHelper->failedCreate($page);
 		}
+	}
+
+	/**
+	 * Renders page edit view
+	 *
+	 * @return   void
+	 */
+	public function editTask($page = false)
+	{
+		$this->_bouncer->redirectUnlessAuthorized('core.create');
+
+		$pageId = $this->_params->get('id');
+		$page = $page ? $page : FormPage::oneOrFail($pageId);
+		$form = $page->getForm();
+
+		$updateTaskUrl = '';// AF: update $this->routes->formsUpdateUrl($formId);
+
+		$this->view
+			->set('action', $updateTaskUrl)
+			->set('form', $form)
+			->set('page', $page)
+			->display();
 	}
 
 }

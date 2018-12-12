@@ -32,8 +32,24 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->view('_protected_link', 'shared')
-	->set('authMethod', 'currentCanCreate')
-	->set('localPath', '/forms/forms/new')
-	->set('textKey', 'COM_FORMS_LINKS_FORM_CREATE')
-	->display();
+$componentPath = \Component::path('com_forms');
+
+require_once "$componentPath/helpers/formsAuth.php";
+
+use Components\Forms\Helpers\FormsAuth;
+
+$formsAuth = new FormsAuth();
+
+$authMethod = $this->authMethod;
+$currentIsAuthorized = $formsAuth->$authMethod();
+$localPath = $this->localPath;
+$textKey = $this->textKey;
+$text = Lang::txt($textKey);
+$url = Route::url($localPath);
+?>
+
+<?php if ($currentIsAuthorized): ?>
+	<a href="<?php echo $url; ?>">
+		<?php echo $text; ?>
+	</a>
+<?php endif; ?>

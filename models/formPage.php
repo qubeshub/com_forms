@@ -36,6 +36,8 @@ use Hubzero\Database\Relational;
 class FormPage extends Relational
 {
 
+	static $FORM_MODEL_NAME = 'Components\Forms\Models\Form';
+
 	/**
 	 * Records table
 	 *
@@ -60,5 +62,20 @@ class FormPage extends Relational
 		'order' => 'positive',
 		'created_by' => 'positive',
 	];
+
+	/*
+	 * Retrieves associated form record
+	 *
+	 * @return   object
+	 */
+	public function getForm()
+	{
+		$formModelName = self::$FORM_MODEL_NAME;
+		$foreignKey = 'form_id';
+
+		$form = $this->belongsToOne($formModelName, $foreignKey)->row();
+
+		return $form;
+	}
 
 }

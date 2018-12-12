@@ -80,11 +80,14 @@ class CrudHelper
 	/**
 	 * Handles successful creation of record
 	 *
-	 * @param    string   $url   URL to redirect user to
+	 * @param    string   $url       URL to redirect user to
+	 * @param    string   $message   Create sucess message
 	 * @return   void
 	 */
-	public function successfulCreate($url)
+	public function successfulCreate($url, $message = '')
 	{
+		$this->_notifyUserOfSuccess($message);
+
 		$this->_router->redirect($url);
 	}
 
@@ -97,6 +100,20 @@ class CrudHelper
 	public function failedCreate($record)
 	{
 		$this->_notifyUserOfFailure($record);
+	}
+
+	/**
+	 * Notifies user of successful record creation
+	 *
+	 * @param    string   $message   Create sucess message
+	 * @return   void
+	 */
+	protected function _notifyUserOfSuccess($message)
+	{
+		if (!empty($message))
+		{
+			$this->_notify->success($message);
+		}
 	}
 
 	/**

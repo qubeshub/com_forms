@@ -93,20 +93,6 @@ class RelationalCrudHelper extends CrudHelper
 	}
 
 	/**
-	 * Handles successful creation of record
-	 *
-	 * @param    string   $successMessage   Create sucess message
-	 * @param    string   $url              URL to redirect user to
-	 * @return   void
-	 */
-	public function successfulCreate($url, $successMessage = '')
-	{
-		$this->_notifyUserOfSuccess($successMessage);
-
-		parent::successfulCreate($url);
-	}
-
-	/**
 	 * Handles failed creation of record
 	 *
 	 * @param    object   $record   Record that failed to be created
@@ -120,20 +106,6 @@ class RelationalCrudHelper extends CrudHelper
 	}
 
 	/**
-	 * Notifies user of successful record creation
-	 *
-	 * @param    string   $successMessage   Create sucess message
-	 * @return   void
-	 */
-	protected function _notifyUserOfSuccess($successMessage)
-	{
-		if (!empty($successMessage))
-		{
-			$this->_notify->success($successMessage);
-		}
-	}
-
-	/**
 	 * Forwards user to new record creation page
 	 *
 	 * @param    object   $record   Record that failed to be created
@@ -141,7 +113,9 @@ class RelationalCrudHelper extends CrudHelper
 	 */
 	protected function _forwardUserToNewPage($record)
 	{
-		$this->_controller->setView(null, 'new');
+		$controllerName = $this->_controller->name;
+
+		$this->_controller->setView($controllerName, 'new');
 		$this->_controller->newTask($record);
 	}
 

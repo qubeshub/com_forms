@@ -41,53 +41,12 @@ use Components\Forms\Helpers\RelationalCrudHelper as CrudHelper;
 class RelationalCrudHelperTest extends Basic
 {
 
-	public function testSuccessfulCreateDoesNotInvokeSuccessIfNoMessage()
-	{
-		$controller = $this->getMockBuilder('SiteController')->getMock();
-		$notify = $this->getMockBuilder('MockProxy')
-			->setMethods(['success'])
-			->getMock();
-		$router = $this->getMockBuilder('MockProxy')
-			->setMethods(['redirect'])
-			->getMock();
-		$crudHelper = new CrudHelper([
-			'controller' => $controller,
-			'notify' => $notify,
-			'router' => $router
-		]);
-
-		$notify->expects($this->never())
-			->method('success');
-
-		$crudHelper->successfulCreate('url');
-	}
-
-	public function testSuccessfulCreateInvokesSuccess()
-	{
-		$controller = $this->getMockBuilder('SiteController')->getMock();
-		$notify = $this->getMockBuilder('MockProxy')
-			->setMethods(['success'])
-			->getMock();
-		$router = $this->getMockBuilder('MockProxy')
-			->setMethods(['redirect'])
-			->getMock();
-		$crudHelper = new CrudHelper([
-			'controller' => $controller,
-			'notify' => $notify,
-			'router' => $router
-		]);
-
-		$notify->expects($this->once())
-			->method('success');
-
-		$crudHelper->successfulCreate('url', 'message');
-	}
-
 	public function testFailedCreateInvokesSetView()
 	{
 		$controller = $this->getMockBuilder('SiteController')
 			->setMethods(['setView', 'newTask'])
 			->getMock();
+		$controller->name = '';
 		$notify = $this->getMockBuilder('Notify')
 			->setMethods(['error'])
 			->getMock();
@@ -115,6 +74,7 @@ class RelationalCrudHelperTest extends Basic
 		$controller = $this->getMockBuilder('SiteController')
 			->setMethods(['setView', 'newTask'])
 			->getMock();
+		$controller->name = '';
 		$notify = $this->getMockBuilder('Notify')
 			->setMethods(['error'])
 			->getMock();

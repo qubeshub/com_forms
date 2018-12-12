@@ -38,12 +38,14 @@ require_once "$componentPath/helpers/pageBouncer.php";
 require_once "$componentPath/models/form.php";
 require_once "$componentPath/models/formPage.php";
 require_once "$componentPath/helpers/params.php";
+require_once "$componentPath/helpers/relationalCrudHelper.php";
 
 use Components\Forms\Helpers\FormsRouter as RoutesHelper;
 use Components\Forms\Helpers\PageBouncer;
 use Components\Forms\Models\Form;
 use Components\Forms\Models\FormPage;
 use Components\Forms\Helpers\Params;
+use Components\Forms\Helpers\RelationalCrudHelper as CrudHelper;
 use Hubzero\Component\SiteController;
 
 class FormPages extends SiteController
@@ -64,6 +66,8 @@ class FormPages extends SiteController
 	 * @var  array
 	 */
 	protected static $_paramWhitelist = [
+		'order',
+		'title',
 		'form_id'
 	];
 
@@ -77,6 +81,11 @@ class FormPages extends SiteController
 		$this->_bouncer = new PageBouncer([
 			'component' => $this->_option
 		]);
+		$this->_crudHelper = new CrudHelper([
+			'controller' => $this,
+			'errorSummary' => Lang::txt('COM_FORMS_FORM_SAVE_ERROR')
+		]);
+		$this->name = $this->_controller;
 		$this->_params = new Params(
 			['whitelist' => self::$_paramWhitelist]
 		);
@@ -99,6 +108,7 @@ class FormPages extends SiteController
 
 		$pages = FormPage::all()
 			->whereEquals('form_id', $formId)
+			->order('order', 'asc')
 			->rows();
 
 		$this->view
@@ -129,6 +139,36 @@ class FormPages extends SiteController
 			->set('action', $createTaskUrl)
 			->set('page', $page)
 			->display();
+	}
+
+	/**
+	 * Attempts to create page record using submitted data
+	 *
+	 * @return   void
+	 */
+	public function createTask()
+	{
+		$this->_bouncer->redirectUnlessAuthorized('core.create');
+
+		$formId = $this->_params->get('form_id');
+		$pageData = $this->_params->getArray('page');
+		$pageData['created'] = Date::toSql();
+		$pageData['created_by'] = User::get('id');
+		$pageData['form_id'] = $formId;
+
+		$page = FormPage::blank();
+		$page->set($pageData);
+
+		if ($page->save())
+		{
+			$forwardingUrl = $this->_routes->formsPagesUrl($formId);
+			$successMessage = Lang::txt('COM_FORMS_FORM_SAVE_SUCCESS');
+			$this->_crudHelper->successfulCreate($forwardingUrl, $successMessage);
+		}
+		else
+		{
+			$this->_crudHelper->failedCreate($page);
+		}
 	}
 
 }

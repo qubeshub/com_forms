@@ -97,6 +97,7 @@ class Forms extends SiteController
 			'controller' => $this,
 			'errorSummary' => Lang::txt('COM_FORMS_FORM_SAVE_ERROR')
 		]);
+		$this->name = $this->_controller;
 		$this->params = new Params(
 			['whitelist' => self::$_paramWhitelist]
 		);

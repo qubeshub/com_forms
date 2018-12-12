@@ -118,7 +118,7 @@ class FormsRouter
 	}
 
 	/**
-	 * Generates search update url
+	 * Generates form display url
 	 *
 	 * @param    int      $formId   ID of form to edit
 	 * @return   string
@@ -133,7 +133,7 @@ class FormsRouter
 	}
 
 	/**
-	 * Generates search update url
+	 * Generates form's pages list url
 	 *
 	 * @param    int      $formId   ID of form associated with pages
 	 * @return   string
@@ -141,6 +141,38 @@ class FormsRouter
 	public function formsPagesUrl($formId)
 	{
 		$segments = ['pages'];
+		$parameters = ['form_id' => $formId];
+
+		$url = $this->_generateUrl($segments, $parameters);
+
+		return $url;
+	}
+
+	/**
+	 * Generates form's pages new url
+	 *
+	 * @param    int      $formId   ID of form associated with pages
+	 * @return   string
+	 */
+	public function formsPagesNewUrl($formId)
+	{
+		$segments = ['pages', 'new'];
+		$parameters = ['form_id' => $formId];
+
+		$url = $this->_generateUrl($segments, $parameters);
+
+		return $url;
+	}
+
+	/**
+	 * Generates form's pages create url
+	 *
+	 * @param    int      $formId   ID of form associated with pages
+	 * @return   string
+	 */
+	public function formsPagesCreateUrl($formId)
+	{
+		$segments = ['pages', 'create'];
 		$parameters = ['form_id' => $formId];
 
 		$url = $this->_generateUrl($segments, $parameters);

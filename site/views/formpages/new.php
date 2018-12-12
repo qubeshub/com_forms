@@ -37,14 +37,14 @@ $this->css('formForm');
 $action = $this->action;
 $form = $this->form;
 $formName = $form->get('name');
-$formDisplayUrl = $this->formDisplayUrl;
+$formsDisplayUrl = $this->formsDisplayUrl;
 $page = $this->page;
 $webPageTitle = 'New Page';
 $submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_CREATE_PAGE');
 
 $breadcrumbs = [
 	'Forms' => '/forms',
-	$formName => $formDisplayUrl,
+	$formName => $formsDisplayUrl,
 	'New Page' => ''
 ];
 $this->view('_breadcrumbs', 'shared')

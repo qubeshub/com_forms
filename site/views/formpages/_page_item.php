@@ -32,21 +32,24 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$editUrl = $this->editUrl;
 $page = $this->page;
 $order = $page->get('order');
 $title = $page->get('title');
 ?>
 
 <li class="page-item">
-	<span class="grid">
+	<a href="<?php echo $editUrl; ?>">
+		<span class="grid">
 
-		<span class="col span1 offset1">
-			<?php echo $order; ?>
+			<span class="col span1 offset1">
+				<?php echo $order; ?>
+			</span>
+
+			<span class="col span3">
+				<?php echo $title; ?>
+			</span>
+
 		</span>
-
-		<span class="col span3">
-			<?php echo $title; ?>
-		</span>
-
-	</span>
+	</a>
 </li>

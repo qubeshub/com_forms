@@ -123,7 +123,7 @@ class FormsRouter
 	 * @param    int      $formId   ID of form to edit
 	 * @return   string
 	 */
-	public function formDisplayUrl($formId)
+	public function formsDisplayUrl($formId)
 	{
 		$segments = ['forms', $formId, 'display'];
 
@@ -176,6 +176,21 @@ class FormsRouter
 		$parameters = ['form_id' => $formId];
 
 		$url = $this->_generateUrl($segments, $parameters);
+
+		return $url;
+	}
+
+	/**
+	 * Generates form's pages create url
+	 *
+	 * @param    int      $pageId   ID of page to edit
+	 * @return   string
+	 */
+	public function pagesEditUrl($pageId)
+	{
+		$segments = ['pages', $pageId, 'edit'];
+
+		$url = $this->_generateUrl($segments);
 
 		return $url;
 	}

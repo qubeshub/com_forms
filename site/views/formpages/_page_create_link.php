@@ -25,34 +25,26 @@
  * HUBzero is a registered trademark of Purdue University.
  *
  * @package   hubzero-cms
- * @author    Anthony Fuentes <fuentesa@purdue.edu>
  * @copyright Copyright 2005-2015 HUBzero Foundation, LLC.
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Forms\Site;
-
-use Request;
+// No direct access
+defined('_HZEXEC_') or die();
 
 $componentPath = Component::path('com_forms');
-$defaultControllerName = 'forms';
-$controllerName = Request::getVar('controller', $defaultControllerName);
-$controllerNameMap = [
-	'forms' => 'forms',
-	'pages' => 'formPages',
-];
 
-$mappedName = $controllerNameMap[$controllerName];
-$controllerPath = "$componentPath/site/controllers/$mappedName.php";
+require_once "$componentPath/helpers/formsRouter.php";
 
-if (!file_exists($controllerPath))
-{
-	$controller = $defaultControllerName;
-}
+use Components\Forms\Helpers\FormsRouter as Routes;
 
-require_once "$componentPath/site/controllers/$mappedName.php";
+$formId = $this->formId;
+$routes = new Routes();
+$pageNewUrl = $routes->formsPagesNewUrl($formId);
 
-$namespacedName = __NAMESPACE__ . "\\Controllers\\$mappedName";
-
-$controller = new $namespacedName();
-$controller->execute();
+$this->view('_protected_link', 'shared')
+	->set('authMethod', 'currentCanCreate')
+	->set('classes', 'btn btn-success')
+	->set('localPath', $pageNewUrl)
+	->set('textKey', 'COM_FORMS_LINKS_PAGE_CREATE')
+	->display();

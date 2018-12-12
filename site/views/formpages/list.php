@@ -25,34 +25,61 @@
  * HUBzero is a registered trademark of Purdue University.
  *
  * @package   hubzero-cms
- * @author    Anthony Fuentes <fuentesa@purdue.edu>
  * @copyright Copyright 2005-2015 HUBzero Foundation, LLC.
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Forms\Site;
+// No direct access
+defined('_HZEXEC_') or die();
 
-use Request;
+$this->css('formPagesList');
 
-$componentPath = Component::path('com_forms');
-$defaultControllerName = 'forms';
-$controllerName = Request::getVar('controller', $defaultControllerName);
-$controllerNameMap = [
-	'forms' => 'forms',
-	'pages' => 'formPages',
+$form = $this->form;
+$formId = $form->get('id');
+$formName = $form->get('name');
+$pages = $this->pages;
+
+$breadcrumbs = [
+	'Forms' => '/forms',
+	 $formName => "/forms/forms/$formId/display",
+	'Edit' => "/forms/forms/$formId/edit",
+	'Pages' => ''
 ];
+$page = "Form's Pages";
 
-$mappedName = $controllerNameMap[$controllerName];
-$controllerPath = "$componentPath/site/controllers/$mappedName.php";
+$this->view('_breadcrumbs', 'shared')
+	->set('breadcrumbs', $breadcrumbs)
+	->set('page', $page)
+	->display();
+?>
 
-if (!file_exists($controllerPath))
-{
-	$controller = $defaultControllerName;
-}
+<section class="main section">
+	<div class="grid">
 
-require_once "$componentPath/site/controllers/$mappedName.php";
+		<div class="row">
+			<?php
+				$this->view('_form_edit_nav', 'shared')
+					->set('current', 'Pages')
+					->set('formId', $formId)
+					->display();
+			?>
+		</div>
 
-$namespacedName = __NAMESPACE__ . "\\Controllers\\$mappedName";
+		<div class="row">
+			<?php
+				$this->view('_pages_list_area')
+					->set('pages', $pages)
+					->display();
+			?>
+		</div>
 
-$controller = new $namespacedName();
-$controller->execute();
+	<div class="row link-row">
+		<?php
+			$this->view('_page_create_link')
+				->set('formId', $formId)
+				->display();
+		?>
+	</div>
+
+	</div>
+</section>

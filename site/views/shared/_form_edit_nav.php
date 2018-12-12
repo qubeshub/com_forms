@@ -46,7 +46,7 @@ $routes = new Routes();
 
 $steps = [
 	'Form Info' => $routes->formsEditUrl($formId),
-	'Pages' => "",
+	'Pages' => $routes->formsPagesUrl($formId),
 	'Steps' => "",
 	'Products' => "",
 	'Payments' => "",

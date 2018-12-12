@@ -25,34 +25,23 @@
  * HUBzero is a registered trademark of Purdue University.
  *
  * @package   hubzero-cms
- * @author    Anthony Fuentes <fuentesa@purdue.edu>
  * @copyright Copyright 2005-2015 HUBzero Foundation, LLC.
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Forms\Site;
+// No direct access
+defined('_HZEXEC_') or die();
 
-use Request;
+$pages = $this->pages;
+?>
 
-$componentPath = Component::path('com_forms');
-$defaultControllerName = 'forms';
-$controllerName = Request::getVar('controller', $defaultControllerName);
-$controllerNameMap = [
-	'forms' => 'forms',
-	'pages' => 'formPages',
-];
-
-$mappedName = $controllerNameMap[$controllerName];
-$controllerPath = "$componentPath/site/controllers/$mappedName.php";
-
-if (!file_exists($controllerPath))
-{
-	$controller = $defaultControllerName;
-}
-
-require_once "$componentPath/site/controllers/$mappedName.php";
-
-$namespacedName = __NAMESPACE__ . "\\Controllers\\$mappedName";
-
-$controller = new $namespacedName();
-$controller->execute();
+<ul class="page-list">
+	<?php
+		foreach ($pages as $page)
+		{
+			$this->view('_page_item')
+				->set('page', $page)
+				->display();
+		}
+	?>
+</ul>

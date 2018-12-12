@@ -41,6 +41,7 @@ use Components\Forms\Helpers\FormsAuth;
 $formsAuth = new FormsAuth();
 
 $authMethod = $this->authMethod;
+$classes = isset($this->classes) ? $this->classes : '';
 $currentIsAuthorized = $formsAuth->$authMethod();
 $localPath = $this->localPath;
 $textKey = $this->textKey;
@@ -49,7 +50,7 @@ $url = Route::url($localPath);
 ?>
 
 <?php if ($currentIsAuthorized): ?>
-	<a href="<?php echo $url; ?>">
+	<a href="<?php echo $url; ?>" class="protected-link <?php echo $classes; ?>">
 		<?php echo $text; ?>
 	</a>
 <?php endif; ?>

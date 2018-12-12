@@ -32,7 +32,7 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('formForm');
+$this->css('pageForm');
 
 $action = $this->action;
 $form = $this->form;

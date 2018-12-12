@@ -41,6 +41,16 @@ use Components\Forms\Helpers\FormsRouter;
 class FormsRouterTest extends Basic
 {
 
+	public function testFormsNewUrlReturnsCorrectUrl()
+	{
+		$routes = new FormsRouter();
+		$expectedUrl = '/forms/forms/new';
+
+		$generatedUrl = $routes->formsNewUrl();
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
 	public function testFormsCreateUrlReturnsCorrectUrl()
 	{
 		$routes = new FormsRouter();

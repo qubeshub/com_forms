@@ -53,6 +53,20 @@ class FormsRouter
 	}
 
 	/**
+	 * Generates forms new URL
+	 *
+	 * @return   string
+	 */
+	public function formsNewUrl()
+	{
+		$segments = ['forms', 'new'];
+
+		$url = $this->_generateUrl($segments);
+
+		return $url;
+	}
+
+	/**
 	 * Generates forms create URL
 	 *
 	 * @return   string

@@ -188,8 +188,8 @@ class Forms extends SiteController
 	{
 		$this->bouncer->redirectUnlessAuthorized('core.create');
 
-		$formId = Request::getInt('id');
-		$form = $form ? $form : Form::one($formId);
+		$formId = $this->params->get('id');
+		$form = $form ? $form : Form::oneOrFail($formId);
 
 		$updateTaskUrl = $this->routes->formsUpdateUrl($formId);
 

@@ -107,4 +107,28 @@ class FormPages extends SiteController
 			->display();
 	}
 
+	/**
+	 * Renders new pages view
+	 *
+	 * @return   void
+	 */
+	public function newTask($page = false)
+	{
+		$this->_bouncer->redirectUnlessAuthorized('core.create');
+
+		$formId = $this->_params->get('form_id');
+		$form = Form::oneOrFail($formId);
+		$formDisplayUrl = $this->_routes->formDisplayUrl($formId);
+
+		$page = $page ? $page : FormPage::blank();
+		$createTaskUrl = $this->_routes->formsPagesCreateUrl($formId);
+
+		$this->view
+			->set('form', $form)
+			->set('formDisplayUrl', $formDisplayUrl)
+			->set('action', $createTaskUrl)
+			->set('page', $page)
+			->display();
+	}
+
 }

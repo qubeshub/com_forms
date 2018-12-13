@@ -78,22 +78,4 @@ class FormTest extends Basic
 		$this->assertEquals('notempty', $validation);
 	}
 
-	public function testRulesRequiresCreated()
-	{
-		$form = Form::blank();
-
-		$validation = $form->rules['created'];
-
-		$this->assertEquals('notempty', $validation);
-	}
-
-	public function testRulesRequiresCreatedBy()
-	{
-		$form = Form::blank();
-
-		$validation = $form->rules['created_by'];
-
-		$this->assertEquals('notempty', $validation);
-	}
-
 }

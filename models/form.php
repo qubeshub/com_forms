@@ -58,9 +58,7 @@ class Form extends Relational
 	public $rules = [
 		'name' => 'notempty',
 		'opening_time' => 'notempty',
-		'closing_time' => 'notempty',
-		'created' => 'notempty',
-		'created_by' => 'notempty'
+		'closing_time' => 'notempty'
 	];
 
 }

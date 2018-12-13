@@ -145,6 +145,7 @@ class RelationalCrudHelperTest extends Basic
 		$controller = $this->getMockBuilder('SiteController')
 			->setMethods(['setView', 'editTask'])
 			->getMock();
+		$controller->name = '';
 		$notify = $this->getMockBuilder('Notify')
 			->setMethods(['error'])
 			->getMock();
@@ -172,6 +173,7 @@ class RelationalCrudHelperTest extends Basic
 		$controller = $this->getMockBuilder('SiteController')
 			->setMethods(['setView', 'editTask'])
 			->getMock();
+		$controller->name = '';
 		$notify = $this->getMockBuilder('Notify')
 			->setMethods(['error'])
 			->getMock();

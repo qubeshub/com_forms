@@ -88,7 +88,9 @@ class RelationalCrudHelper extends CrudHelper
 	 */
 	protected function _forwardUserToEditPage($record)
 	{
-		$this->_controller->setView(null, 'edit');
+		$controllerName = $this->_controller->name;
+
+		$this->_controller->setView($controllerName, 'edit');
 		$this->_controller->editTask($record);
 	}
 

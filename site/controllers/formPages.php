@@ -159,8 +159,9 @@ class FormPages extends SiteController
 
 		if ($page->save())
 		{
-			$forwardingUrl = $this->_routes->formsPagesUrl($formId);
-			$successMessage = Lang::txt('COM_FORMS_FORM_SAVE_SUCCESS');
+			$pageId = $page->get('id');
+			$forwardingUrl = $this->_routes->pagesEditUrl($pageId);
+			$successMessage = Lang::txt('COM_FORMS_PAGE_SAVE_SUCCESS');
 			$this->_crudHelper->successfulCreate($forwardingUrl, $successMessage);
 		}
 		else
@@ -182,13 +183,42 @@ class FormPages extends SiteController
 		$page = $page ? $page : FormPage::oneOrFail($pageId);
 		$form = $page->getForm();
 
-		$updateTaskUrl = '';// AF: update $this->routes->formsUpdateUrl($formId);
+		$updateTaskUrl = $this->_routes->pagesUpdateUrl($pageId);
 
 		$this->view
 			->set('action', $updateTaskUrl)
 			->set('form', $form)
 			->set('page', $page)
 			->display();
+	}
+
+	/**
+	 * Handles updating of given page using provided data
+	 *
+	 * @return   void
+	 */
+	public function updateTask()
+	{
+		$this->_bouncer->redirectUnlessAuthorized('core.create');
+
+		$pageId = $this->_params->get('id');
+		$pageData = $this->_params->getArray('page');
+		$pageData['modified'] = Date::toSql();
+		$pageData['modified_by'] = User::get('id');
+
+		$page = FormPage::oneOrFail($pageId);
+		$page->set($pageData);
+
+		if ($page->save())
+		{
+			$forwardingUrl = $this->_routes->pagesEditUrl($pageId);
+			$message = Lang::txt('COM_FORMS_PAGE_SAVE_SUCCESS');
+			$this->_crudHelper->successfulUpdate($forwardingUrl, $message);
+		}
+		else
+		{
+			$this->_crudHelper->failedUpdate($page);
+		}
 	}
 
 }

@@ -46,7 +46,7 @@ $submitValue = $this->submitValue;
 	?>
 
 	<div class="grid button-container">
-		<div class="col span2">
+		<div class="col span2 omega">
 			<input type="submit" class="btn btn-success" value="<?php echo $submitValue; ?>">
 		</div>
 	</div>

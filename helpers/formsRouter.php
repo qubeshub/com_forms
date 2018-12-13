@@ -202,7 +202,7 @@ class FormsRouter
 	}
 
 	/**
-	 * Generates form's pages create url
+	 * Generates page's edit url
 	 *
 	 * @param    int      $pageId   ID of page to edit
 	 * @return   string
@@ -210,6 +210,21 @@ class FormsRouter
 	public function pagesEditUrl($pageId)
 	{
 		$segments = ['pages', $pageId, 'edit'];
+
+		$url = $this->_generateUrl($segments);
+
+		return $url;
+	}
+
+	/**
+	 * Generates page's update url
+	 *
+	 * @param    int      $pageId   ID of page to update
+	 * @return   string
+	 */
+	public function pagesUpdateUrl($pageId)
+	{
+		$segments = ['pages', $pageId, 'update'];
 
 		$url = $this->_generateUrl($segments);
 

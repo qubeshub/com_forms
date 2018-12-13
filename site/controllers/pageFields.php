@@ -25,36 +25,81 @@
  * HUBzero is a registered trademark of Purdue University.
  *
  * @package   hubzero-cms
- * @author    Anthony Fuentes <fuentesa@purdue.edu>
  * @copyright Copyright 2005-2015 HUBzero Foundation, LLC.
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Forms\Site;
-
-use Hubzero\Utility\Arr;
-use Request;
+namespace Components\Forms\Site\Controllers;
 
 $componentPath = Component::path('com_forms');
-$defaultControllerName = 'forms';
-$controllerName = Request::getCmd('controller', $defaultControllerName);
-$controllerNameMap = [
-	'fields' => 'pageFields',
-	'forms' => 'forms',
-	'pages' => 'formPages'
-];
 
-$mappedName = Arr::getValue($controllerNameMap, $controllerName, $defaultControllerName);
-$controllerPath = "$componentPath/site/controllers/$mappedName.php";
+require_once "$componentPath/helpers/pageBouncer.php";
+require_once "$componentPath/helpers/params.php";
+require_once "$componentPath/models/formPage.php";
 
-if (!file_exists($controllerPath))
+use Components\Forms\Helpers\PageBouncer;
+use Components\Forms\Helpers\Params;
+use Components\Forms\Models\FormPage;
+use Hubzero\Component\SiteController;
+
+class PageFields extends SiteController
 {
-	$controller = $defaultControllerName;
+
+	/**
+	 * Task mapping
+	 *
+	 * @var  array
+	 */
+	protected $_taskMap = [
+		'__default' => 'edit'
+	];
+
+	/**
+	 * Parameter whitelist
+	 *
+	 * @var  array
+	 */
+	protected static $_paramWhitelist = [
+		'page_id'
+	];
+
+	/**
+	 * Executes requested task
+	 *
+	 * @return   void
+	 */
+	public function execute()
+	{
+		$this->_bouncer = new PageBouncer([
+			'component' => $this->_option
+		]);
+		$this->name = $this->_controller;
+		$this->_params = new Params(
+			['whitelist' => self::$_paramWhitelist]
+		);
+
+		parent::execute();
+	}
+
+	/**
+	 * Renders fields editing page
+	 *
+	 * @return   void
+	 */
+	public function editTask()
+	{
+		$this->_bouncer->redirectUnlessAuthorized('core.create');
+
+		$pageId = $this->_params->get('page_id');
+		$page = FormPage::oneOrFail($pageId);
+
+		$fields = $page->getFields();
+		$form = $page->getForm();
+
+		$this->view
+			->set('form', $form)
+			->set('pageId', $pageId)
+			->display();
+	}
+
 }
-
-require_once "$componentPath/site/controllers/$mappedName.php";
-
-$namespacedName = __NAMESPACE__ . "\\Controllers\\$mappedName";
-
-$controller = new $namespacedName();
-$controller->execute();

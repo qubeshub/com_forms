@@ -35,17 +35,17 @@ $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/formsRouter.php";
 require_once "$componentPath/helpers/pageBouncer.php";
-require_once "$componentPath/models/form.php";
-require_once "$componentPath/models/formPage.php";
 require_once "$componentPath/helpers/params.php";
 require_once "$componentPath/helpers/relationalCrudHelper.php";
+require_once "$componentPath/models/form.php";
+require_once "$componentPath/models/formPage.php";
 
 use Components\Forms\Helpers\FormsRouter as RoutesHelper;
 use Components\Forms\Helpers\PageBouncer;
-use Components\Forms\Models\Form;
-use Components\Forms\Models\FormPage;
 use Components\Forms\Helpers\Params;
 use Components\Forms\Helpers\RelationalCrudHelper as CrudHelper;
+use Components\Forms\Models\Form;
+use Components\Forms\Models\FormPage;
 use Hubzero\Component\SiteController;
 
 class FormPages extends SiteController
@@ -184,9 +184,11 @@ class FormPages extends SiteController
 		$form = $page->getForm();
 
 		$updateTaskUrl = $this->_routes->pagesUpdateUrl($pageId);
+		$editFieldsUrl = $this->_routes->pagesFieldsEditUrl($pageId);
 
 		$this->view
 			->set('action', $updateTaskUrl)
+			->set('editFieldsUrl', $editFieldsUrl)
 			->set('form', $form)
 			->set('page', $page)
 			->display();

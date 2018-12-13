@@ -32,27 +32,21 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('pageForm');
-$this->css('pageEdit');
-
-$action = $this->action;
-$editFieldsUrl = $this->editFieldsUrl;
 $form = $this->form;
 $formId = $form->get('id');
 $formName = $form->get('name');
-$page = $this->page;
-$pageId = $page->get('id');
-$submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_UPDATE_PAGE');
+$pageId = $this->pageId;
 
 $breadcrumbs = [
 	$formName => ['formsDisplayUrl', [$formId]],
 	'Edit' => ['formsEditUrl', [$formId]],
 	'Pages' => ['formsPagesUrl', [$formId]],
-	$pageId => ['pagesEditUrl', [$pageId]]
+	$pageId => ['pagesEditUrl', [$pageId]],
+	'Fields' => ['pagesFieldsEditUrl', [$pageId]]
 ];
 $this->view('_forms_breadcrumbs', 'shared')
 	->set('breadcrumbs', $breadcrumbs)
-	->set('page', 'Edit Page')
+	->set('page', 'Edit Fields')
 	->display();
 ?>
 
@@ -61,22 +55,6 @@ $this->view('_forms_breadcrumbs', 'shared')
 
 		<div class="row">
 			<div class="col span12 omega">
-				<?php
-					$this->view('_page_form')
-						->set('action', $action)
-						->set('page', $page)
-						->set('submitValue', $submitValue)
-						->display();
-				?>
-			</div>
-
-		</div>
-
-		<div class="row">
-			<div class="col span2 offset10 omega edit-link-container">
-				<a href="<?php echo $editFieldsUrl; ?>" class="edit-link">
-					Edit Fields
-				</a>
 			</div>
 		</div>
 

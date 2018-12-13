@@ -232,6 +232,22 @@ class FormsRouter
 	}
 
 	/**
+	 * Generates page's field editing url
+	 *
+	 * @param    int      $pageId   ID of page to edit fields of
+	 * @return   string
+	 */
+	public function pagesFieldsEditUrl($pageId)
+	{
+		$segments = ['fields'];
+		$parameters = ['page_id' => $pageId];
+
+		$url = $this->_generateUrl($segments, $parameters);
+
+		return $url;
+	}
+
+	/**
 	 * Generates URL based on given segments and parameters
 	 *
 	 * @param    array    $segments     URL segments

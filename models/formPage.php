@@ -31,12 +31,18 @@
 
 namespace Components\Forms\Models;
 
+$componentPath = Component::path('com_forms');
+
+require_once "$componentPath/models/form.php";
+require_once "$componentPath/models/pageField.php";
+
 use Hubzero\Database\Relational;
 
 class FormPage extends Relational
 {
 
 	static $FORM_MODEL_NAME = 'Components\Forms\Models\Form';
+	static $FIELD_MODEL_NAME = 'Components\Forms\Models\PageField';
 
 	/**
 	 * Records table
@@ -76,6 +82,21 @@ class FormPage extends Relational
 		$form = $this->belongsToOne($formModelName, $foreignKey)->row();
 
 		return $form;
+	}
+
+	/*
+	 * Retrieves associated field records
+	 *
+	 * @return   object
+	 */
+	public function getFields()
+	{
+		$fieldModelName = self::$FIELD_MODEL_NAME;
+		$foreignKey = 'page_id';
+
+		$fields = $this->oneToMany($fieldModelName, $foreignKey);
+
+		return $fields;
 	}
 
 }

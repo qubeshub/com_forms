@@ -1,0 +1,12 @@
+/*
+ * Edit fields link
+ */
+.edit-link-container {
+	text-align: center;
+	margin: 1.5em 0 0 0;
+}
+
+.edit-link {
+	margin: 0 0 0 auto;
+	font-size: 1.5em;
+}

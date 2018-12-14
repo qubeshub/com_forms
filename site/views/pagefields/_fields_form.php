@@ -32,40 +32,13 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->js('form-builder.min')
-	->js('formBuilder')
-	->js('fieldsEdit');
-
-
-$form = $this->form;
-$formId = $form->get('id');
-$formName = $form->get('name');
-$pageId = $this->pageId;
-
-$breadcrumbs = [
-	$formName => ['formsDisplayUrl', [$formId]],
-	'Edit' => ['formsEditUrl', [$formId]],
-	'Pages' => ['formsPagesUrl', [$formId]],
-	$pageId => ['pagesEditUrl', [$pageId]],
-	'Fields' => ['pagesFieldsEditUrl', [$pageId]]
-];
-$this->view('_forms_breadcrumbs', 'shared')
-	->set('breadcrumbs', $breadcrumbs)
-	->set('page', 'Edit Fields')
-	->display();
+$noJsNotice = Lang::txt('COM_FORMS_NOTICES_FIELDS_NO_JS');
 ?>
 
-<section class="main section">
-	<div class="grid">
+<div id="form-builder-anchor"></div>
 
-		<div class="row">
-			<div class="col span12 omega">
-				<?php
-					$this->view('_fields_form')
-						->display();
-				?>
-			</div>
-		</div>
-
-	</div>
-</section>
+<noscript>
+	<h2>
+		<?php echo $noJsNotice; ?>
+	</h2>
+</noscript>

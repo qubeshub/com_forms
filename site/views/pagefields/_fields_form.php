@@ -33,12 +33,21 @@
 defined('_HZEXEC_') or die();
 
 $noJsNotice = Lang::txt('COM_FORMS_NOTICES_FIELDS_NO_JS');
+$pageId = $this->pageId;
+$submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_SAVE_CHANGES');
 ?>
 
 <div id="form-builder-anchor"></div>
+
+<form action="">
+	<input class="btn btn-success" type="submit" value="<?php echo $submitValue; ?>" />
+	<input type="hidden" name="page_id" value="<?php echo $pageId; ?>" />
+	<input type="hidden" name="api_endpoint" value="<?php echo $pageId; ?>" />
+</form>
 
 <noscript>
 	<h2>
 		<?php echo $noJsNotice; ?>
 	</h2>
 </noscript>
+

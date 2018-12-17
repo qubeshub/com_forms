@@ -32,10 +32,14 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->js('form-builder.min')
+$this->css('fieldsEdit')
+	->js('form-builder.min')
 	->js('formBuilder')
+	->js('api')
+	->js('page')
 	->js('fieldsEdit');
 
+\Html::behavior('core');
 
 $form = $this->form;
 $formId = $form->get('id');
@@ -62,6 +66,7 @@ $this->view('_forms_breadcrumbs', 'shared')
 			<div class="col span12 omega">
 				<?php
 					$this->view('_fields_form')
+						->set('pageId', $pageId)
 						->display();
 				?>
 			</div>

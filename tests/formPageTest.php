@@ -69,13 +69,4 @@ class FormPageTest extends Basic
 		$this->assertEquals('positive', $validation);
 	}
 
-	public function testRulesRequiresCreatedBy()
-	{
-		$page = FormPage::blank();
-
-		$validation = $page->rules['created_by'];
-
-		$this->assertEquals('positive', $validation);
-	}
-
 }

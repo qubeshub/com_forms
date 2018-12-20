@@ -34,26 +34,24 @@ namespace Components\Forms\Tests;
 $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/virtualCrudHelper.php";
+require_once "$componentPath/tests/helpers/canMock.php";
 
 use Hubzero\Test\Basic;
 use Components\Forms\Helpers\VirtualCrudHelper as CrudHelper;
+use Components\Forms\Tests\Traits\canMock;
 
 class VirtualCrudHelperTest extends Basic
 {
+	use canMock;
 
 	public function testfailedCreateInvokesRedirect()
 	{
 		$url = 'url';
-		$notify = $this->getMockBuilder('MockProxy')
-			->setMethods(['error'])
-			->getMock();
-		$record = $this->getMockBuilder('Relational')
-			->setMethods(['getErrors'])
-			->getMock();
-		$record->method('getErrors')->willReturn([]);
-		$router = $this->getMockBuilder('MockProxy')
-			->setMethods(['redirect'])
-			->getMock();
+		$notify = $this->mock(['class' => 'Notify', 'methods' => ['error']]);
+		$record = $this->mock([
+			'class' => 'Relational', 'methods' => ['getErrors' => []]
+		]);
+		$router = $this->mock(['class' => 'App', 'methods' => ['redirect']]);
 		$crudHelper = new CrudHelper([
 			'notify' => $notify,
 			'router' => $router

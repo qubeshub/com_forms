@@ -34,20 +34,22 @@ namespace Components\Forms\Tests;
 $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/params.php";
+require_once "$componentPath/tests/helpers/canMock.php";
 
 use Hubzero\Test\Basic;
 use Components\Forms\Helpers\Params;
+use Components\Forms\Tests\Traits\canMock;
 
 class ParamsTest extends Basic
 {
+	use canMock;
 
 	public function testGetArrayInvokesGetArrayWithGivenKey()
 	{
 		$key = 'test';
-		$request = $this->getMockBuilder('MockProxy')
-			->setMethods(['getArray'])
-			->getMock();
-		$request->method('getArray')->willReturn([]);
+		$request = $this->mock([
+			'class' => 'Request', 'methods' => ['getArray' => []]
+		]);
 		$params = new Params([
 			'request' => $request,
 			'whitelist' => []
@@ -63,14 +65,9 @@ class ParamsTest extends Basic
 	public function testGetArrayFiltersKeysCorrectly()
 	{
 		$whitelist = ['a', 'b'];
-		$request = $this->getMockBuilder('MockProxy')
-			->setMethods(['getArray'])
-			->getMock();
-		$request->method('getArray')->willReturn([
-			'a' => 1,
-			'b' => 2,
-			'c' => 3,
-		 	'd' => 4
+		$requestArray = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4];
+		$request = $this->mock([
+			'class' => 'Request', 'methods' => ['getArray' => $requestArray]
 		]);
 		$params = new Params([
 			'request' => $request,
@@ -86,9 +83,7 @@ class ParamsTest extends Basic
 	public function testGetInvokesGetWithGivenKey()
 	{
 		$key = 'test';
-		$request = $this->getMockBuilder('MockProxy')
-			->setMethods(['get'])
-			->getMock();
+		$request = $this->mock(['class' => 'Request', 'methods' => ['get']]);
 		$params = new Params([
 			'request' => $request,
 			'whitelist' => []
@@ -105,10 +100,9 @@ class ParamsTest extends Basic
 	{
 		$key = 'test';
 		$sentData = 'sent data';
-		$request = $this->getMockBuilder('MockProxy')
-			->setMethods(['get'])
-			->getMock();
-		$request->method('get')->willReturn($sentData);
+		$request = $this->mock([
+			'class' => 'Request', 'methods' => ['get' => $sentData]
+		]);
 		$params = new Params([
 			'request' => $request,
 			'whitelist' => []

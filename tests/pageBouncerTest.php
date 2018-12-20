@@ -35,21 +35,22 @@ namespace Components\Forms\Tests;
 $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/pageBouncer.php";
+require_once "$componentPath/tests/helpers/canMock.php";
 
 use Hubzero\Test\Basic;
 use Components\Forms\Helpers\PageBouncer;
+use Components\Forms\Tests\Traits\canMock;
 
 class PageBouncerTest extends Basic
 {
+	use canMock;
 
 	public function testRedirectUnlessAuthorizedInvokesAuthorize()
 	{
-		$permitter = $this->getMockBuilder('FormsAuth')
-			->setMethods(['currentIsAuthorized'])
-			->getMock();
-		$router = $this->getMockBuilder('Router')
-			->setMethods(['redirect'])
-			->getMock();
+		$permitter = $this->mock([
+			'class' => 'FormsAuth', 'methods' => ['currentIsAuthorized']
+		]);
+		$router = $this->mock(['class' => 'Router', 'methods' => ['redirect']]);
 		$bouncer = new PageBouncer([
 			'component' => 'com_forms',
 			'permitter' => $permitter,
@@ -64,12 +65,10 @@ class PageBouncerTest extends Basic
 
 	public function testRedirectUnlessAuthorizedInvokesRedirect()
 	{
-		$permitter = $this->getMockBuilder('FormsAuth')
-			->setMethods(['currentIsAuthorized'])
-			->getMock();
-		$router = $this->getMockBuilder('Router')
-			->setMethods(['redirect'])
-			->getMock();
+		$permitter = $this->mock([
+			'class' => 'FormsAuth', 'methods' => ['currentIsAuthorized']
+		]);
+		$router = $this->mock(['class' => 'Router', 'methods' => ['redirect']]);
 		$bouncer = new PageBouncer([
 			'component' => 'com_forms',
 			'permitter' => $permitter,

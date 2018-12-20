@@ -36,20 +36,23 @@ $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/criterion.php";
 require_once "$componentPath/helpers/query.php";
+require_once "$componentPath/tests/helpers/canMock.php";
 
 use Exception;
 use Hubzero\Test\Basic;
 use Components\Forms\Helpers\Criterion;
 use Components\Forms\Helpers\Query;
+use Components\Forms\Tests\Traits\canMock;
 
 class QueryTest extends Basic
 {
+	use canMock;
 
 	public function testSavedInvokesSetOnSession()
 	{
-		$session = $this->getMockBuilder('Session')
-			->setMethods(['set'])
-			->getMock();
+		$session = $this->mock([
+			'class' => 'Session', 'methods' => ['set']
+		]);
 		$query = new Query(['session' => $session]);
 
 		$session->expects($this->once())
@@ -60,10 +63,9 @@ class QueryTest extends Basic
 
 	public function testLoadReturnsQueryInstance()
 	{
-		$session = $this->getMockBuilder('Session')
-			->setMethods(['get'])
-			->getMock();
-		$session->method('get')->willReturn([]);
+		$session = $this->mock([
+			'class' => 'Session', 'methods' => ['get' => []]
+		]);
 
 		$query = Query::load(['session' => $session]);
 		$queryClass = get_class($query);

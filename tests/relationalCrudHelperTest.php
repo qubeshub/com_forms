@@ -34,26 +34,27 @@ namespace Components\Forms\Tests;
 $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/relationalCrudHelper.php";
+require_once "$componentPath/tests/helpers/canMock.php";
 
 use Hubzero\Test\Basic;
 use Components\Forms\Helpers\RelationalCrudHelper as CrudHelper;
+use Components\Forms\Tests\Traits\canMock;
 
 class RelationalCrudHelperTest extends Basic
 {
+	use canMock;
 
 	public function testFailedCreateInvokesSetView()
 	{
-		$controller = $this->getMockBuilder('SiteController')
-			->setMethods(['setView', 'newTask'])
-			->getMock();
-		$controller->name = '';
-		$notify = $this->getMockBuilder('Notify')
-			->setMethods(['error'])
-			->getMock();
-		$record = $this->getMockBuilder('Relational')
-			->setMethods(['getErrors'])
-			->getMock();
-		$record->method('getErrors')->willReturn([]);
+		$controller = $this->mock([
+			'class' => 'SiteController',
+			'methods' => ['setView', 'newTask'],
+			'props' => ['name' => '']
+		]);
+		$notify = $this->mock(['class' => 'Notify', 'methods' => ['error']]);
+		$record = $this->mock([
+			'class' => 'Relational', 'methods' => ['getErrors' => []]
+		]);
 		$crudHelper = new CrudHelper([
 			'controller' => $controller,
 			'notify' => $notify
@@ -71,17 +72,15 @@ class RelationalCrudHelperTest extends Basic
 
 	public function testFailedCreateInvokesNewTask()
 	{
-		$controller = $this->getMockBuilder('SiteController')
-			->setMethods(['setView', 'newTask'])
-			->getMock();
-		$controller->name = '';
-		$notify = $this->getMockBuilder('Notify')
-			->setMethods(['error'])
-			->getMock();
-		$record = $this->getMockBuilder('Relational')
-			->setMethods(['getErrors'])
-			->getMock();
-		$record->method('getErrors')->willReturn([]);
+		$controller = $this->mock([
+			'class' => 'SiteController',
+			'methods' => ['setView', 'newTask'],
+			'props' => ['name' => '']
+		]);
+		$notify = $this->mock(['class' => 'Notify', 'methods' => ['error']]);
+		$record = $this->mock([
+			'class' => 'Relational', 'methods' => ['getErrors' => []]
+		]);
 		$crudHelper = new CrudHelper([
 			'controller' => $controller,
 			'notify' => $notify
@@ -98,14 +97,9 @@ class RelationalCrudHelperTest extends Basic
 
 	public function testSuccessfulUpdateInvokesSuccessWhenGivenMessage()
 	{
-		$controller = $this->getMockBuilder('SiteController')
-			->getMock();
-		$notify = $this->getMockBuilder('Notify')
-			->setMethods(['success'])
-			->getMock();
-		$router = $this->getMockBuilder('App')
-			->setMethods(['redirect'])
-			->getMock();
+		$controller = $this->mock(['class' => 'SiteController']);
+		$notify = $this->mock(['class' => 'Notify', 'methods' => ['success']]);
+		$router = $this->mock(['class' => 'App', 'methods' => ['redirect']]);
 		$crudHelper = new CrudHelper([
 			'controller' => $controller,
 			'notify' => $notify,
@@ -120,14 +114,9 @@ class RelationalCrudHelperTest extends Basic
 
 	public function testSuccessfulUpdateInvokesSuccessWhenMessageEmpty()
 	{
-		$controller = $this->getMockBuilder('SiteController')
-			->getMock();
-		$notify = $this->getMockBuilder('Notify')
-			->setMethods(['success'])
-			->getMock();
-		$router = $this->getMockBuilder('App')
-			->setMethods(['redirect'])
-			->getMock();
+		$controller = $this->mock(['class' => 'SiteController']);
+		$notify = $this->mock(['class' => 'Notify', 'methods' => ['success']]);
+		$router = $this->mock(['class' => 'App', 'methods' => ['redirect']]);
 		$crudHelper = new CrudHelper([
 			'controller' => $controller,
 			'notify' => $notify,
@@ -142,17 +131,15 @@ class RelationalCrudHelperTest extends Basic
 
 	public function testfailedUpdateInvokesSetView()
 	{
-		$controller = $this->getMockBuilder('SiteController')
-			->setMethods(['setView', 'editTask'])
-			->getMock();
-		$controller->name = '';
-		$notify = $this->getMockBuilder('Notify')
-			->setMethods(['error'])
-			->getMock();
-		$record = $this->getMockBuilder('Relational')
-			->setMethods(['getErrors'])
-			->getMock();
-		$record->method('getErrors')->willReturn([]);
+		$controller = $this->mock([
+			'class' => 'SiteController',
+			'methods' => ['setView', 'editTask'],
+			'props' => ['name' => '']
+		]);
+		$notify = $this->mock(['class' => 'Notify', 'methods' => ['error']]);
+		$record = $this->mock([
+			'class' => 'Relational', 'methods' => ['getErrors' => []]
+		]);
 		$crudHelper = new CrudHelper([
 			'controller' => $controller,
 			'notify' => $notify
@@ -170,17 +157,15 @@ class RelationalCrudHelperTest extends Basic
 
 	public function testfailedUpdateInvokesEditTask()
 	{
-		$controller = $this->getMockBuilder('SiteController')
-			->setMethods(['setView', 'editTask'])
-			->getMock();
-		$controller->name = '';
-		$notify = $this->getMockBuilder('Notify')
-			->setMethods(['error'])
-			->getMock();
-		$record = $this->getMockBuilder('Relational')
-			->setMethods(['getErrors'])
-			->getMock();
-		$record->method('getErrors')->willReturn([]);
+		$controller = $this->mock([
+			'class' => 'SiteController',
+			'methods' => ['setView', 'editTask'],
+			'props' => ['name' => '']
+		]);
+		$notify = $this->mock(['class' => 'Notify', 'methods' => ['error']]);
+		$record = $this->mock([
+			'class' => 'Relational', 'methods' => ['getErrors' => []]
+		]);
 		$crudHelper = new CrudHelper([
 			'controller' => $controller,
 			'notify' => $notify

@@ -34,18 +34,22 @@ namespace Components\Forms\Tests;
 $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/componentAuth.php";
+require_once "$componentPath/tests/helpers/canMock.php";
 
 use Hubzero\Test\Basic;
 use Components\Forms\Helpers\ComponentAuth;
+use Components\Forms\Tests\Traits\canMock;
 
 class ComponentAuthTest extends Basic
 {
+	use canMock;
 
 	public function testCurrentIsAuthorizedInvokesAuthorize()
 	{
-		$permitter = $this->getMockBuilder('User')
-			->setMethods(['authorize'])
-			->getMock();
+		$permitter = $this->mock([
+			'class' => 'User',
+			'methods' => ['authorize']
+		]);
 		$auth = new ComponentAuth([
 			'component' => 'com_forms',
 			'permitter' => $permitter
@@ -59,9 +63,10 @@ class ComponentAuthTest extends Basic
 
 	public function testCurrentCanCreateInvokesAuthorize()
 	{
-		$permitter = $this->getMockBuilder('User')
-			->setMethods(['authorize'])
-			->getMock();
+		$permitter = $this->mock([
+			'class' => 'User',
+			'methods' => ['authorize']
+		]);
 		$auth = new ComponentAuth([
 			'component' => 'com_forms',
 			'permitter' => $permitter

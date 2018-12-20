@@ -50,4 +50,15 @@ class PageField extends Relational
 	 */
 	public $initiate = ['created'];
 
+	/**
+	 * Attribute validation
+	 *
+	 * @var  array
+	 */
+	public $rules = [
+		'page_id' => 'positive',
+		'order' => 'positive',
+		'type' => 'notempty'
+	];
+
 }

@@ -33,32 +33,28 @@ namespace Components\Forms\Helpers;
 
 $componentPath = Component::path('com_forms');
 
-require_once "$componentPath/helpers/criterion.php";
-require_once "$componentPath/helpers/likeCriterion.php";
+require_once "$componentPath/helpers/apiBatchUpdateResponse.php";
 
-use Components\Forms\Helpers\Criterion;
-use Components\Forms\Helpers\LikeCriterion;
-use Hubzero\Utility\Arr;
+use Components\Forms\Helpers\ApiBatchUpdateResponse;
 
-class CriterionFactory
+class ApiResponseFactory
 {
 
 	/**
-	 * Instantiates appropriate Criterion type
+	 * Instantiates appropriate ApiResponse type
 	 *
-	 * @param    array    $args   Criterion type and instantiation state
+	 * @param    array    $args   CRUD operation and result
 	 * @return   object
+	 *
 	 */
-	public function one($args = [])
+	public function one($args)
 	{
-		$operator = Arr::getValue($args, 'operator');
+		$operation = $args['operation'];
 
-		switch($operator)
+		switch($operation)
 		{
-			case 'like':
-				return new LikeCriterion($args);
-			default:
-				return new Criterion($args);
+			case 'batchUpdate':
+				return new ApiBatchUpdateResponse($args);
 		}
 	}
 

@@ -29,37 +29,29 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Forms\Helpers;
+namespace Components\Forms\Tests;
 
 $componentPath = Component::path('com_forms');
 
-require_once "$componentPath/helpers/criterion.php";
-require_once "$componentPath/helpers/likeCriterion.php";
+require_once "$componentPath/helpers/apiResponseFactory.php";
 
-use Components\Forms\Helpers\Criterion;
-use Components\Forms\Helpers\LikeCriterion;
-use Hubzero\Utility\Arr;
+use Hubzero\Test\Basic;
+use Components\Forms\Helpers\ApiResponseFactory;
 
-class CriterionFactory
+class ApiResponseFactoryTest extends Basic
 {
 
-	/**
-	 * Instantiates appropriate Criterion type
-	 *
-	 * @param    array    $args   Criterion type and instantiation state
-	 * @return   object
-	 */
-	public function one($args = [])
+	public function testOneReturnsApiUpdateResponseWhenUpdateOperation()
 	{
-		$operator = Arr::getValue($args, 'operator');
+		$factory = new ApiResponseFactory();
 
-		switch($operator)
-		{
-			case 'like':
-				return new LikeCriterion($args);
-			default:
-				return new Criterion($args);
-		}
+		$response = $factory->one([
+			'operation' => 'batchUpdate',
+			'result' => [], 'error_message' => '', 'success_message' => ''
+		]);
+		$responseClass = get_class($response);
+
+		$this->assertEquals('Components\Forms\Helpers\ApiBatchUpdateResponse', $responseClass);
 	}
 
 }

@@ -67,4 +67,17 @@ class ApiResponseFactoryTest extends Basic
 		$this->assertEquals('Components\Forms\Helpers\ApiReadResponse', $responseClass);
 	}
 
+	public function testOneReturnsApiNullResponseByDefault()
+	{
+		$factory = new ApiResponseFactory();
+
+		$response = $factory->one([
+			'operation' => 'null',
+			'result' => [], 'error_message' => '', 'success_message' => ''
+		]);
+		$responseClass = get_class($response);
+
+		$this->assertEquals('Components\Forms\Helpers\ApiNullResponse', $responseClass);
+	}
+
 }

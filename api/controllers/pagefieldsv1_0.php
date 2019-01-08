@@ -139,23 +139,86 @@ class PageFieldsv1_0 extends ApiController
 	 */
 	public function updateTask()
 	{
-		$this->requiresAuthentication();
+		//$this->requiresAuthentication();
 		$this->_bouncer->redirectUnlessAuthorized('core.create');
 
-		$fieldsData = $this->_params->get('fields');
 		$pageId = $this->_params->get('page_id');
-		$page = FormPage::one($pageId);
+		$page = FormPage::oneOrNew($pageId);
+		$pageIsNew = $page->isNew();
+		$userCanEditPage = $page->editableBy(User::getCurrentUser());
 
+		if (!$pageIsNew && $userCanEditPage)
+		{
+			$response = $this->_updatePagesFields($page);
+		}
+		else
+		{
+			$response = $this->_updatePagesFieldsIssue($pageIsNew, $userCanEditPage);
+		}
+
+		$this->send($response->toArray());
+	}
+
+	/**
+	 * Attempts to update given pages fields
+	 *
+	 * @param    object   $page   Page record
+	 * @return   object
+	 */
+	protected function _updatePagesFields($page)
+	{
+		$newFieldsData = $this->_params->get('fields');
 		$pagesFields = $page->getFieldsInArray();
-		$updateResult = $this->_factory->updatePagesFields($pagesFields, $fieldsData);
+		$updateResult = $this->_factory->updatePagesFields($pagesFields, $newFieldsData);
 		$response = $this->_apiResponseFactory->one([
 			'operation' => 'batchUpdate',
-		 	'result' => $updateResult,
+			'result' => $updateResult,
 			'error_message' => Lang::txt('COM_FORMS_FIELDS_UPDATE_ERROR'),
 			'success_message' => Lang::txt('COM_FORMS_FIELDS_UPDATE_SUCCESS')
 		]);
 
-		$this->send($response->toArray());
+		return $response;
+	}
+
+	/**
+	 * Generates response when issues prevent update
+	 *
+	 * @param    bool     $pageIsNew         Indicates if Page record is new
+	 * @param    bool     $userCanEditPage   Indicates if current user can edit page
+	 * @return   object
+	 */
+	protected function _updatePagesFieldsIssue($pageIsNew, $userCanEditPage)
+	{
+		$message = $this->_updatePagesFieldsIssueMessage($pageIsNew, $userCanEditPage);
+
+		$response = $this->_apiResponseFactory->one([
+			'operation' => 'null',
+			'message' =>  $message,
+			'status' => 'error',
+		]);
+
+		return $response;
+	}
+
+	/**
+	 * Generates response message when issues prevent update
+	 *
+	 * @param    bool     $pageIsNew         Indicates if Page record is new
+	 * @param    bool     $userCanEditPage   Indicates if current user can edit page
+	 * @return   object
+	 */
+	protected function _updatePagesFieldsIssueMessage($pageIsNew, $userCanEditPage)
+	{
+		if ($pageIsNew)
+		{
+			$message = Lang::txt('COM_FORMS_FIELDS_UPDATE_NO_PAGE_RECORD');
+		}
+		else
+		{
+			$message = Lang::txt('COM_FORMS_FIELDS_UPDATE_PERMISSIONS_DENIED');
+		}
+
+		return $message;
 	}
 
 }

@@ -116,4 +116,19 @@ class FormPage extends Relational
 		return $fieldsArray;
 	}
 
+	/**
+	 * Indicates whether user can edit $this page
+	 *
+	 * @param    object   $user   Given user
+	 * @return   array
+	 */
+	public function editableBy($user)
+	{
+		$userIsOwner = $this->get('created_by') == $user->get('id');
+
+		$editableBy = $userIsOwner;
+
+		return $editableBy;
+	}
+
 }

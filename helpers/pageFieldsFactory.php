@@ -33,11 +33,13 @@ namespace Components\Forms\Helpers;
 
 $compnentPath = Component::path('com_forms');
 
+require_once "$componentPath/helpers/associationReadResult.php";
 require_once "$componentPath/helpers/batchUpdateHelper.php";
 require_once "$componentPath/helpers/crudBatch.php";
 require_once "$componentPath/helpers/crudBatchResult.php";
 require_once "$componentPath/helpers/factory.php";
 
+use Components\Forms\Helpers\AssociationReadResult;
 use Components\Forms\Helpers\BatchUpdateHelper;
 use Components\Forms\Helpers\CrudBatch;
 use Components\Forms\Helpers\CrudBatchResult;
@@ -61,6 +63,22 @@ class PageFieldsFactory extends Factory
 		$args['model_name'] = 'Components\Forms\Models\PageField';
 
 		parent::__construct($args);
+	}
+
+	/**
+	 * Retrieves given pages associated fields
+	 *
+	 * @param    object   $page   Given page
+	 * @return   object
+	 */
+	public function readPagesFields($page)
+	{
+		$readResult = new AssociationReadResult([
+			'model' => $page,
+			'accessor' => 'getFieldsInArray',
+		]);
+
+		return $readResult;
 	}
 
 	/**

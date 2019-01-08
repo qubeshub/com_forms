@@ -31,35 +31,70 @@
 
 namespace Components\Forms\Helpers;
 
-$componentPath = Component::path('com_forms');
-
-require_once "$componentPath/helpers/apiBatchUpdateResponse.php";
-require_once "$componentPath/helpers/apiReadResponse.php";
-
-use Components\Forms\Helpers\ApiBatchUpdateResponse;
-use Components\Forms\Helpers\ApiReadResponse;
-
-class ApiResponseFactory
+class AssociationReadResult
 {
 
 	/**
-	 * Instantiates appropriate ApiResponse type
+	 * Constructs AssociationReadResult instance
 	 *
-	 * @param    array    $args   CRUD operation and result
-	 * @return   object
-	 *
+	 * @param    array   $args   Instantiation state
+	 * @return   void
 	 */
-	public function one($args)
+	public function __construct($args = [])
 	{
-		$operation = $args['operation'];
+		$this->_data = null;
+		$this->_accessor = $args['accessor'];
+		$this->_model = $args['model'];
+	}
 
-		switch($operation)
+	/**
+	 * Indicates whether read succeeded
+	 *
+	 * @return   bool
+	 */
+	public function succeeded()
+	{
+		$modelIsNew = $this->_model->isNew();
+
+		$readSucceeded = $this->_retrieveAssociations();
+
+		return !$modelIsNew && $readSucceeded;
+	}
+
+	/**
+	 * Getter for _data attribute
+	 *
+	 * @return   mixed
+	 */
+	public function getData()
+	{
+		if ($this->_data === null)
 		{
-			case 'batchUpdate':
-				return new ApiBatchUpdateResponse($args);
-			case 'read':
-				return new ApiReadResponse($args);
+			$this->_retrieveAssociations();
 		}
+
+		return $this->_data;
+	}
+
+	/**
+	 * Retrieves associations from object using given accessor
+	 *
+	 * @return   bool
+	 */
+	protected function _retrieveAssociations()
+	{
+		try
+		{
+			$accessor = $this->_accessor;
+			$this->_data = $this->_model->$accessor();
+			$readSucceeded = true;
+		}
+		catch (Exception $e)
+		{
+			$readSucceeded = false;
+		}
+
+		return $readSucceeded;
 	}
 
 }

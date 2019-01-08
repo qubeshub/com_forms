@@ -29,6 +29,12 @@ class FormBuilder {
 		return fields
 	}
 
+	setFields(fields) {
+		const fieldsJson = JSON.stringify(fields)
+
+		this._builder.actions.setData(fieldsJson)
+	}
+
 }
 
 HUB.FORMS.FormBuilder = FormBuilder

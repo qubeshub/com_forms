@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * HUBzero CMS
  *
  * Copyright 2005-2015 HUBzero Foundation, LLC.
@@ -29,37 +29,65 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Forms\Helpers;
+namespace Components\Forms\Api;
 
-$componentPath = Component::path('com_forms');
+use Hubzero\Component\Router\Base;
 
-require_once "$componentPath/helpers/apiBatchUpdateResponse.php";
-require_once "$componentPath/helpers/apiReadResponse.php";
+class Router extends Base
 
-use Components\Forms\Helpers\ApiBatchUpdateResponse;
-use Components\Forms\Helpers\ApiReadResponse;
-
-class ApiResponseFactory
 {
 
 	/**
-	 * Instantiates appropriate ApiResponse type
+	 * Build API URL
 	 *
-	 * @param    array    $args   CRUD operation and result
-	 * @return   object
-	 *
+	 * @param   array  &$query  URL parameters
+	 * @return  array
 	 */
-	public function one($args)
+	public function build(&$query)
 	{
-		$operation = $args['operation'];
+		$segments = array();
 
-		switch($operation)
+		if (!empty($query['controller']))
 		{
-			case 'batchUpdate':
-				return new ApiBatchUpdateResponse($args);
-			case 'read':
-				return new ApiReadResponse($args);
+			$segments[] = $query['controller'];
+			unset($query['controller']);
 		}
+		if (!empty($query['task']))
+		{
+			$segments[] = $query['task'];
+			unset($query['task']);
+		}
+
+		return $segments;
+	}
+
+	/**
+	 * Parse URL segments
+	 *
+	 * @param   array  &$segments  URL segments
+	 * @return  array
+	 */
+	public function parse(&$segments)
+	{
+		$vars = array();
+
+		if (isset($segments[0]))
+		{
+			$vars['controller'] = $segments[0];
+		}
+		if (isset($segments[1]))
+		{
+			if (is_numeric($segments[1]))
+			{
+				$vars['id'] = $segments[1];
+			}
+			else
+			{
+				$vars['task'] = $segments[1];
+			}
+		}
+
+		return $vars;
 	}
 
 }

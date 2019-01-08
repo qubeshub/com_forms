@@ -54,4 +54,17 @@ class ApiResponseFactoryTest extends Basic
 		$this->assertEquals('Components\Forms\Helpers\ApiBatchUpdateResponse', $responseClass);
 	}
 
+	public function testOneReturnsApiReadResponseWhenReadOperation()
+	{
+		$factory = new ApiResponseFactory();
+
+		$response = $factory->one([
+			'operation' => 'read',
+			'result' => [], 'error_message' => '', 'success_message' => ''
+		]);
+		$responseClass = get_class($response);
+
+		$this->assertEquals('Components\Forms\Helpers\ApiReadResponse', $responseClass);
+	}
+
 }

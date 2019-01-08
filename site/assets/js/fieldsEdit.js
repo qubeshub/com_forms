@@ -2,6 +2,20 @@
 const anchorId = 'form-builder-anchor'
 var formBuilder
 
+const getFormBuilder = () => {
+	const $anchor = $(`#${anchorId}`)
+	formBuilder = new HUB.FORMS.FormBuilder({$anchor})
+
+	return formBuilder
+}
+
+const getPage = () => {
+	const id = getPageId()
+	const page = new HUB.FORMS.Page({id})
+
+	return page
+}
+
 const getPageId = () => {
 	const pageIdInputName = 'page_id'
 	const pageIdInput = $('input[name=page_id]')
@@ -11,12 +25,19 @@ const getPageId = () => {
 	return pageId
 }
 
-const submitForm = (e) => {
+const registerSubmitHandler = (page) => {
+	const $submitButton = $('.btn-success')
+
+	$submitButton.click((e) => {
+		submitForm(e, page)
+	})
+}
+
+const submitForm = (e, page) => {
 	e.preventDefault()
 
 	const fields = formBuilder.getFields()
-	const pageId = getPageId()
-	const page = new HUB.FORMS.Page({id: pageId, fields})
+	page.setFields(fields)
 
 	page.save()
 }
@@ -24,13 +45,16 @@ const submitForm = (e) => {
 $(document).ready(() => {
 	Hubzero.initApi(() => {
 
-		const $anchor = $(`#${anchorId}`)
-		const $submitButton = $('.btn-success')
+		const formBuilder = getFormBuilder()
+		const page = getPage()
 
-		formBuilder = new HUB.FORMS.FormBuilder({$anchor})
 		formBuilder.render()
 
-		$submitButton.click(submitForm)
+		page.fetchFields().then((response) => {
+			const currentFields = response['associations']
+			formBuilder.setFields(currentFields)
+		})
 
+		registerSubmitHandler(page)
 	})
 })

@@ -65,8 +65,7 @@ class FormPage extends Relational
 	 */
 	public $rules = [
 		'form_id' => 'positive',
-		'order' => 'positive',
-		'created_by' => 'positive',
+		'order' => 'positive'
 	];
 
 	/*
@@ -97,6 +96,24 @@ class FormPage extends Relational
 		$fields = $this->oneToMany($fieldModelName, $foreignKey);
 
 		return $fields;
+	}
+
+	/**
+	 * Returns associated field models in an array
+	 *
+	 * @return   array
+	 */
+	public function getFieldsInArray()
+	{
+		$fieldsArray = [];
+		$fields = $this->getFields()->rows();
+
+		foreach ($fields as $field)
+		{
+			$fieldsArray[] = $field;
+		}
+
+		return $fieldsArray;
 	}
 
 }

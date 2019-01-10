@@ -37,6 +37,7 @@ require_once "$componentPath/helpers/apiResponseFactory.php";
 require_once "$componentPath/helpers/pageBouncer.php";
 require_once "$componentPath/helpers/pageFieldsFactory.php";
 require_once "$componentPath/helpers/params.php";
+require_once "$componentPath/helpers/params.php";
 require_once "$componentPath/models/formPage.php";
 
 use Components\Forms\Helpers\ApiResponseFactory;
@@ -115,7 +116,27 @@ class PageFieldsv1_0 extends ApiController
 			'success_message' => Lang::txt('COM_FORMS_FIELDS_READ_SUCCESS')
 		]);
 
-		$this->send($response->toArray());
+		$responseArray = $this->_parseSpecialAttributes($response);
+
+		$this->send($responseArray);
+	}
+
+	/**
+	 * Parses any special values on response array
+	 *
+	 * @param    object   $response   API response
+	 * @return   object
+	 */
+	protected function _parseSpecialAttributes($response)
+	{
+		$responseArray = $response->toArray();
+
+		$responseArray['associations'] = array_map(function($fieldData) {
+			$fieldData['values'] = json_decode($fieldData['values']);
+			return $fieldData;
+		}, $responseArray['associations']);
+
+		return $responseArray;
 	}
 
 	/**
@@ -139,7 +160,7 @@ class PageFieldsv1_0 extends ApiController
 	 */
 	public function updateTask()
 	{
-		//$this->requiresAuthentication();
+		$this->requiresAuthentication();
 		$this->_bouncer->redirectUnlessAuthorized('core.create');
 
 		$pageId = $this->_params->get('page_id');
@@ -193,7 +214,7 @@ class PageFieldsv1_0 extends ApiController
 
 		$response = $this->_apiResponseFactory->one([
 			'operation' => 'null',
-			'message' =>  $message,
+			'error_message' =>  $message,
 			'status' => 'error',
 		]);
 

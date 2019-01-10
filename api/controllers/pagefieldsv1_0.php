@@ -37,7 +37,6 @@ require_once "$componentPath/helpers/apiResponseFactory.php";
 require_once "$componentPath/helpers/pageBouncer.php";
 require_once "$componentPath/helpers/pageFieldsFactory.php";
 require_once "$componentPath/helpers/params.php";
-require_once "$componentPath/helpers/params.php";
 require_once "$componentPath/models/formPage.php";
 
 use Components\Forms\Helpers\ApiResponseFactory;
@@ -188,7 +187,7 @@ class PageFieldsv1_0 extends ApiController
 	 */
 	protected function _updatePagesFields($page)
 	{
-		$newFieldsData = $this->_params->get('fields');
+		$newFieldsData = $this->_params->get('fields', []);
 		$pagesFields = $page->getFieldsInArray();
 		$updateResult = $this->_factory->updatePagesFields($pagesFields, $newFieldsData);
 		$response = $this->_apiResponseFactory->one([

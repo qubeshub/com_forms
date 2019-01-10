@@ -2,15 +2,18 @@
 const anchorId = 'form-builder-anchor'
 var formBuilder
 
-const getFormBuilder = () => {
+const getFormBuilder = (pageId) => {
 	const $anchor = $(`#${anchorId}`)
-	formBuilder = new HUB.FORMS.FormBuilder({$anchor})
+	const fieldClass = HUB.FORMS.ComFormsFormField
+
+	formBuilder = new HUB.FORMS.ComFormsFormBuilder({
+		$anchor, fieldClass, pageId
+	})
 
 	return formBuilder
 }
 
-const getPage = () => {
-	const id = getPageId()
+const getPage = (id) => {
 	const page = new HUB.FORMS.Page({id})
 
 	return page
@@ -45,13 +48,15 @@ const submitForm = (e, page) => {
 $(document).ready(() => {
 	Hubzero.initApi(() => {
 
-		const formBuilder = getFormBuilder()
-		const page = getPage()
+		const pageId = getPageId()
+		const page = getPage(pageId)
+		const formBuilder = getFormBuilder(pageId)
 
 		formBuilder.render()
 
 		page.fetchFields().then((response) => {
 			const currentFields = response['associations']
+
 			formBuilder.setFields(currentFields)
 		})
 

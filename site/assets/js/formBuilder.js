@@ -22,11 +22,9 @@ class FormBuilder {
 	}
 
 	getFields() {
-		const rawFormData = this._builder.formData
+		let fieldsState = this._builder.actions.getData('js')
 
-		const fields = JSON.parse(rawFormData)
-
-		return fields
+		return fieldsState
 	}
 
 	setFields(fields) {

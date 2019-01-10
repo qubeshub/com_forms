@@ -34,11 +34,11 @@ defined('_HZEXEC_') or die();
 
 $this->css('fieldsEdit')
 	->js('form-builder.min')
-	->js('formBuilderField')
-	->js('comFormsFormField')
 	->js('formBuilder')
 	->js('comFormsFormBuilder')
+	->js('comFormsFieldTranslator')
 	->js('api')
+	->js('objectHelper')
 	->js('page')
 	->js('fieldsEdit');
 

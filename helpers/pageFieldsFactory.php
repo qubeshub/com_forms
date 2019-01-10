@@ -106,8 +106,7 @@ class PageFieldsFactory extends Factory
 	 */
 	protected function _calculateUpdateDelta($currentFields, $submittedFieldsData)
 	{
-		$parsedFieldsData = $this->_parseSpecialAttributes($submittedFieldsData);
-		$submittedFields = $this->instantiateMany($parsedFieldsData);
+		$submittedFields = $this->instantiateMany($submittedFieldsData);
 
 		$updateDelta = $this->_batchUpdateHelper->updateDelta(
 			$currentFields,
@@ -116,23 +115,6 @@ class PageFieldsFactory extends Factory
 
 		return $updateDelta;
 	}
-
-	/**
-	 * Parses any special values on fields
-	 *
-	 * @param    array   $fieldsData   Fields' data
-	 * @return   object
-	 */
-	protected function _parseSpecialAttributes($fieldsData)
-	{
-		$parsedData = array_map(function($fieldData) {
-			$fieldData['values'] = json_encode($fieldData['values']);
-			return $fieldData;
-		}, $fieldsData);
-
-		return $parsedData;
-	}
-
 
 	/**
 	 * Saves, creates, or destroys fields based on update delta

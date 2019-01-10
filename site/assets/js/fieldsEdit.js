@@ -1,23 +1,7 @@
 
 const anchorId = 'form-builder-anchor'
+var fieldTranslator
 var formBuilder
-
-const getFormBuilder = (pageId) => {
-	const $anchor = $(`#${anchorId}`)
-	const fieldClass = HUB.FORMS.ComFormsFormField
-
-	formBuilder = new HUB.FORMS.ComFormsFormBuilder({
-		$anchor, fieldClass, pageId
-	})
-
-	return formBuilder
-}
-
-const getPage = (id) => {
-	const page = new HUB.FORMS.Page({id})
-
-	return page
-}
 
 const getPageId = () => {
 	const pageIdInputName = 'page_id'
@@ -26,6 +10,29 @@ const getPageId = () => {
 	const pageId = pageIdInput.val()
 
 	return pageId
+}
+
+const getPage = (id) => {
+	const page = new HUB.FORMS.Page({id})
+
+	return page
+}
+
+const getFormBuilder = (pageId) => {
+	const $anchor = $(`#${anchorId}`)
+
+	formBuilder = new HUB.FORMS.ComFormsFormBuilder({$anchor, pageId})
+
+	return formBuilder
+}
+
+const getFieldTranslator = () => {
+	const objectHelper = new HUB.FORMS.ObjectHelper()
+
+	HUB.FORMS.ComFormsFieldTranslator.objectHelper = objectHelper
+	fieldTranslator = new HUB.FORMS.ComFormsFieldTranslator()
+
+	return fieldTranslator
 }
 
 const registerSubmitHandler = (page) => {
@@ -40,8 +47,9 @@ const submitForm = (e, page) => {
 	e.preventDefault()
 
 	const fields = formBuilder.getFields()
-	page.setFields(fields)
+	const translatedFields = fieldTranslator.forServer(fields)
 
+	page.setFields(translatedFields)
 	page.save()
 }
 
@@ -50,14 +58,16 @@ $(document).ready(() => {
 
 		const pageId = getPageId()
 		const page = getPage(pageId)
-		const formBuilder = getFormBuilder(pageId)
+		formBuilder = getFormBuilder(pageId)
+		fieldTranslator = getFieldTranslator()
 
 		formBuilder.render()
 
 		page.fetchFields().then((response) => {
 			const currentFields = response['associations']
+			const translatedFields = fieldTranslator.forBuilder(currentFields)
 
-			formBuilder.setFields(currentFields)
+			formBuilder.setFields(translatedFields)
 		})
 
 		registerSubmitHandler(page)

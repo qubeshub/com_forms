@@ -8,12 +8,9 @@ class ComFormsFormBuilder extends HUB.FORMS.FormBuilder {
 	constructor(args) {
 		super(args)
 		this._pageId = args.pageId
-		this._getFieldClass = HUB.FORMS.ComFormsFormField
-		this._setFieldClass = HUB.FORMS.FormBuilderField
 	}
 
 	setFields(fields) {
-		fields = this._formFieldsData(fields, this._setFieldClass)
 		fields = this._sortFields(fields)
 
 		super.setFields(fields)
@@ -21,31 +18,12 @@ class ComFormsFormBuilder extends HUB.FORMS.FormBuilder {
 		this._addCmsIdsToDom(fields)
 	}
 
-	getFields() {
-		let fields = super.getFields()
-
-		fields = this._formFieldsData(fields, this._getFieldClass)
-		this._getCmsIdsFromDom(fields)
-
-		return fields
-	}
-
-	_formFieldsData(fields, fieldClass) {
-		fields = fields.map((field, order) => {
-			return this._formFieldData(field, order, fieldClass)
+	_sortFields(fields) {
+		fields.sort((field, fieldNext) => {
+			return field.order - fieldNext.order
 		})
 
 		return fields
-	}
-
-	_formFieldData(field, order, fieldClass) {
-		field = new fieldClass({
-			...field,
-			order,
-			page_id: this._pageId
-		})
-
-		return field.toObject()
 	}
 
 	_addCmsIdsToDom(virutalFields) {
@@ -63,7 +41,35 @@ class ComFormsFormBuilder extends HUB.FORMS.FormBuilder {
 		$field.attr(dataAttribute, cmsId)
 	}
 
-	_getCmsIdsFromDom(virtualFields) {
+	getFields() {
+		const fieldsData = super.getFields()
+
+		const supplementedFieldsData = this._addSupplementaryFieldsData(fieldsData)
+
+		return supplementedFieldsData
+	}
+
+	_addSupplementaryFieldsData(fieldsData) {
+		let supplementedFieldsData = fieldsData.map((fieldData, order) => {
+			return this._addSupplementaryFieldData(fieldData, order)
+		})
+
+		this._addCmsIds(supplementedFieldsData)
+
+		return supplementedFieldsData
+	}
+
+	_addSupplementaryFieldData(field, order) {
+		let supplementedFieldData = {
+			...field,
+			order,
+			page_id: this._pageId
+		}
+
+		return supplementedFieldData
+	}
+
+	_addCmsIds(virtualFields) {
 		const domFields = this._getFieldDomElements()
 
 		domFields.each((i, field) => {
@@ -85,14 +91,6 @@ class ComFormsFormBuilder extends HUB.FORMS.FormBuilder {
 		const $fields = $fieldsContainer.children()
 
 		return $fields
-	}
-
-	_sortFields(fields) {
-		fields.sort((field, fieldNext) => {
-			return field.order - fieldNext.order
-		})
-
-		return fields
 	}
 
 	static get cmsIdsDataAttribute() {

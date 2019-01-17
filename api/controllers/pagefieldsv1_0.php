@@ -187,9 +187,10 @@ class PageFieldsv1_0 extends ApiController
 	 */
 	protected function _updatePagesFields($page)
 	{
-		$newFieldsData = $this->_params->get('fields', []);
+		$submittedFieldsData = $this->_getFieldsData();
 		$pagesFields = $page->getFieldsInArray();
-		$updateResult = $this->_factory->updatePagesFields($pagesFields, $newFieldsData);
+		$updateResult = $this->_factory->updatePagesFields($pagesFields, $submittedFieldsData);
+
 		$response = $this->_apiResponseFactory->one([
 			'operation' => 'batchUpdate',
 			'result' => $updateResult,
@@ -198,6 +199,23 @@ class PageFieldsv1_0 extends ApiController
 		]);
 
 		return $response;
+	}
+
+	/**
+	 * Augments then returns submitted fields data
+	 *
+	 * @return   array
+	 */
+	protected function _getFieldsData()
+	{
+		$currentUserId = User::get('id');
+		$submitteFieldsData = $this->_params->get('fields', []);
+
+		$augmentedFieldsData = array_map(function($fieldData) use ($currentUserId) {
+			return array_merge($fieldData, ['created_by' => $currentUserId]);
+		}, $submitteFieldsData);
+
+		return $augmentedFieldsData;
 	}
 
 	/**

@@ -117,6 +117,9 @@ class ComFormsFieldTranslator {
 			case 'toggle':
 				parsedValue = value ? 1 : 0
 				break;
+			case 'values':
+				parsedValue = JSON.stringify(value)
+				break;
 			default:
 				parsedValue = value
 		}

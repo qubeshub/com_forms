@@ -42,6 +42,7 @@ require_once "$componentPath/helpers/query.php";
 require_once "$componentPath/helpers/relationalCrudHelper.php";
 require_once "$componentPath/helpers/relationalSearch.php";
 require_once "$componentPath/models/form.php";
+require_once "$componentPath/models/formResponse.php";
 
 use Components\Forms\Helpers\FormsRouter as RoutesHelper;
 use Components\Forms\Helpers\MockProxy;
@@ -51,6 +52,7 @@ use Components\Forms\Helpers\Query;
 use Components\Forms\Helpers\RelationalCrudHelper as CrudHelper;
 use Components\Forms\Helpers\RelationalSearch as Search;
 use Components\Forms\Models\Form;
+use Components\Forms\Models\FormResponse;
 use Hubzero\Component\SiteController;
 use \Date;
 use \User;
@@ -237,9 +239,14 @@ class Forms extends SiteController
 	{
 		$formId = Request::getInt('id');
 		$form = Form::oneOrFail($formId);
+		$response = FormResponse::oneWhere([
+			'form_id' => $formId,
+			'user_id' => User::get('id')
+		]);
 
 		$this->view
 			->set('form', $form)
+			->set('response', $response)
 			->display();
 	}
 

@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * HUBzero CMS
  *
  * Copyright 2005-2015 HUBzero Foundation, LLC.
@@ -29,71 +29,44 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Forms\Models;
+namespace Components\Forms\Tests;
 
-use Hubzero\Database\Relational;
+$componentPath = Component::path('com_forms');
 
-class FormResponse extends Relational
+require_once "$componentPath/models/formResponse.php";
+
+use Hubzero\Test\Basic;
+use Components\Forms\Models\FormResponse;
+
+class FormResponseTest extends Basic
 {
 
-	/**
-	 * Records table
-	 *
-	 * @var string
-	 */
-	protected $table = '#__forms_form_responses';
-
-	/*
-	 * Attributes to be populated on record creation
-	 *
-	 * @var array
-	 */
-	public $initiate = ['created'];
-
-	/*
-	 * Attribute validation
-	 *
-	 * @var  array
-	 */
-	public $rules = [
-		'form_id' => 'notempty',
-		'user_id' => 'notempty'
-	];
-
-	/**
-	 * Returns record based on given criteria
-	 *
-	 * @param    array   $criteria   Criteria to match record to
-	 * @return   object
-	 */
-	public static function oneWhere($criteria)
+	public function testInitiateHasCreated()
 	{
-		$record = self::_getRecordWhere($criteria);
+		$response = FormResponse::blank();
 
-		if (!$record)
-		{
-			$record = self::blank();
-		}
+		$initiate = $response->initiate;
+		$hasCreated = in_array('created', $initiate);
 
-		return $record;
+		$this->assertEquals(true, $hasCreated);
 	}
 
-	/**
-	 * Searches for record using given criteria
-	 *
-	 * @param    array   $criteria   Criteria to match record to
-	 * @return   mixed
-	 */
-	protected static function _getRecordWhere($criteria)
+	public function testRulesRequireFormId()
 	{
-		$query = self::all();
+		$response = FormResponse::blank();
 
-		foreach ($criteria as $attr => $value)
-		{
-			$query->whereEquals($attr, $value);
-		}
+		$validation = $response->rules['form_id'];
 
-		return $query->rows()->current();
+		$this->assertEquals('notempty', $validation);
+	}
+
+	public function testRulesRequireUserId()
+	{
+		$response = FormResponse::blank();
+
+		$validation = $response->rules['user_id'];
+
+		$this->assertEquals('notempty', $validation);
 	}
 
 }

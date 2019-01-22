@@ -31,16 +31,19 @@
 
 namespace Components\Forms\Models;
 
+$componentPath = Component::path('com_forms');
+
+require_once "$componentPath/models/formPrerequisite.php";
+require_once "$componentPath/models/formResponse.php";
+
+use Components\Forms\Models\FormResponse;
 use Hubzero\Database\Relational;
 
 class Form extends Relational
 {
 
-	/*
-	 * Records table
-	 *
-	 * @var string
-	 */
+	static protected $_prerequisiteClass = 'Components\Forms\Models\FormPrerequisite';
+
 	protected $table = '#__forms_forms';
 
 	/*
@@ -60,5 +63,77 @@ class Form extends Relational
 		'opening_time' => 'notempty',
 		'closing_time' => 'notempty'
 	];
+
+	/**
+	 * Returns associated prerequisites
+	 *
+	 * @return   object
+	 */
+	public function getPrerequisites()
+	{
+		$prerequisiteModelClass = self::$_prerequisiteClass;
+		$foreignKey = 'form_id';
+
+		$prerequisites = $this->oneToMany($prerequisiteModelClass, $foreignKey);
+
+		return $prerequisites;
+	}
+
+	/**
+	 * Indicates if given user has completed form
+	 *
+	 * @param    int    $userId   User's ID
+	 * @return   bool
+	 */
+	public function completedBy($userId)
+	{
+		$response = $this->getResponse($userId);
+
+		return !!$response->get('accepted');
+	}
+
+	/**
+	 * Returns associated responses
+	 *
+	 * @param    int      $userId Given user's ID
+	 * @return   object
+	 */
+	public function getResponse($userId)
+	{
+		$response = self::_getResponse($this->get('id'), $userId);
+
+		return $response;
+	}
+
+	/**
+	 * Searches for response with given form and user IDs
+	 *
+	 * @param    int      $formId   Given form's ID
+	 * @param    int      $userId   Given user's ID
+	 * @return   object
+	 */
+	protected static function _getResponse($formId, $userId)
+	{
+		$responseClass = self::_getResponseClass();
+
+		$response = $responseClass::oneWhere([
+			'form_id' => $formId,
+			'user_id' => $userId
+		]);
+
+		return $response;
+	}
+
+	/**
+	 * Returns form response model class
+	 *
+	 * @param    int      $formId   Given form's ID
+	 * @param    int      $userId   Given user's ID
+	 * @return   object
+	 */
+	protected static function _getResponseClass()
+	{
+		return get_class(FormResponse::blank());
+	}
 
 }

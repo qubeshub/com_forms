@@ -33,38 +33,22 @@
 defined('_HZEXEC_') or die();
 
 $form = $this->form;
-$formName = $form->get('name');
-$response = $this->response;
 ?>
 
-<div class="grid form-overview">
-
-	<div class="row">
-		<h2><?php echo  $formName; ?></h2>
-	</div>
-
-	<div class="row">
+<div class="grid">
+	<div class="col span6">
 		<?php
-			$this->view('_response_status')
-				->set('response', $response)
+			$this->view('_forms_dates_open')
+				->set('openingTime', $form->get('opening_time'))
 				->display();
 		?>
 	</div>
 
-	<div class="row">
+	<div class="col span6 omega">
 		<?php
-			$this->view('_forms_dates')
-				->set('form', $form)
+			$this->view('_forms_dates_closes')
+				->set('closingTime', $form->get('closing_time'))
 				->display();
 		?>
 	</div>
-
-	<div class="row">
-		<?php
-			$this->view('_forms_steps')
-				->set('form', $form)
-				->display();
-		?>
-	</div>
-
 </div>

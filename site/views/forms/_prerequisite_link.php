@@ -32,39 +32,19 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$form = $this->form;
-$formName = $form->get('name');
-$response = $this->response;
+$componentPath = Component::path('com_forms');
+
+require_once "$componentPath/helpers/formsRouter.php";
+
+use Components\Forms\Helpers\FormsRouter;
+
+$router = new FormsRouter();
+$prereq = $this->prereq;
+$parentId = $prereq->get('prerequisite_id');
+$prereqLink = $router->formsDisplayUrl($parentId);
+$prereqName = $prereq->getParent('name');
 ?>
 
-<div class="grid form-overview">
-
-	<div class="row">
-		<h2><?php echo  $formName; ?></h2>
-	</div>
-
-	<div class="row">
-		<?php
-			$this->view('_response_status')
-				->set('response', $response)
-				->display();
-		?>
-	</div>
-
-	<div class="row">
-		<?php
-			$this->view('_forms_dates')
-				->set('form', $form)
-				->display();
-		?>
-	</div>
-
-	<div class="row">
-		<?php
-			$this->view('_forms_steps')
-				->set('form', $form)
-				->display();
-		?>
-	</div>
-
-</div>
+<a href="<?php echo $prereqLink; ?>">
+	<?php echo $prereqName; ?>
+</a>

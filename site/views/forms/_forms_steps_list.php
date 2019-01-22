@@ -32,39 +32,21 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$form = $this->form;
-$formName = $form->get('name');
-$response = $this->response;
+$prereqs = $this->prereqs
+	->order('order', 'asc')
+	->rows();
+$userId = User::get('id');
 ?>
 
-<div class="grid form-overview">
+<ol>
+	<?php
+		foreach ($prereqs as $prereq):
 
-	<div class="row">
-		<h2><?php echo  $formName; ?></h2>
-	</div>
-
-	<div class="row">
-		<?php
-			$this->view('_response_status')
-				->set('response', $response)
+			$this->view('_forms_step')
+				->set('prereq', $prereq)
+				->set('userId', $userId)
 				->display();
-		?>
-	</div>
 
-	<div class="row">
-		<?php
-			$this->view('_forms_dates')
-				->set('form', $form)
-				->display();
-		?>
-	</div>
-
-	<div class="row">
-		<?php
-			$this->view('_forms_steps')
-				->set('form', $form)
-				->display();
-		?>
-	</div>
-
-</div>
+		endforeach;
+	?>
+</ol>

@@ -32,39 +32,27 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$form = $this->form;
-$formName = $form->get('name');
+$statusTitle = Lang::txt('COM_FORMS_HEADINGS_STATUS');
 $response = $this->response;
 ?>
 
-<div class="grid form-overview">
+<?php
+	if ($response->isNew()):
+		$statusMessage = Lang::txt('COM_FORMS_RESPONSE_STATUS_START');
+	elseif ($submissionDate = $response->get('submitted')):
+		$formattedDate = date('F dS, Y', strtotime($submissionDate));
+		$statusMessage = Lang::txt('COM_FORMS_RESPONSE_STATUS_SUBMITTED', $formattedDate);
+	else:
+		$completionPercentage = $response->requiredCompletionPercentage();
+		$statusMessage = Lang::txt('%s complete', $completionPercentage);
+	endif;
+?>
 
-	<div class="row">
-		<h2><?php echo  $formName; ?></h2>
-	</div>
+<div>
+	<h3>
+		<?php echo $statusTitle; ?>
+	</h3>
 
-	<div class="row">
-		<?php
-			$this->view('_response_status')
-				->set('response', $response)
-				->display();
-		?>
-	</div>
-
-	<div class="row">
-		<?php
-			$this->view('_forms_dates')
-				->set('form', $form)
-				->display();
-		?>
-	</div>
-
-	<div class="row">
-		<?php
-			$this->view('_forms_steps')
-				->set('form', $form)
-				->display();
-		?>
-	</div>
-
+	<?php echo $statusMessage; ?>
 </div>
+

@@ -32,39 +32,23 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$form = $this->form;
-$formName = $form->get('name');
-$response = $this->response;
+$openingTime = date_create_from_format('Y-m-d H:i:s', $this->openingTime);
+$now = new \DateTime();
+$timeUntilOpen = $now->diff($openingTime);
+
+if ($timeUntilOpen->days > 0)
+{
+	$openTitle = Lang::txt('COM_FORMS_HEADINGS_DATES_OPENS');
+}
+else
+{
+	$openTitle = Lang::txt('COM_FORMS_HEADINGS_DATES_OPENED');
+}
 ?>
 
-<div class="grid form-overview">
-
-	<div class="row">
-		<h2><?php echo  $formName; ?></h2>
-	</div>
-
-	<div class="row">
-		<?php
-			$this->view('_response_status')
-				->set('response', $response)
-				->display();
-		?>
-	</div>
-
-	<div class="row">
-		<?php
-			$this->view('_forms_dates')
-				->set('form', $form)
-				->display();
-		?>
-	</div>
-
-	<div class="row">
-		<?php
-			$this->view('_forms_steps')
-				->set('form', $form)
-				->display();
-		?>
-	</div>
-
+<div>
+	<h3>
+		<?php echo $openTitle; ?>
+	</h3>
+	<?php echo date('F dS, Y', strtotime($this->openingTime)); ?>
 </div>

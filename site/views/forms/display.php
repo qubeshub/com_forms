@@ -32,9 +32,12 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('formDisplay');
+
 $form = $this->form;
 $formId = $form->get('id');
 $formName = $form->get('name');
+$formResponse = $this->get('response');
 
 $this->view('_forms_breadcrumbs', 'shared')
 	->set('breadcrumbs', [$formName => ['formsDisplayUrl', [$formId]]])
@@ -46,10 +49,11 @@ $this->view('_forms_breadcrumbs', 'shared')
 	<div class="grid">
 		<div class="row">
 
-			<div class="col span6">
+			<div class="col span7">
 				<?php
 					$this->view('_form_overview')
 						->set('form', $form)
+						->set('response', $formResponse)
 						->display();
 				?>
 			</div>

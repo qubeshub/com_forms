@@ -32,39 +32,23 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$form = $this->form;
-$formName = $form->get('name');
-$response = $this->response;
+$prereq = $this->prereq;
+$userId = $this->userId;
+
+$completed = $prereq->completedBy($userId);
+$checkedStatus = $completed ? 'checked' : '';
 ?>
 
-<div class="grid form-overview">
-
-	<div class="row">
-		<h2><?php echo  $formName; ?></h2>
-	</div>
-
-	<div class="row">
+<li>
+	<span>
+		<input type="checkbox" disabled <?php echo $checkedStatus; ?>>
+	</span>
+	|
+	<span>
 		<?php
-			$this->view('_response_status')
-				->set('response', $response)
+			$this->view('_prerequisite_link')
+				->set('prereq', $prereq)
 				->display();
 		?>
-	</div>
-
-	<div class="row">
-		<?php
-			$this->view('_forms_dates')
-				->set('form', $form)
-				->display();
-		?>
-	</div>
-
-	<div class="row">
-		<?php
-			$this->view('_forms_steps')
-				->set('form', $form)
-				->display();
-		?>
-	</div>
-
-</div>
+	</span>
+</li>

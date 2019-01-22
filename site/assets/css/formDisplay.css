@@ -1,0 +1,25 @@
+
+h2 {
+	font-weight: bold;
+}
+
+h3 {
+	font-size: 1.5em;
+	text-decoration: underline;
+}
+
+.form-overview {
+	font-size: 1.5em;
+}
+
+ol {
+	margin: 0 0 0 1em;
+}
+
+.row:nth-child(2) {
+	margin: 0 0 2em 0;
+}
+
+.row:nth-child(3) {
+	margin: 0 0 4em 0;
+}

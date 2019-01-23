@@ -31,10 +31,19 @@
 
 namespace Components\Forms\Models;
 
+$componentPath = Component::path('com_forms');
+
+require_once "$componentPath/helpers/relationalQueryHelper.php";
+require_once "$componentPath/models/fieldResponse.php";
+
+use Components\Forms\Helpers\RelationalQueryHelper;
 use Hubzero\Database\Relational;
 
 class FormResponse extends Relational
 {
+
+	static protected $_fieldResponseClass = 'Components\Forms\Models\FieldResponse';
+	static protected $_formClass = 'Components\Forms\Models\Form';
 
 	/**
 	 * Records table
@@ -59,6 +68,17 @@ class FormResponse extends Relational
 		'form_id' => 'notempty',
 		'user_id' => 'notempty'
 	];
+
+	/**
+	 * Constructs FormResponse instance
+	 *
+	 * @return   void
+	 */
+	public function __construct($args = [])
+	{
+		$this->_relationalHelper = new RelationalQueryHelper();
+		parent::__construct();
+	}
 
 	/**
 	 * Returns record based on given criteria
@@ -94,6 +114,95 @@ class FormResponse extends Relational
 		}
 
 		return $query->rows()->current();
+	}
+
+	/**
+	 * Calculates percentage of required questions user has responded to
+	 *
+	 * @return   int
+	 */
+	public function requiredCompletionPercentage()
+	{
+		$requiredFields = $this->_getRequiredFields();
+		$responses = $this->_getResponsesTo($requiredFields);
+
+		$requiredCompletionPercentage = ($responses->count() / $requiredFields->count()) * 100;
+
+		return $requiredCompletionPercentage;
+	}
+
+	/**
+	 * Gets forms required fields
+	 *
+	 * @return   object
+	 */
+	protected function _getRequiredFields()
+	{
+		$allFields = $this->_getFields();
+
+		$requiredFields = $allFields->whereEquals('required', 1);
+
+		return $requiredFields;
+	}
+
+	/**
+	 * Gets all of the forms fields
+	 *
+	 * @return   object
+	 */
+	protected function _getFields()
+	{
+		$form = $this->getForm();
+
+		$fields = $form->getFields();
+
+		return $fields;
+	}
+
+	/**
+	 * Gets all forms fields
+	 *
+	 * @return   object
+	 */
+	public function getForm()
+	{
+		$formClass = self::$_formClass;
+
+		$form = $this->belongsToOne($formClass, 'form_id')
+			->rows();
+
+		return $form;
+	}
+
+	/**
+	 * Returns user's responses to given fields
+	 *
+	 * @param    object   $fields   Fields to search for responses to
+	 * @return   object
+	 */
+	protected function _getResponsesTo($fields)
+	{
+		$fieldsIds = $this->_relationalHelper->flatMap($fields, 'id');
+
+		$specificResponses = $this->getResponses()
+			->whereIn('field_id', $fieldsIds);
+
+		return $specificResponses;
+	}
+
+	/**
+	 * Gets users responses for fields associated with a form
+	 *
+	 * @return   object
+	 */
+	public function getResponses()
+	{
+		$fieldsResponseClass = self::$_fieldResponseClass;
+		$foreignKey = 'form_response_id';
+
+		$fieldsResponses = $this->oneToMany($fieldsResponseClass, $foreignKey);
+
+		return $fieldsResponses;
 	}
 
 }

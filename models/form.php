@@ -33,15 +33,19 @@ namespace Components\Forms\Models;
 
 $componentPath = Component::path('com_forms');
 
+require_once "$componentPath/models/formPage.php";
 require_once "$componentPath/models/formPrerequisite.php";
 require_once "$componentPath/models/formResponse.php";
+require_once "$componentPath/models/pageField.php";
 
 use Components\Forms\Models\FormResponse;
+use Components\Forms\Models\PageField;
 use Hubzero\Database\Relational;
 
 class Form extends Relational
 {
 
+	static protected $_pageClass = 'Components\Forms\Models\FormPage';
 	static protected $_prerequisiteClass = 'Components\Forms\Models\FormPrerequisite';
 
 	protected $table = '#__forms_forms';
@@ -127,13 +131,70 @@ class Form extends Relational
 	/**
 	 * Returns form response model class
 	 *
-	 * @param    int      $formId   Given form's ID
-	 * @param    int      $userId   Given user's ID
 	 * @return   object
 	 */
 	protected static function _getResponseClass()
 	{
 		return get_class(FormResponse::blank());
+	}
+
+	/**
+	 * Get associated fields
+	 *
+	 * @return   object
+	 */
+	public function getFields()
+	{
+		$pagesIds = $this->_getPagesIds();
+		$fieldClass = self::_getFieldClass();
+
+		$fields = $fieldClass::all()
+			->whereIn('page_id', $pagesIds);
+
+		return $fields;
+	}
+
+	/**
+	 * Returns associated pages IDs
+	 *
+	 * @return   array
+	 */
+	protected function _getPagesIds()
+	{
+		$pages = $this->getPages()->select('id')->execute();
+
+		$pagesIds = array_map(function($page) {
+			return $page->id;
+		}, $pages);
+
+		return $pagesIds;
+	}
+
+	/**
+	 * Returns field class
+	 *
+	 * @return   object
+	 */
+	protected static function _getFieldClass()
+	{
+		$fieldClass = get_class(PageField::blank());
+
+		return $fieldClass;
+	}
+
+	/**
+	 * Get associated pages
+	 *
+	 * @return   object
+	 */
+	public function getPages()
+	{
+		$pageModelClass = self::$_pageClass;
+		$foreignKey = 'form_id';
+
+		$pages = $this->oneToMany($pageModelClass, $foreignKey);
+
+		return $pages;
 	}
 
 }

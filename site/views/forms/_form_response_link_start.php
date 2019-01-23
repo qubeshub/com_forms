@@ -32,42 +32,17 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('formDisplay');
+$componentPath = Component::path('com_forms');
 
-$form = $this->form;
-$formId = $form->get('id');
-$formName = $form->get('name');
-$response = $this->get('response');
+require_once "$componentPath/helpers/formsRouter.php";
 
-$this->view('_forms_breadcrumbs', 'shared')
-	->set('breadcrumbs', [$formName => ['formsDisplayUrl', [$formId]]])
-	->set('page', $formName)
-	->display();
+use Components\Forms\Helpers\FormsRouter;
+
+$formId = $this->formId;
+$router = new FormsRouter();
+$startUrl = $router->formResponseStartUrl($formId)
 ?>
 
-<section class="main section">
-	<div class="grid">
-		<div class="row">
-
-			<div class="col span7">
-				<div>
-					<?php
-						$this->view('_form_overview')
-							->set('form', $form)
-							->set('response', $response)
-							->display();
-					?>
-				</div>
-
-				<div class="form-response-link">
-					<?php $this->view('_form_response_link')
-						->set('form', $form)
-						->set('response', $response)
-						->display();
-					?>
-				</div>
-			</div>
-
-		</div>
-	</div>
-</section>
+<a class="start" href="<?php echo $startUrl; ?>">
+	Start &#x2192
+</a>

@@ -40,11 +40,14 @@ $response = $this->response;
 	if ($response->isNew()):
 		$statusMessage = Lang::txt('COM_FORMS_RESPONSE_STATUS_START');
 	elseif ($submissionDate = $response->get('submitted')):
-		$formattedDate = date('F dS, Y', strtotime($submissionDate));
+		$formattedDate = date('F jS, Y', strtotime($submissionDate));
 		$statusMessage = Lang::txt('COM_FORMS_RESPONSE_STATUS_SUBMITTED', $formattedDate);
+	elseif ($acceptedDate = $response->get('accepted')):
+		$formattedDate = date('F jS, Y', strtotime($acceptedDate));
+		$statusMessage = Lang::txt('COM_FORMS_RESPONSE_STATUS_ACCEPTED', $formattedDate);
 	else:
 		$completionPercentage = $response->requiredCompletionPercentage();
-		$statusMessage = Lang::txt('%s complete', $completionPercentage);
+		$statusMessage = Lang::txt('COM_FORMS_RESPONSE_STATUS_PERCENT', $completionPercentage);
 	endif;
 ?>
 

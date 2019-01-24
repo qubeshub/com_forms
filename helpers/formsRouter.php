@@ -248,6 +248,37 @@ class FormsRouter
 	}
 
 	/**
+	 * Generates form response start URL
+	 *
+	 * @param    int      $formId   ID of form user is starting on
+	 * @return   string
+	 */
+	public function formResponseStartUrl($formId)
+	{
+		$segments = ['responses', 'start'];
+		$parameters = ['form_id' => $formId];
+
+		$url = $this->_generateUrl($segments, $parameters);
+
+		return $url;
+	}
+
+	/**
+	 * Generates URL to page response page
+	 *
+	 * @param    int      $params   Query params
+	 * @return   string
+	 */
+	public function formsPageResponseUrl($params)
+	{
+		$segments = ['fill'];
+
+		$url = $this->_generateUrl($segments, $params);
+
+		return $url;
+	}
+
+	/**
 	 * Generates URL based on given segments and parameters
 	 *
 	 * @param    array    $segments     URL segments

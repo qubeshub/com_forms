@@ -40,6 +40,7 @@ $defaultControllerName = 'forms';
 $controllerName = Request::getCmd('controller', $defaultControllerName);
 $controllerNameMap = [
 	'fields' => 'pageFields',
+	'responses' => 'formResponses',
 	'forms' => 'forms',
 	'pages' => 'formPages'
 ];

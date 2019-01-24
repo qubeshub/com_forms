@@ -18,7 +18,7 @@ class Migration20190117165449ComFormsCreateFormResponsesTable extends Base
 			`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 			`form_id` int(11) unsigned NOT NULL,
 			`user_id` int(11) unsigned NOT NULL,
-			`created` timestamp NOT NULL,
+			`created` timestamp NULL DEFAULT NULL,
 			`modified` timestamp NULL DEFAULT NULL,
 			`submitted` timestamp NULL DEFAULT NULL,
 			`accepted` timestamp NULL DEFAULT NULL,

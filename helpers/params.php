@@ -72,17 +72,17 @@ class Params
 	}
 
 	/**
-	 * Retrieves datum from request
+	 * Forwards requests to _request
 	 *
 	 * @param    string   $key       Key to retrieve datum
 	 * @param    array    $default   Default value
 	 * @return   mixed
 	 */
-	public function get($key, $default = null)
+	public function __call($name, $args)
 	{
-		$param = $this->_request->get($key, $default);
+		$result = $this->_request->$name(...$args);
 
-		return $param;
+		return $result;
 	}
 
 }

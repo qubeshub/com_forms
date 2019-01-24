@@ -205,9 +205,13 @@ class Form extends Relational
 	 */
 	public function getPageOrdinal($position)
 	{
-		$pages = $this->getPages();
+		$pages = $this->getPages()
+			->order('order', 'asc')
+			->rows()
+			->raw();
 
-		$page = $pages->rows()->seek($position);
+		$pageArray = array_slice($pages, $position - 1, 1);
+		$page = $pageArray[0];
 
 		return $page;
 	}

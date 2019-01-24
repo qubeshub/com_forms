@@ -42,7 +42,8 @@ $controllerNameMap = [
 	'fields' => 'pageFields',
 	'responses' => 'formResponses',
 	'forms' => 'forms',
-	'pages' => 'formPages'
+	'pages' => 'formPages',
+	'fill' => 'pageResponses'
 ];
 
 $mappedName = Arr::getValue($controllerNameMap, $controllerName, $defaultControllerName);

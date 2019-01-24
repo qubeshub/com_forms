@@ -197,4 +197,19 @@ class Form extends Relational
 		return $pages;
 	}
 
+	/**
+	 * Retrieves page at given location
+	 *
+	 * @param    int      $position   Ordinal position
+	 * @return   object
+	 */
+	public function getPageOrdinal($position)
+	{
+		$pages = $this->getPages();
+
+		$page = $pages->rows()->seek($position);
+
+		return $page;
+	}
+
 }

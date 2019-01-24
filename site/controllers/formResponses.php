@@ -105,7 +105,7 @@ class FormResponses extends SiteController
 		else
 		{
 			$formsFirstPage = $this->_routes->formsPageResponseUrl([
-				'form_id' => $formId, 'order' => 1
+				'form_id' => $formId, 'ordinal' => 1
 			]);
 			$responseStartedMessage = Lang::txt('COM_FORMS_NOTICES_SUCCESSFUL_START');
 			$this->_crudHelper->successfulCreate($formsFirstPage, $responseStartedMessage);

@@ -32,18 +32,17 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$form = $this->form;
-$id = $form->get('id');
-$pages = $form->getPages();
-$response = $this->get('response');
+$decoration = $this->element;
+$type = $this->type;
 
-if ($response->isNew()):
-	$this->view('_form_response_link_start')
-		->set('formId', $id)
-		->display();
-else:
-	$this->view('_form_response_link_pages')
-		->set('formId', $id)
-		->set('pages', $pages)
-		->display();
-endif;
+$decorationTypeMap = [
+	'header' => '_form_decoration_header',
+	'hidden' => '_form_decoration_hidden',
+	'paragraph' => '_form_decoration_paragraph'
+];
+
+$partialName = $decorationTypeMap[$type];
+
+$this->view($partialName)
+	->set('decoration', $decoration)
+	->display();

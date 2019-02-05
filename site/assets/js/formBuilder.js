@@ -10,8 +10,8 @@ class FormBuilder {
 		this._builder = undefined
 		this._defaultOptions = {
 			disabledActionButtons: ['clear', 'data', 'save'],
-			disabledAttrs: ['access', 'className', 'style'],
-			disableFields: ['autocomplete', 'button', 'file']
+			disabledAttrs: ['access', 'className', 'placeholder', 'style', 'subtype'],
+			disableFields: ['autocomplete', 'button', 'file'],
 		}
 	}
 

@@ -28,3 +28,7 @@ ol {
 	font-size: 2em;
 	font-weight: bold;
 }
+
+.page-number {
+	margin: 0 0 0 .5em;
+}

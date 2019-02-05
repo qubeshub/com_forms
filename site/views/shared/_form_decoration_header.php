@@ -32,18 +32,12 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$form = $this->form;
-$id = $form->get('id');
-$pages = $form->getPages();
-$response = $this->get('response');
+$header = $this->decoration;
+$content = htmlspecialchars($header->get('label'));
+?>
 
-if ($response->isNew()):
-	$this->view('_form_response_link_start')
-		->set('formId', $id)
-		->display();
-else:
-	$this->view('_form_response_link_pages')
-		->set('formId', $id)
-		->set('pages', $pages)
-		->display();
-endif;
+<div class="header">
+	<h1>
+		<?php echo $content; ?>
+	</h1>
+</div>

@@ -32,18 +32,17 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$form = $this->form;
-$id = $form->get('id');
-$pages = $form->getPages();
-$response = $this->get('response');
+$option = $this->option;
+$selected = '';
+$value = htmlspecialchars($option->value);
+$label = htmlspecialchars($option->label);
 
-if ($response->isNew()):
-	$this->view('_form_response_link_start')
-		->set('formId', $id)
-		->display();
-else:
-	$this->view('_form_response_link_pages')
-		->set('formId', $id)
-		->set('pages', $pages)
-		->display();
-endif;
+if (isset($option->selected) && $option->selected)
+{
+	$selected = 'selected';
+}
+?>
+
+<option value="<?php echo $value; ?>" <?php echo $selected; ?>>
+	<?php echo $label; ?>
+</option>

@@ -32,18 +32,12 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$form = $this->form;
-$id = $form->get('id');
-$pages = $form->getPages();
-$response = $this->get('response');
+$field = $this->field;
+$default = htmlspecialchars($field->get('default_value'), ENT_COMPAT);
+$name = htmlspecialchars($field->get('name'), ENT_COMPAT);
+?>
 
-if ($response->isNew()):
-	$this->view('_form_response_link_start')
-		->set('formId', $id)
-		->display();
-else:
-	$this->view('_form_response_link_pages')
-		->set('formId', $id)
-		->set('pages', $pages)
-		->display();
-endif;
+<div class="field-wrap">
+	<input type="date" name="<?php echo $name; ?>"
+		value="<?php echo $default; ?>">
+</div>

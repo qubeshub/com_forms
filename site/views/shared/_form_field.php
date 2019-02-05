@@ -32,18 +32,29 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$form = $this->form;
-$id = $form->get('id');
-$pages = $form->getPages();
-$response = $this->get('response');
+$field = $this->element;
+$type = $this->type;
 
-if ($response->isNew()):
-	$this->view('_form_response_link_start')
-		->set('formId', $id)
-		->display();
-else:
-	$this->view('_form_response_link_pages')
-		->set('formId', $id)
-		->set('pages', $pages)
-		->display();
-endif;
+$fieldTypeMap = [
+	'checkbox-group' => '_form_field_checkbox_group',
+	'date' => '_form_field_date',
+	'number' => '_form_field_number',
+	'radio-group' => '_form_field_radio_group',
+	'select' => '_form_field_select',
+	'text' => '_form_field_text_field',
+	'textarea' => '_form_field_text_area'
+];
+$partialName = $fieldTypeMap[$type];
+?>
+
+<fieldset>
+	<?php
+		$this->view('_form_field_label')
+			->set('field', $field)
+			->display();
+
+		$this->view($partialName)
+			->set('field', $field)
+			->display();
+	?>
+</fieldset>

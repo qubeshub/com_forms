@@ -32,18 +32,15 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$form = $this->form;
-$id = $form->get('id');
-$pages = $form->getPages();
-$response = $this->get('response');
+$field = $this->field;
+$default = htmlspecialchars($field->get('default_value'), ENT_COMPAT);
+$maxLength = htmlspecialchars($field->get('max_length'), ENT_COMPAT);
+$name = htmlspecialchars($field->get('name'), ENT_COMPAT);
+$size = $maxLength * .8;
+?>
 
-if ($response->isNew()):
-	$this->view('_form_response_link_start')
-		->set('formId', $id)
-		->display();
-else:
-	$this->view('_form_response_link_pages')
-		->set('formId', $id)
-		->set('pages', $pages)
-		->display();
-endif;
+<div class="field-wrap">
+		maxlength="<?php echo $maxLength; ?>"
+		size="<?php echo $size; ?>"
+		value="<?php echo $default; ?>">
+</div>

@@ -32,18 +32,24 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$form = $this->form;
-$id = $form->get('id');
-$pages = $form->getPages();
-$response = $this->get('response');
+$field = $this->field;
+$helpText = htmlspecialchars($field->get('help_text'));
+$label = htmlspecialchars($field->get('label'), ENT_COMPAT);
+$isRequired = $field->get('required');
+?>
 
-if ($response->isNew()):
-	$this->view('_form_response_link_start')
-		->set('formId', $id)
-		->display();
-else:
-	$this->view('_form_response_link_pages')
-		->set('formId', $id)
-		->set('pages', $pages)
-		->display();
-endif;
+<legend>
+	<?php echo $label; ?>
+
+	<?php if (!!$helpText): ?>
+		<span class="hasTip fontcon" title="<?php echo $helpText; ?>">
+			&#xf075;
+		</span>
+	<?php endif; ?>
+
+	<?php if($isRequired): ?>
+		<span class="required star">
+			<?php echo Lang::txt('COM_FORMS_FIELDS_META_REQUIRED'); ?>
+		</span>
+	<?php endif; ?>
+</legend>

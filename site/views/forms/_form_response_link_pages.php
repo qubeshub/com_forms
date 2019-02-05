@@ -32,18 +32,32 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$form = $this->form;
-$id = $form->get('id');
-$pages = $form->getPages();
-$response = $this->get('response');
+$componentPath = Component::path('com_forms');
 
-if ($response->isNew()):
-	$this->view('_form_response_link_start')
-		->set('formId', $id)
-		->display();
-else:
-	$this->view('_form_response_link_pages')
-		->set('formId', $id)
-		->set('pages', $pages)
-		->display();
-endif;
+require_once "$componentPath/helpers/formsRouter.php";
+use Components\Forms\Helpers\FormsRouter as RoutesHelper;
+
+$formId = $this->formId;
+$pages = $this->pages;
+$routes = new RoutesHelper();
+$orderedPages = $pages->order('order', 'asc')->rows();
+$pageCount = $orderedPages->count();
+$i = 1;
+?>
+
+<span>
+	<?php
+		echo Lang::txt('COM_FORMS_HEADINGS_PAGES');
+		foreach ($orderedPages as $page):
+			$pageUrl = $routes->formsPageResponseUrl([
+				'form_id' => $formId, 'ordinal' => $i
+			]);
+	?>
+		<span class="page-number">
+			<a href="<?php echo $pageUrl; ?>">
+				<?php echo $i; $i++; ?>
+			</a>
+			<?php if ($i <= $pageCount) echo ','; ?>
+		</span>
+	<?php endforeach; ?>
+</span>

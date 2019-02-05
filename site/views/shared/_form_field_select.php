@@ -32,18 +32,20 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$form = $this->form;
-$id = $form->get('id');
-$pages = $form->getPages();
-$response = $this->get('response');
+$field = $this->field;
+$multiple = $field->get('multiple') ? 'multiple' : '';
+$name = htmlspecialchars($field->get('name'), ENT_COMPAT);
+$options = $field->getOptions();
+?>
 
-if ($response->isNew()):
-	$this->view('_form_response_link_start')
-		->set('formId', $id)
-		->display();
-else:
-	$this->view('_form_response_link_pages')
-		->set('formId', $id)
-		->set('pages', $pages)
-		->display();
-endif;
+<select name="<?php echo $name; ?>" <?php echo $multiple; ?>>
+
+	<?php
+		foreach($options as $option):
+			$this->view("_form_field_select_option")
+				->set('option', $option)
+				->display();
+		endforeach;
+	?>
+
+</select>

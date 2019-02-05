@@ -32,18 +32,28 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$form = $this->form;
-$id = $form->get('id');
-$pages = $form->getPages();
-$response = $this->get('response');
+$noJsNotice = Lang::txt('COM_FORMS_NOTICES_FIELDS_FILL_NO_JS');
+$elements = $this->elements;
+$title = $this->title;
+?>
 
-if ($response->isNew()):
-	$this->view('_form_response_link_start')
-		->set('formId', $id)
-		->display();
-else:
-	$this->view('_form_response_link_pages')
-		->set('formId', $id)
-		->set('pages', $pages)
-		->display();
-endif;
+<form action="" method="post" id="hubForm">
+	<fieldset>
+	<legend><?php echo $title; ?></legend>
+
+		<?php
+			foreach($elements as $element):
+				$this->view('_form_element', 'shared')
+					->set('element', $element)
+					->display();
+			endforeach;
+		?>
+
+	</fieldset>
+</form>
+
+<noscript>
+	<h2>
+		<?php echo $noJsNotice; ?>
+	</h2>
+</noscript>

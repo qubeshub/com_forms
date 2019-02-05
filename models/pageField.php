@@ -61,4 +61,18 @@ class PageField extends Relational
 		'type' => 'notempty'
 	];
 
+	/**
+	 * Returns field's options
+	 *
+	 * @return   array
+	 */
+	public function getOptions()
+	{
+		$options = $this->get('values', []);
+
+		$decodedOptions = json_decode($options);
+
+		return $decodedOptions;
+	}
+
 }

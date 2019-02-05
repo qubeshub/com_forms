@@ -32,18 +32,22 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$form = $this->form;
-$id = $form->get('id');
-$pages = $form->getPages();
-$response = $this->get('response');
+$inline = $this->inline;
+$name = htmlspecialchars($this->name, ENT_COMPAT);
+$type = $this->type;
 
-if ($response->isNew()):
-	$this->view('_form_response_link_start')
-		->set('formId', $id)
-		->display();
-else:
-	$this->view('_form_response_link_pages')
-		->set('formId', $id)
-		->set('pages', $pages)
-		->display();
-endif;
+$otherOption = new stdClass();
+$otherOption->label = 'other';
+$otherOption->value = '';
+
+$this->view("_form_field_$type")
+	->set('inline', $inline)
+	->set('name', $name)
+	->set('option', $otherOption)
+	->display();
+
+?>
+
+<label>
+	<input type="text" name="<?php echo $name; ?>[other]" />
+</label>

@@ -32,18 +32,41 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$form = $this->form;
-$id = $form->get('id');
-$pages = $form->getPages();
-$response = $this->get('response');
+$this->css('pageFill');
 
-if ($response->isNew()):
-	$this->view('_form_response_link_start')
-		->set('formId', $id)
-		->display();
-else:
-	$this->view('_form_response_link_pages')
-		->set('formId', $id)
-		->set('pages', $pages)
-		->display();
-endif;
+$form = $this->form;
+$formId = $form->get('id');
+$formName = $form->get('name');
+$page = $this->page;
+$pageElements = $page->getFields()
+	->order('order', 'asc')
+	->rows();
+$pageId = $page->get('id');
+$pageTitle = $page->get('title');
+
+$breadcrumbs = [
+	$formName => ['formsDisplayUrl', [$formId]],
+	$pageTitle => ['formsPageResponseUrl', [['page_id' => $pageId]]]
+];
+$this->view('_forms_breadcrumbs', 'shared')
+	->set('breadcrumbs', $breadcrumbs)
+	->set('page', "Fill Page - $pageTitle")
+	->display();
+?>
+
+<section class="main section">
+	<div class="grid">
+
+		<div class="row">
+			<div class="col span12 omega">
+				<?php
+					$this->view('_form', 'shared')
+						->set('title', $pageTitle)
+						->set('elements', $pageElements)
+						->display();
+				?>
+			</div>
+		</div>
+
+	</div>
+</section>

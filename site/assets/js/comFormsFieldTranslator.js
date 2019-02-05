@@ -174,11 +174,9 @@ class ComFormsFieldTranslator {
 			order: 'order',
 			other: 'other',
 			page_id: 'page_id',
-			placeholder: 'placeholder',
 			required: 'required',
 			rows: 'rows',
 			step: 'step',
-			subtype: 'subtype',
 			toggle: 'toggle',
 			type: 'type',
 			values: 'values'

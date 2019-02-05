@@ -38,6 +38,7 @@ $this->css('fieldsEdit')
 	->js('comFormsFormBuilder')
 	->js('comFormsFieldTranslator')
 	->js('api')
+	->js('notify')
 	->js('objectHelper')
 	->js('page')
 	->js('fieldsEdit');

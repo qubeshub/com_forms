@@ -1,5 +1,6 @@
 
 const anchorId = 'form-builder-anchor'
+const notify = HUB.FORMS.Notify
 var fieldTranslator
 var formBuilder
 
@@ -50,7 +51,11 @@ const submitForm = (e, page) => {
 	const translatedFields = fieldTranslator.forServer(fields)
 
 	page.setFields(translatedFields)
-	page.save()
+	page.save().then(notifyUser)
+}
+
+const notifyUser = ({message, status}) => {
+	notify[status](message)
 }
 
 $(document).ready(() => {

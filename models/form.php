@@ -69,6 +69,30 @@ class Form extends Relational
 	];
 
 	/**
+	 * Determines if users responses to prereqs were accepted
+	 *
+	 * @param    int    $userId   User's ID
+	 * @return   object
+	 */
+	public function prereqsAccepted($userId)
+	{
+		$prereqs = $this->getPrerequisites()
+			->rows();
+		$prereqsAccepted = true;
+
+		foreach ($prereqs as $prereq)
+		{
+			if (!$prereq->acceptedFor($userId))
+			{
+				$prereqsAccepted = false;
+				break;
+			}
+		}
+
+		return $prereqsAccepted;
+	}
+
+	/**
 	 * Returns associated prerequisites
 	 *
 	 * @return   object
@@ -84,12 +108,12 @@ class Form extends Relational
 	}
 
 	/**
-	 * Indicates if given user has completed form
+	 * Indicates if given user response was accepted
 	 *
 	 * @param    int    $userId   User's ID
 	 * @return   bool
 	 */
-	public function completedBy($userId)
+	public function acceptedFor($userId)
 	{
 		$response = $this->getResponse($userId);
 

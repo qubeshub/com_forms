@@ -75,16 +75,16 @@ class FormPrerequisite extends Relational
 	}
 
 	/**
-	 * Indicates if given user has completed prerequisite
+	 * Indicates if given user response was accepted
 	 *
 	 * @param    int    $userId   User's ID
 	 * @return   bool
 	 */
-	public function completedBy($userId)
+	public function acceptedFor($userId)
 	{
 		$this->_setPrereq();
 
-		return $this->_prereq->completedBy($userId);
+		return $this->_prereq->acceptedFor($userId);
 	}
 
 	/**

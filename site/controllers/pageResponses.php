@@ -33,10 +33,12 @@ namespace Components\Forms\Site\Controllers;
 
 $componentPath = Component::path('com_forms');
 
+require_once "$componentPath/helpers/comFormsPageBouncer.php";
 require_once "$componentPath/helpers/params.php";
 require_once "$componentPath/models/form.php";
 require_once "$componentPath/models/formPage.php";
 
+use Components\Forms\Helpers\ComFormsPageBouncer as PageBouncer;
 use Components\Forms\Helpers\Params;
 use Components\Forms\Models\Form;
 use Components\Forms\Models\FormPage;
@@ -72,6 +74,7 @@ class PageResponses extends SiteController
 	 */
 	public function execute()
 	{
+		$this->_pageBouncer = new PageBouncer();
 		$this->_params = new Params(
 			['whitelist' => self::$_paramWhitelist]
 		);
@@ -87,6 +90,8 @@ class PageResponses extends SiteController
 	public function fillTask()
 	{
 		$this->_setFormAndPage();
+
+		$this->_pageBouncer->redirectIfPrereqsNotAccepted($this->_form);
 
 		$this->view
 			->set('form', $this->_form)

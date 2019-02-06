@@ -37,15 +37,17 @@ $prereqs = $form->getPrerequisites();
 $stepsTitle = Lang::txt('COM_FORMS_HEADINGS_STEPS');
 ?>
 
-<div>
-	<h3>
-		<?php echo $stepsTitle; ?>
-	</h3>
+<?php if ($prereqs->count() > 0): ?>
+	<div>
+		<h3>
+			<?php echo $stepsTitle; ?>
+		</h3>
 
-	<?php
-		$this->view('_forms_steps_list')
-			->set('prereqs', $prereqs)
-			->display();
-	?>
+		<?php
+			$this->view('_forms_steps_list')
+				->set('prereqs', $prereqs)
+				->display();
+		?>
 
-</div>
+	</div>
+<?php endif; ?>

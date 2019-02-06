@@ -124,9 +124,17 @@ class FormResponse extends Relational
 	public function requiredCompletionPercentage()
 	{
 		$requiredFields = $this->_getRequiredFields();
-		$responses = $this->_getResponsesTo($requiredFields);
+		$requiredCount = $requiredFields->count();
+		$responsesCount = $this->_getResponsesTo($requiredFields)->count();
 
-		$requiredCompletionPercentage = ($responses->count() / $requiredFields->count()) * 100;
+		if ($requiredCount > 0)
+		{
+			$requiredCompletionPercentage = ($responsesCount / $requiredCount) * 100;
+		}
+		else
+		{
+			$requiredCompletionPercentage = 100;
+		}
 
 		return $requiredCompletionPercentage;
 	}

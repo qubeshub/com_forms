@@ -32,22 +32,45 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('fieldsForm')
+	->js('form-builder.min')
+	->js('formBuilder')
+	->js('comFormsFormBuilder')
+	->js('comFormsFieldTranslator')
+	->js('api')
+	->js('notify')
+	->js('objectHelper')
+	->js('page')
+	->js('fieldsForm');
+
+\Html::behavior('core');
+
 $noJsNotice = Lang::txt('COM_FORMS_NOTICES_FIELDS_NO_JS');
 $pageId = $this->pageId;
-$submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_SAVE_CHANGES');
+$submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_UPDATE_FIELDS');
 ?>
 
-<div id="form-builder-anchor"></div>
+<fieldset>
+	<legend>Fields</legend>
 
-<form action="">
-	<input class="btn btn-success" type="submit" value="<?php echo $submitValue; ?>" />
-	<input type="hidden" name="page_id" value="<?php echo $pageId; ?>" />
-	<input type="hidden" name="api_endpoint" value="<?php echo $pageId; ?>" />
-</form>
+	<div id="form-builder-anchor"></div>
 
-<noscript>
-	<h2>
-		<?php echo $noJsNotice; ?>
-	</h2>
-</noscript>
+	<form action="">
+		<input type="hidden" name="page_id" value="<?php echo $pageId; ?>" />
+		<input type="hidden" name="api_endpoint" value="<?php echo $pageId; ?>" />
+	</form>
 
+	<noscript>
+		<h2>
+			<?php echo $noJsNotice; ?>
+		</h2>
+	</noscript>
+
+</fieldset>
+
+<div class="row button-container">
+	<input type="submit"
+		id="fields-submit"
+		class="btn btn-success"
+		value="<?php echo $submitValue; ?>" />
+</div>

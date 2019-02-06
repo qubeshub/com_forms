@@ -32,11 +32,10 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('pageForm');
-$this->css('pageEdit');
+$this->css('pageEdit')
+	->css('pageForm');
 
 $action = $this->action;
-$editFieldsUrl = $this->editFieldsUrl;
 $form = $this->form;
 $formId = $form->get('id');
 $formName = $form->get('name');
@@ -59,25 +58,22 @@ $this->view('_forms_breadcrumbs', 'shared')
 <section class="main section">
 	<div class="grid">
 
-		<div class="row">
-			<div class="col span12 omega">
-				<?php
-					$this->view('_page_form')
-						->set('action', $action)
-						->set('page', $page)
-						->set('submitValue', $submitValue)
-						->display();
-				?>
-			</div>
-
+		<div class="col span12 omega">
+			<?php
+				$this->view('_page_form')
+					->set('action', $action)
+					->set('page', $page)
+					->set('submitValue', $submitValue)
+					->display();
+			?>
 		</div>
 
-		<div class="row">
-			<div class="col span2 offset10 omega edit-link-container">
-				<a href="<?php echo $editFieldsUrl; ?>" class="edit-link">
-					Edit Fields
-				</a>
-			</div>
+		<div class="col span12 omega">
+			<?php
+				$this->view('_fields_form')
+					->set('pageId', $pageId)
+					->display();
+			?>
 		</div>
 
 	</div>

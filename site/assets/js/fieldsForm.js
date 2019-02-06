@@ -1,5 +1,6 @@
 
 const anchorId = 'form-builder-anchor'
+const submitId = 'fields-submit'
 const notify = HUB.FORMS.Notify
 var fieldTranslator
 var formBuilder
@@ -37,7 +38,7 @@ const getFieldTranslator = () => {
 }
 
 const registerSubmitHandler = (page) => {
-	const $submitButton = $('.btn-success')
+	const $submitButton = $(`#${submitId}`)
 
 	$submitButton.click((e) => {
 		submitForm(e, page)

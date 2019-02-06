@@ -45,10 +45,8 @@ $submitValue = $this->submitValue;
 			->display();
 	?>
 
-	<div class="grid button-container">
-		<div class="col span2 omega">
-			<input type="submit" class="btn btn-success" value="<?php echo $submitValue; ?>">
-		</div>
+	<div class="row button-container">
+		<input type="submit" class="btn btn-success" value="<?php echo $submitValue; ?>">
 	</div>
 
 </form>

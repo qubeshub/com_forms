@@ -36,10 +36,11 @@ $field = $this->field;
 $default = htmlspecialchars($field->get('default_value'), ENT_COMPAT);
 $maxLength = htmlspecialchars($field->get('max_length'), ENT_COMPAT);
 $name = htmlspecialchars($field->get('name'), ENT_COMPAT);
-$size = $maxLength * .8;
+$size = $maxLength;
 ?>
 
 <div class="field-wrap">
+	<input type="text"
 		maxlength="<?php echo $maxLength; ?>"
 		size="<?php echo $size; ?>"
 		value="<?php echo $default; ?>">

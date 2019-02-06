@@ -32,23 +32,8 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$prereq = $this->prereq;
-$userId = $this->userId;
-
-$completed = $prereq->acceptedFor($userId);
-$checkedStatus = $completed ? 'checked' : '';
 ?>
 
-<li>
-	<span>
-		<input type="checkbox" disabled <?php echo $checkedStatus; ?>>
-	</span>
-	|
-	<span>
-		<?php
-			$this->view('_prerequisite_link')
-				->set('prereq', $prereq)
-				->display();
-		?>
-	</span>
-</li>
+<div class="notice">
+	<?php echo Lang::txt('COM_FORMS_NOTICES_FORMS_PREREQS_INCOMPLETE'); ?>
+</div>

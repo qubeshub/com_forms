@@ -40,17 +40,19 @@ use Components\Forms\Helpers\FormsAuth;
 
 $formsAuth = new FormsAuth();
 
+$authArgs = isset($this->authArgs) ? $this->authArgs : [];
 $authMethod = $this->authMethod;
 $classes = isset($this->classes) ? $this->classes : '';
-$currentIsAuthorized = $formsAuth->$authMethod();
-$localPath = $this->localPath;
+$isAuthorized = $formsAuth->$authMethod(...$authArgs);
 $textKey = $this->textKey;
-$text = Lang::txt($textKey);
-$url = Route::url($localPath);
-?>
+$urlFunction = $this->urlFunction;
+$urlFunctionArgs = isset($this->urlFunctionArgs) ? $this->urlFunctionArgs : [];
 
-<?php if ($currentIsAuthorized): ?>
-	<a href="<?php echo $url; ?>" class="protected-link <?php echo $classes; ?>">
-		<?php echo $text; ?>
-	</a>
-<?php endif; ?>
+if ($isAuthorized):
+	$this->view('_link')
+		->set('classes', $classes)
+		->set('textKey', $textKey)
+		->set('urlFunction', $urlFunction)
+		->set('urlFunctionArgs', $urlFunctionArgs)
+		->display();
+endif;

@@ -32,8 +32,22 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->view('_protected_link', 'shared')
-	->set('authMethod', 'currentCanCreate')
-	->set('textKey', 'COM_FORMS_LINKS_FORM_CREATE')
-	->set('urlFunction', 'formsNewUrl')
-	->display();
+$componentPath = \Component::path('com_forms');
+
+require_once "$componentPath/helpers/formsRouter.php";
+
+use Components\Forms\Helpers\FormsRouter;
+
+$routes = new FormsRouter();
+
+$classes = isset($this->classes) ? $this->classes : '';
+$textKey = $this->textKey;
+$text = Lang::txt($textKey);
+$urlFunction = $this->urlFunction;
+$urlFunctionArgs = $this->urlFunctionArgs;
+$url = $routes->$urlFunction(...$urlFunctionArgs);
+?>
+
+<a href="<?php echo $url; ?>" class="protected-link <?php echo $classes; ?>">
+	<?php echo $text; ?>
+</a>

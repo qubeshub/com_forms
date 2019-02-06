@@ -32,19 +32,12 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$componentPath = Component::path('com_forms');
-
-require_once "$componentPath/helpers/formsRouter.php";
-
-use Components\Forms\Helpers\FormsRouter as Routes;
-
 $formId = $this->formId;
-$routes = new Routes();
-$pageNewUrl = $routes->formsPagesNewUrl($formId);
 
 $this->view('_protected_link', 'shared')
 	->set('authMethod', 'currentCanCreate')
 	->set('classes', 'btn btn-success')
-	->set('localPath', $pageNewUrl)
 	->set('textKey', 'COM_FORMS_LINKS_PAGE_CREATE')
+	->set('urlFunction', 'formsPagesNewUrl')
+	->set('urlFunctionArgs', [$formId])
 	->display();

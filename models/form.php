@@ -240,4 +240,15 @@ class Form extends Relational
 		return $page;
 	}
 
+	/**
+	 * Indicates form belongs to user with given ID
+	 *
+	 * @param    int    $userId   User ID
+	 * @return   bool
+	 */
+	public function isOwnedBy($userId)
+	{
+		return $this->get('created_by') === $userId;
+	}
+
 }

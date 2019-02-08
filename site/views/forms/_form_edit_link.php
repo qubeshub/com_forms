@@ -32,25 +32,13 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$action = $this->action;
 $form = $this->form;
-$submitValue = $this->submitValue;
-?>
+$formId = $form->get('id');
 
-<form id="hubForm" class="full" method="post" action="<?php echo $action; ?>">
-
-	<?php
-		$this->view('_name_description_fields')
-			->set('form', $form)
-			->display();
-
-		$this->view('_dates_option_fields')
-			->set('form', $form)
-			->display();
-	?>
-
-	<div class="button-container">
-		<input type="submit" class="btn btn-success" value="<?php echo $submitValue; ?>">
-	</div>
-
-</form>
+$this->view('_protected_link', 'shared')
+	->set('authArgs', [$form])
+	->set('authMethod', 'canCurrentUserEditForm')
+	->set('textKey', 'COM_FORMS_FIELDS_VALUES_EDIT_FORM')
+	->set('urlFunction', 'formsEditUrl')
+	->set('urlFunctionArgs', [$formId])
+	->display();

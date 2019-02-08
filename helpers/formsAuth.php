@@ -53,4 +53,36 @@ class FormsAuth extends ComponentAuth
 		parent::__construct($args);
 	}
 
+	/**
+	 * Determines if current user can edit given form
+	 *
+	 * @param    object   $form     Form instance
+	 * @return   bool
+	 */
+	public function canCurrentUserEditForm($form)
+	{
+		$currentUsersId = User::get('id');
+
+		$canEdit = $this->_canUserEditForm($form, $currentUsersId);
+
+		return $canEdit;
+	}
+
+	/**
+	 * Determines if form can be edited by user w/ given ID
+	 *
+	 * @param    object   $form     Form instance
+	 * @param    int      $userId   Given user's ID
+	 * @return   bool
+	 */
+	protected function _canUserEditForm($form, $userId)
+	{
+		$userIsAdmin = $this->currentIsAuthorized('core.admin');
+		$userOwnsForm = $form->isOwnedBy($userId);
+
+		$canEdit = $userIsAdmin || $userOwnsForm;
+
+		return $canEdit;
+	}
+
 }

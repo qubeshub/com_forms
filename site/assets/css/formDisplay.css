@@ -36,3 +36,8 @@ ol {
 .notice {
 	font-size: 1.5em;
 }
+
+.edit-link-container {
+	font-size: 1.5em;
+	margin: 2em 0 0 0;
+}

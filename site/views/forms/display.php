@@ -60,10 +60,19 @@ $this->view('_forms_breadcrumbs', 'shared')
 				</div>
 
 				<div class="form-response-link">
-					<?php $this->view('_form_response_link')
-						->set('form', $form)
-						->set('response', $response)
-						->display();
+					<?php
+						$this->view('_form_response_link')
+							->set('form', $form)
+							->set('response', $response)
+							->display();
+					?>
+				</div>
+
+				<div class="edit-link-container">
+					<?php
+						$this->view('_form_edit_link')
+							->set('form', $form)
+							->display();
 					?>
 				</div>
 			</div>

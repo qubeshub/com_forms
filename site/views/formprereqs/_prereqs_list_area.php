@@ -32,27 +32,13 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('formEditNav');
+$prereqs = $this->prereqs;
 
-$componentPath = Component::path('com_forms');
-
-require_once "$componentPath/helpers/formsRouter.php";
-
-use Components\Forms\Helpers\FormsRouter as Routes;
-
-$current = $this->current;
-$formId = $this->formId;
-$routes = new Routes();
-
-$steps = [
-	'Form Info' => $routes->formsEditUrl($formId),
-	'Pages' => $routes->formsPagesUrl($formId),
-	'Steps' => $routes->formsPrereqsUrl($formId),
-	'Responses' => ""
-];
-
-$this->view('_ul_nav', 'shared')
-	->set('current', $current)
-	->set('steps', $steps)
-	->display();
-
+if (count($prereqs) > 0):
+	$this->view('_prereqs_list')
+		->set('prereqs', $prereqs)
+		->display();
+else:
+	$this->view('_prereqs_none_notice')
+		->display();
+endif;

@@ -37,7 +37,7 @@ $formId = $this->formId;
 $this->view('_protected_link', 'shared')
 	->set('authMethod', 'currentCanCreate')
 	->set('classes', 'btn btn-success')
-	->set('textKey', 'COM_FORMS_LINKS_PAGE_CREATE')
+	->set('textKey', 'COM_FORMS_LINKS_PAGE_NEW')
 	->set('urlFunction', 'formsPagesNewUrl')
 	->set('urlFunctionArgs', [$formId])
 	->display();

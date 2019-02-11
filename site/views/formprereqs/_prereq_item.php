@@ -32,27 +32,29 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('formEditNav');
+$prereq = $this->prereq;
+$prereqId = $prereq->get('id');
+$order = $prereq->get('order');
+$title = $prereq->getParent('name');
+?>
 
-$componentPath = Component::path('com_forms');
+<li class="prereq-item">
+	<span class="grid">
 
-require_once "$componentPath/helpers/formsRouter.php";
+		<span class="col span1 offset1">
+			<input name="prereqs[<?php echo $prereqId; ?>][id]"
+				type="hidden"
+				value="<?php echo $prereqId; ?>">
+			<input name="prereqs[<?php echo $prereqId; ?>][order]"
+				type="number"
+				min="1"
+				value="<?php echo $order; ?>"
+				class="item-input" >
+		</span>
 
-use Components\Forms\Helpers\FormsRouter as Routes;
+		<span class="col span3">
+			<?php echo $title; ?>
+		</span>
 
-$current = $this->current;
-$formId = $this->formId;
-$routes = new Routes();
-
-$steps = [
-	'Form Info' => $routes->formsEditUrl($formId),
-	'Pages' => $routes->formsPagesUrl($formId),
-	'Steps' => $routes->formsPrereqsUrl($formId),
-	'Responses' => ""
-];
-
-$this->view('_ul_nav', 'shared')
-	->set('current', $current)
-	->set('steps', $steps)
-	->display();
-
+	</span>
+</li>

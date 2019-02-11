@@ -32,27 +32,12 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('formEditNav');
-
-$componentPath = Component::path('com_forms');
-
-require_once "$componentPath/helpers/formsRouter.php";
-
-use Components\Forms\Helpers\FormsRouter as Routes;
-
-$current = $this->current;
 $formId = $this->formId;
-$routes = new Routes();
 
-$steps = [
-	'Form Info' => $routes->formsEditUrl($formId),
-	'Pages' => $routes->formsPagesUrl($formId),
-	'Steps' => $routes->formsPrereqsUrl($formId),
-	'Responses' => ""
-];
-
-$this->view('_ul_nav', 'shared')
-	->set('current', $current)
-	->set('steps', $steps)
+$this->view('_protected_link', 'shared')
+	->set('authMethod', 'currentCanCreate')
+	->set('classes', 'btn btn-success')
+	->set('textKey', 'COM_FORMS_LINKS_PREREQ_NEW')
+	->set('urlFunction', 'formsPrereqsNewUrl')
+	->set('urlFunctionArgs', [$formId])
 	->display();
-

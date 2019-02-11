@@ -29,30 +29,43 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-// No direct access
-defined('_HZEXEC_') or die();
-
-$this->css('formEditNav');
+namespace Components\Forms\Tests;
 
 $componentPath = Component::path('com_forms');
 
-require_once "$componentPath/helpers/formsRouter.php";
+require_once "$componentPath/helpers/formPrereqsFactory.php";
+require_once "$componentPath/tests/helpers/canMock.php";
 
-use Components\Forms\Helpers\FormsRouter as Routes;
+use Hubzero\Test\Basic;
+use Components\Forms\Helpers\FormPrereqsFactory;
+use Components\Forms\Tests\Traits\canMock;
 
-$current = $this->current;
-$formId = $this->formId;
-$routes = new Routes();
+class FormPrereqsFactoryTest extends Basic
+{
+	use canMock;
 
-$steps = [
-	'Form Info' => $routes->formsEditUrl($formId),
-	'Pages' => $routes->formsPagesUrl($formId),
-	'Steps' => $routes->formsPrereqsUrl($formId),
-	'Responses' => ""
-];
+	public function testUpdatePagesFieldsInvokesBatchUpdateHelperUpdateDelta()
+	{
+		$updateDelta = $this->mock([
+			'class' => 'UpdateDelta',
+			'methods' => [
+				'getModelsToDestroy' => [],
+				'getModelsToSave' => []
+			]
+		]);
+		$batchUpdateHelper =	$this->mock([
+			'class' => 'BatchUpdateHelper',
+		 	'methods' => ['updateDelta' => $updateDelta]
+		]);
+		$factory = new FormPrereqsFactory([
+			'assoc_helper' => $batchUpdateHelper
+		]);
 
-$this->view('_ul_nav', 'shared')
-	->set('current', $current)
-	->set('steps', $steps)
-	->display();
+		$batchUpdateHelper->expects($this->once())
+			->method('updateDelta');
+
+		$factory->updateFormsPrereqs([], []);
+	}
+
+}
 

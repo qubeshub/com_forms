@@ -279,6 +279,69 @@ class FormsRouter
 	}
 
 	/**
+	 * Generates URL to forms prereqs page
+	 *
+	 * @param    int      $formId   Form ID
+	 * @return   string
+	 */
+	public function formsPrereqsUrl($formId)
+	{
+		$segments = ['steps'];
+		$params = ['form_id' => $formId];
+
+		$url = $this->_generateUrl($segments, $params);
+
+		return $url;
+	}
+
+	/**
+	 * Generates URL to forms prereqs page
+	 *
+	 * @param    int      $prereqId   ID of prereq to edit
+	 * @return   string
+	 */
+	public function prereqsEditUrl($prereqId)
+	{
+		$segments = ['steps', $prereqId, 'edit'];
+
+		$url = $this->_generateUrl($segments);
+
+		return $url;
+	}
+
+	/**
+	 * Generates form's prereqs new url
+	 *
+	 * @param    int      $formId   ID of form associated with pages
+	 * @return   string
+	 */
+	public function formsPrereqsNewUrl($formId)
+	{
+		$segments = ['steps', 'new'];
+		$parameters = ['form_id' => $formId];
+
+		$url = $this->_generateUrl($segments, $parameters);
+
+		return $url;
+	}
+
+	/**
+	 * Generates form's prereqs update url
+	 *
+	 * @param    int      $formId   ID of form to update prereqs for
+	 * @return   string
+	 */
+	public function prereqsUpdateUrl($formId)
+	{
+		$segments = ['steps', 'update'];
+		$parameters = ['form_id' => $formId];
+
+		$url = $this->_generateUrl($segments, $parameters);
+
+		return $url;
+	}
+
+	/**
 	 * Generates URL based on given segments and parameters
 	 *
 	 * @param    array    $segments     URL segments

@@ -195,9 +195,53 @@ class FormsRouterTest extends Basic
 	{
 		$routes = new FormsRouter();
 		$queryParams = ['form_id' => 99, 'page' => 1];
-		$expectedUrl = "/forms/fill?form_id=99&page=1";
+		$expectedUrl = '/forms/fill?form_id=99&page=1';
 
 		$generatedUrl = $routes->formsPageResponseUrl($queryParams);
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
+	public function testFormsPrereqsUrlReturnsCorrectUrl()
+	{
+		$routes = new FormsRouter();
+		$id = 99;
+		$expectedUrl = "/forms/steps?form_id=$id";
+
+		$generatedUrl = $routes->formsPrereqsUrl($id);
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
+	public function testPrereqsEditUrlReturnsCorrectUrl()
+	{
+		$routes = new FormsRouter();
+		$id = 99;
+		$expectedUrl = "/forms/steps/$id/edit";
+
+		$generatedUrl = $routes->prereqsEditUrl($id);
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
+	public function testPrereqsNewUrlReturnsCorrectUrl()
+	{
+		$routes = new FormsRouter();
+		$id = 99;
+		$expectedUrl = "/forms/steps/new?form_id=$id";
+
+		$generatedUrl = $routes->formsPrereqsNewUrl($id);
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
+	public function testPrereqsUpdateUrlReturnsCorrectUrl()
+	{
+		$routes = new FormsRouter();
+		$id = 99;
+		$expectedUrl = "/forms/steps/update?form_id=$id";
+
+		$generatedUrl = $routes->prereqsUpdateUrl($id);
 
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}

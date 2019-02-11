@@ -251,4 +251,22 @@ class Form extends Relational
 		return $this->get('created_by') === $userId;
 	}
 
+	/**
+	 * Returns associated prerequisite models in an array
+	 *
+	 * @return   array
+	 */
+	public function getPrereqsInArray()
+	{
+		$prereqsArray = [];
+		$prereqs = $this->getPrerequisites()->rows();
+
+		foreach ($prereqs as $prereq)
+		{
+			$prereqsArray[] = $prereq;
+		}
+
+		return $prereqsArray;
+	}
+
 }

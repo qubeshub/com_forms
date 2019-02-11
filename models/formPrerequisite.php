@@ -41,6 +41,7 @@ use Hubzero\Database\Relational;
 class FormPrerequisite extends Relational
 {
 
+	static $FORM_MODEL_NAME = 'Components\Forms\Models\Form';
 	protected $table = '#__forms_form_prerequisites';
 
 	/*
@@ -85,6 +86,21 @@ class FormPrerequisite extends Relational
 		$this->_setPrereq();
 
 		return $this->_prereq->acceptedFor($userId);
+	}
+
+	/**
+	 * Returns associated form
+	 *
+	 * @return   object
+	 */
+	public function getForm()
+	{
+		$formModelName = self::$FORM_MODEL_NAME;
+		$foreignKey = 'form_id';
+
+		$form = $this->belongsToOne($formModelName, $foreignKey)->row();
+
+		return $form;
 	}
 
 	/**

@@ -34,7 +34,7 @@ defined('_HZEXEC_') or die();
 
 $pages = $this->pages;
 
-if (sizeof($pages) > 0):
+if (count($pages) > 0):
 	$this->view('_pages_list')
 		->set('pages', $pages)
 		->display();
@@ -42,4 +42,3 @@ else:
 	$this->view('_pages_none_notice')
 		->display();
 endif;
-?>

@@ -32,27 +32,63 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('formEditNav');
+$this->css('formPrereqsList');
 
-$componentPath = Component::path('com_forms');
+$form = $this->form;
+$formAction = $this->formAction;
+$formId = $form->get('id');
+$formName = $form->get('name');
+$prereqs = $this->prereqs;
 
-require_once "$componentPath/helpers/formsRouter.php";
-
-use Components\Forms\Helpers\FormsRouter as Routes;
-
-$current = $this->current;
-$formId = $this->formId;
-$routes = new Routes();
-
-$steps = [
-	'Form Info' => $routes->formsEditUrl($formId),
-	'Pages' => $routes->formsPagesUrl($formId),
-	'Steps' => $routes->formsPrereqsUrl($formId),
-	'Responses' => ""
+$breadcrumbs = [
+	 $formName => ['formsDisplayUrl', [$formId]],
+	'Edit' => ['formsEditUrl', [$formId]],
+	'Steps' => ['formsPrereqsUrl', [$formId]]
 ];
-
-$this->view('_ul_nav', 'shared')
-	->set('current', $current)
-	->set('steps', $steps)
+$this->view('_forms_breadcrumbs', 'shared')
+	->set('breadcrumbs', $breadcrumbs)
+	->set('page', "Form's Pages")
 	->display();
+?>
 
+<section class="main section">
+
+	<div class="row">
+		<?php
+			$this->view('_form_edit_nav', 'shared')
+				->set('current', 'Steps')
+				->set('formId', $formId)
+				->display();
+		?>
+	</div>
+
+	<form action="<?php echo $formAction; ?>">
+		<input type="hidden" name="form_id" value="<?php echo $formId; ?>">
+
+		<div class="row">
+			<?php
+				$this->view('_prereqs_list_area')
+					->set('prereqs', $prereqs)
+					->display();
+			?>
+		</div>
+
+			<div class="row link-row">
+				<span>
+					<?php if ($prereqs->count() > 0): ?>
+						<input class="btn" type="submit" value="Update Steps">
+					<?php endif; ?>
+				</span>
+
+				<span>
+					<?php
+						$this->view('_prereq_new_link')
+							->set('formId', $formId)
+							->display();
+					?>
+				</span>
+			</div>
+
+	</form>
+
+</section>

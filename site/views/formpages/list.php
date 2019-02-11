@@ -70,13 +70,13 @@ $this->view('_forms_breadcrumbs', 'shared')
 			?>
 		</div>
 
-	<div class="row link-row">
-		<?php
-			$this->view('_page_create_link')
-				->set('formId', $formId)
-				->display();
-		?>
-	</div>
+		<div class="row link-row">
+			<?php
+				$this->view('_page_create_link')
+					->set('formId', $formId)
+					->display();
+			?>
+		</div>
 
 	</div>
 </section>

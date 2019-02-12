@@ -32,9 +32,11 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$forms = $this->forms;
 $prereq = $this->prereq;
 $prereqId = $prereq->get('id');
 $order = $prereq->get('order');
+$scopeId = $prereq->get('prerequisite_id');
 $title = $prereq->getParent('name');
 ?>
 
@@ -53,7 +55,13 @@ $title = $prereq->getParent('name');
 		</span>
 
 		<span class="col span3">
-			<?php echo $title; ?>
+			<?php
+				$this->view('_form_select')
+					->set('forms', $forms)
+					->set('name', "prereqs[$prereqId][prerequisite_id]")
+					->set('scopeId', $scopeId)
+					->display();
+			?>
 		</span>
 
 	</span>

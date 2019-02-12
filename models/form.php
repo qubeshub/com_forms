@@ -269,4 +269,22 @@ class Form extends Relational
 		return $prereqsArray;
 	}
 
+	/**
+	 * Returns all possible form prerequisites for form with given ID
+	 *
+	 * @param    object   $form   Form record
+	 * @return   object
+	 */
+	public static function possiblePrereqsFor($form)
+	{
+		$formId = $form->get('id');
+
+		$possiblePrereqs = self::all()
+			->select('id, name')
+			->whereNotIn('id', [$formId])
+			->order('name', 'asc');
+
+		return $possiblePrereqs;
+	}
+
 }

@@ -38,6 +38,7 @@ $form = $this->form;
 $formAction = $this->formAction;
 $formId = $form->get('id');
 $formName = $form->get('name');
+$forms = $this->forms;
 $prereqs = $this->prereqs;
 
 $breadcrumbs = [
@@ -68,6 +69,7 @@ $this->view('_forms_breadcrumbs', 'shared')
 		<div class="row">
 			<?php
 				$this->view('_prereqs_list_area')
+					->set('forms', $forms)
 					->set('prereqs', $prereqs)
 					->display();
 			?>

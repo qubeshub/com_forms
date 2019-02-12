@@ -54,8 +54,6 @@ use Components\Forms\Models\FormPrerequisite;
 class FormPrereqs extends SiteController
 {
 
-	public $editTask = 'listTask';
-
 	/**
 	 * Task mapping
 	 *
@@ -109,6 +107,7 @@ class FormPrereqs extends SiteController
 
 		$formId = $this->_params->getInt('form_id');
 		$form = Form::oneOrFail($formId);
+		$forms = Form::possiblePrereqsFor($form);
 
 		$prereqs =  $form->getPrerequisites()
 			->order('order', 'asc')
@@ -118,6 +117,7 @@ class FormPrereqs extends SiteController
 
 		$this->view
 			->set('form', $form)
+			->set('forms', $forms)
 			->set('formAction', $updateTaskUrl)
 			->set('prereqs', $prereqs)
 			->display();
@@ -136,7 +136,6 @@ class FormPrereqs extends SiteController
 		$form = Form::oneOrFail($formId);
 		$currentPrereqs =  $form->getPrereqsInArray();
 		$submittedPrereqsInfo = $this->_params->get('prereqs');
-
 		$updateResult = $this->_factory->updateFormsPrereqs($currentPrereqs, $submittedPrereqsInfo);
 
 		if ($updateResult->succeeded())
@@ -174,10 +173,7 @@ class FormPrereqs extends SiteController
 
 		$this->_bouncer->redirectUnlessCanEditForm($form);
 
-		$forms = Form::all()
-			->select('id, name')
-			->whereNotIn('id', [$formId])
-			->order('name', 'asc');
+		$forms = Form::possiblePrereqsFor($form);
 
 		$prereq = $prereq ? $prereq: FormPrerequisite::blank();
 		$createTaskUrl = $this->_routes->prereqsCreateUrl();

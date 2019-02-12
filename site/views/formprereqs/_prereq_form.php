@@ -39,6 +39,7 @@ $forms = $this->forms;
 $prereq = $this->prereq;
 $prereqOrder = $prereq->get('order');
 $scopeId = $prereq->get('prerequisite_id');
+$selectName = $this->selectName;
 
 $submitValue = $this->submitValue;
 $orderLabel = Lang::txt('COM_FORMS_FIELDS_ORDER');
@@ -66,6 +67,7 @@ $formLabel = Lang::txt('COM_FORMS_FIELDS_FORM');
 						echo $formLabel;
 						$this->view('_form_select')
 							->set('forms', $forms)
+							->set('name', $selectName)
 							->set('scopeId', $scopeId)
 							->display();
 					?>

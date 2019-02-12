@@ -33,11 +33,12 @@
 defined('_HZEXEC_') or die();
 
 $forms = $this->forms;
+$name = $this->name;
 $nullOptionText = Lang::txt('COM_FORMS_FIELDS_VALUES_SELECT_FORM');
 $scopeId = $this->scopeId;
 ?>
 
-<select name="prereq[prerequisite_id]">
+<select name="<?php echo $name; ?>">
 
 	<option selected disabled hidden>
 		<?php echo $nullOptionText; ?>

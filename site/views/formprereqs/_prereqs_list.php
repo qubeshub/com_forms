@@ -32,6 +32,7 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$forms = $this->forms;
 $prereqs = $this->prereqs;
 ?>
 
@@ -39,6 +40,7 @@ $prereqs = $this->prereqs;
 	<?php
 		foreach ($prereqs as $prereq):
 			$this->view('_prereq_item')
+				->set('forms', $forms)
 				->set('prereq', $prereq)
 				->display();
 		endforeach;

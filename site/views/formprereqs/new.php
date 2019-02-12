@@ -61,6 +61,7 @@ $this->view('_forms_breadcrumbs', 'shared')
 				->set('formId', $formId)
 				->set('forms', $forms)
 				->set('prereq', $prereq)
+				->set('selectName', 'prereq[prerequisite_id]')
 				->set('submitValue', $submitValue)
 				->display();
 		?>

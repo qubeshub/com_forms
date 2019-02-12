@@ -113,4 +113,25 @@ class CrudBatchResultTest extends Basic
 		$this->assertEquals([1,2, 3, 4], $failedDesroys);
 	}
 
+	public function testGetErrorsReturnsCorrectErrors()
+	{
+		$recordA = $this->mock([
+			'class' => 'Relational',
+			'methods' => ['get' => 1, 'getErrors' => ['a']]
+		]);
+		$recordB = $this->mock([
+			'class' => 'Relational',
+			'methods' => ['get' => 2, 'getErrors' => ['b']]
+		]);
+		$batch = $this->mock([
+			'class' => 'CrudBatch',
+			'methods' => ['getFailedSaves' => [$recordA, $recordB]]
+		]);
+		$result = new CrudBatchResult(['batches' => [$batch]]);
+
+		$errors = $result->getErrors();
+
+		$this->assertEquals(['Record 1', 'a', 'Record 2', 'b'], $errors);
+	}
+
 }

@@ -59,6 +59,26 @@ class PageBouncer
 	}
 
 	/**
+	 * Redirects user if they cannot edit given form
+	 *
+	 * @param    object   $form   Form record
+	 * @return   void
+	 */
+	public function redirectUnlessCanEditForm($form, $url = null)
+	{
+		$url = $url ? $url : '/forms';
+
+		$this->redirectUnlessAuthorized('core.create', $url);
+
+		$canEdit = $this->_permitter->canCurrentUserEditForm($form);
+
+		if (!$canEdit)
+		{
+			$this->_router->redirect($url);
+		}
+	}
+
+	/**
 	 * Redirects users without given permission
 	 *
 	 * @param    string   $permission   Permission name

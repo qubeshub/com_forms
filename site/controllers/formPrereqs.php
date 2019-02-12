@@ -72,7 +72,10 @@ class FormPrereqs extends SiteController
 	 */
 	protected static $_paramWhitelist = [
 		'form_id',
-		'prereqs'
+		'order',
+		'prereqs',
+		'prerequisite_id',
+		'prerequisite_scope'
 	];
 
 	/**
@@ -164,22 +167,59 @@ class FormPrereqs extends SiteController
 	 *
 	 * @return   void
 	 */
-	public function newTask()
+	public function newTask($prereq = null, $args = [])
 	{
-		$this->_bouncer->redirectUnlessAuthorized('core.create');
-
-		$formId = $this->_params->getInt('form_id');
+		$formId = isset($args['form_id']) ? $args['form_id'] : $this->_params->getInt('form_id');
 		$form = Form::oneOrFail($formId);
 
-		$prereq = FormPrerequisite::blank();
+		$this->_bouncer->redirectUnlessCanEditForm($form);
 
+		$forms = Form::all()
+			->select('id, name')
+			->whereNotIn('id', [$formId])
+			->order('name', 'asc');
+
+		$prereq = $prereq ? $prereq: FormPrerequisite::blank();
 		$createTaskUrl = $this->_routes->prereqsCreateUrl();
 
 		$this->view
+			->set('action', $createTaskUrl)
 			->set('form', $form)
-			->set('formAction', $createTaskUrl)
+			->set('forms', $forms)
 			->set('prereq', $prereq)
 			->display();
+	}
+
+	/**
+	 * Attempts to create a form prerequisite
+	 *
+	 * @return   void
+	 */
+	public function createTask()
+	{
+		$prereqData = $this->_params->getArray('prereq');
+		$formId = $prereqData['form_id'];
+		$form = Form::oneOrFail($formId);
+
+		$this->_bouncer->redirectUnlessCanEditForm($form);
+
+		$prereqData = $this->_params->getArray('prereq');
+		$prereqData['created'] = Date::toSql();
+		$prereqData['created_by'] = User::get('id');
+		$prereq = FormPrerequisite::blank();
+		$prereq->set($prereqData);
+
+		if ($prereq->save())
+		{
+			$id = $prereq->get('id');
+			$forwardingUrl = $this->_routes->formsPrereqsUrl($formId);
+			$message = Lang::txt('COM_FORMS_STEP_SAVE_SUCCESS');
+			$this->_crudHelper->successfulCreate($forwardingUrl, $message);
+		}
+		else
+		{
+			$this->_crudHelper->failedCreate($prereq, ['form_id' => $formId]);
+		}
 	}
 
 }

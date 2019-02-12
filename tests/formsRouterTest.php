@@ -246,4 +246,14 @@ class FormsRouterTest extends Basic
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
 
+	public function testPrereqsCreateUrlReturnsCorrectUrl()
+	{
+		$routes = new FormsRouter();
+		$expectedUrl = "/forms/steps/create";
+
+		$generatedUrl = $routes->prereqsCreateUrl();
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
 }

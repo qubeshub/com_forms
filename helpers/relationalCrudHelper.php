@@ -98,11 +98,12 @@ class RelationalCrudHelper extends CrudHelper
 	 * Handles failed creation of record
 	 *
 	 * @param    object   $record   Record that failed to be created
+	 * @param    array    $args     Supplementary data
 	 * @return   void
 	 */
-	public function failedCreate($record)
+	public function failedCreate($record, $args = [])
 	{
-		$this->_forwardUserToNewPage($record);
+		$this->_forwardUserToNewPage($record, $args);
 
 		parent::failedCreate($record);
 	}
@@ -111,14 +112,15 @@ class RelationalCrudHelper extends CrudHelper
 	 * Forwards user to new record creation page
 	 *
 	 * @param    object   $record   Record that failed to be created
+	 * @param    array    $args     Supplementary data
 	 * @return   void
 	 */
-	protected function _forwardUserToNewPage($record)
+	protected function _forwardUserToNewPage($record, $args)
 	{
 		$controllerName = $this->_controller->name;
 
 		$this->_controller->setView($controllerName, 'new');
-		$this->_controller->newTask($record);
+		$this->_controller->newTask($record, $args);
 	}
 
 }

@@ -61,6 +61,27 @@ class CrudBatchResult
 	}
 
 	/**
+	 * Returns errors for models that failed to be saved
+	 *
+	 * @return   bool
+	 */
+	public function getErrors()
+	{
+		$failedSaves = $this->getFailedSaves();
+
+		$errors = array_map(function($record) {
+			$id = $record->get('id');
+			$errors = $record->getErrors();
+			array_unshift($errors, "Record $id");
+			return $errors;
+		}, $failedSaves);
+
+		$errors = array_merge(...$errors);
+
+		return $errors;
+	}
+
+	/**
 	 * Returns all models that failed to be saved
 	 *
 	 * @return   bool

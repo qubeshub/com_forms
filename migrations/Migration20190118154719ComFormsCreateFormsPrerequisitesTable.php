@@ -20,6 +20,7 @@ class Migration20190118154719ComFormsCreateFormsPrerequisitesTable extends Base
 			`prerequisite_id` int(11) unsigned NOT NULL,
 			`prerequisite_scope` varchar(50) NOT NULL,
 			`order` int(11) unsigned NOT NULL,
+			`created_by` int(11) unsigned NOT NULL,
 			`created` timestamp NULL DEFAULT NULL,
 			UNIQUE KEY `form_prerequisite` (`form_id`, `prerequisite_id`, `prerequisite_scope`),
 			PRIMARY KEY (`id`)

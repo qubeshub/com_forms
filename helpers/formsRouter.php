@@ -342,6 +342,20 @@ class FormsRouter
 	}
 
 	/**
+	 * Generates prereqs create url
+	 *
+	 * @return   string
+	 */
+	public function prereqsCreateUrl()
+	{
+		$segments = ['steps', 'create'];
+
+		$url = $this->_generateUrl($segments);
+
+		return $url;
+	}
+
+	/**
 	 * Generates URL based on given segments and parameters
 	 *
 	 * @param    array    $segments     URL segments

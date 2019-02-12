@@ -81,4 +81,72 @@ class PageBouncerTest extends Basic
 		$bouncer->redirectUnlessAuthorized('test');
 	}
 
+	public function testRedirectUnlessCanEditFormInvokesCurrentAuthorized()
+	{
+		$auth = $this->mock([
+			'class' => 'FormsAuth',
+			'methods' => ['currentIsAuthorized', 'canCurrentUserEditForm']
+		]);
+		$form = $this->mock(['class' => 'Form']);
+		$router = $this->mock(['class' => 'Router', 'methods' => ['redirect']]);
+		$bouncer = new PageBouncer([
+			'component' => 'com_forms',
+			'permitter' => $auth,
+			'router' => $router
+		]);
+
+		$auth->expects($this->once())
+			->method('currentIsAuthorized')
+			->with('core.create');
+
+		$bouncer->redirectUnlessCanEditForm($form);
+	}
+
+	public function testRedirectUnlessCanEditFormInvokesCanCurrentUserEditForm()
+	{
+		$auth = $this->mock([
+			'class' => 'FormsAuth',
+			'methods' => [
+				'currentIsAuthorized' => true,
+				'canCurrentUserEditForm' => true
+			]
+		]);
+		$form = $this->mock(['class' => 'Form']);
+		$router = $this->mock(['class' => 'Router', 'methods' => ['redirect']]);
+		$bouncer = new PageBouncer([
+			'component' => 'com_forms',
+			'permitter' => $auth,
+			'router' => $router
+		]);
+
+		$auth->expects($this->once())
+			->method('canCurrentUserEditForm')
+			->with($form);
+
+		$bouncer->redirectUnlessCanEditForm($form);
+	}
+
+	public function testRedirectUnlessCanEditFormInvokesRedirectIfUserCantEditForm()
+	{
+		$auth = $this->mock([
+			'class' => 'FormsAuth',
+			'methods' => [
+				'currentIsAuthorized' => true,
+				'canCurrentUserEditForm' => false
+			]
+		]);
+		$form = $this->mock(['class' => 'Form']);
+		$router = $this->mock(['class' => 'Router', 'methods' => ['redirect']]);
+		$bouncer = new PageBouncer([
+			'component' => 'com_forms',
+			'permitter' => $auth,
+			'router' => $router
+		]);
+
+		$router->expects($this->once())
+			->method('redirect');
+
+		$bouncer->redirectUnlessCanEditForm($form);
+	}
+
 }

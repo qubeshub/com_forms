@@ -131,4 +131,28 @@ class FormPage extends Relational
 		return $editableBy;
 	}
 
+	/**
+	 * Deletes FormPage and associated PageField records
+	 *
+	 * @return   boool
+	 */
+	public function destroy()
+	{
+		$fields = $this->getFields()->rows();
+
+		$allFieldsDestroyed = $fields->destroyAll();
+
+		if ($allFieldsDestroyed)
+		{
+			$destroyed = parent::destroy();
+		}
+		else
+		{
+			$this->setErrors([Lang::txt('COM_FORMS_PAGES_FAILED_DESTROY_FIELDS_NOT_DESTROYED')]);
+			$destroyed = false;
+		}
+
+		return $destroyed;
+	}
+
 }

@@ -160,7 +160,6 @@ class PageFieldsv1_0 extends ApiController
 	public function updateTask()
 	{
 		$this->requiresAuthentication();
-		$this->_bouncer->redirectUnlessAuthorized('core.create');
 
 		$pageId = $this->_params->get('page_id');
 		$page = FormPage::oneOrNew($pageId);

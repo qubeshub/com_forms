@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * HUBzero CMS
  *
  * Copyright 2005-2015 HUBzero Foundation, LLC.
@@ -29,65 +29,44 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-// No direct access
-defined('_HZEXEC_') or die();
+namespace Components\Forms\Helpers;
 
-$this->css('formPagesList');
+$compnentPath = Component::path('com_forms');
 
-$form = $this->form;
-$formId = $form->get('id');
-$formName = $form->get('name');
-$pages = $this->pages;
-$pagesUpdateText = Lang::txt('COM_FORMS_FIELDS_VALUES_UPDATE_PAGES');
-$updateAction = $this->updateAction;
+require_once "$componentPath/helpers/factory.php";
 
-$breadcrumbs = [
-	 $formName => ['formsDisplayUrl', [$formId]],
-	'Edit' => ['formsEditUrl', [$formId]],
-	'Pages' => ['formsPagesUrl', [$formId]]
-];
-$this->view('_forms_breadcrumbs', 'shared')
-	->set('breadcrumbs', $breadcrumbs)
-	->set('page', "Form's Pages")
-	->display();
-?>
+use Components\Forms\Helpers\Factory;
 
-<section class="main section">
+class FormPagesFactory extends Factory
+{
 
-	<div class="row">
-		<?php
-			$this->view('_form_edit_nav', 'shared')
-				->set('current', 'Pages')
-				->set('formId', $formId)
-				->display();
-		?>
-	</div>
+	protected $_modelName;
 
-	<form action="<?php echo $updateAction; ?>">
-		<input type="hidden" name="form_id" value="<?php echo $formId; ?>">
+	/**
+	 * Constructs FormPrereqsFactory instance
+	 *
+	 * @param    array   $args   Instantiation state
+	 * @return   void
+	 */
+	public function __construct($args = [])
+	{
+		$args['model_name'] = 'Components\Forms\Models\FormPage';
 
-		<div class="row">
-			<?php
-				$this->view('_pages_list_area')
-					->set('pages', $pages)
-					->display();
-			?>
-		</div>
+		parent::__construct($args);
+	}
 
-		<div class="row link-row">
-			<span>
-				<?php if ($pages->count() > 0): ?>
-					<input class="btn" type="submit" value="<?php echo $pagesUpdateText; ?>">
-				<?php endif; ?>
-			</span>
+	/**
+	 * Updates given forms associated prerequisites
+	 *
+	 * @param    object   $currentPages        Form's current pages
+	 * @param    array    $submittedPageData   Submitted pages' data
+	 * @return   object
+	 */
+	public function updateFormsPages($currentPages, $submittedPageData)
+	{
+		return parent::batchUpdate($currentPages, $submittedPageData);
+	}
 
-			<span>
-				<?php
-					$this->view('_page_create_link')
-						->set('formId', $formId)
-						->display();
-				?>
-			</span>
-		</div>
-	</form>
-</section>
+}
+
+

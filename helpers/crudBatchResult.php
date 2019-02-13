@@ -76,7 +76,10 @@ class CrudBatchResult
 			return $errors;
 		}, $failedSaves);
 
-		$errors = array_merge(...$errors);
+		if ($errors)
+		{
+			$errors = array_merge(...$errors);
+		}
 
 		return $errors;
 	}

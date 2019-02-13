@@ -33,6 +33,7 @@ namespace Components\Forms\Site\Controllers;
 
 $componentPath = Component::path('com_forms');
 
+require_once "$componentPath/helpers/formPagesFactory.php";
 require_once "$componentPath/helpers/formsRouter.php";
 require_once "$componentPath/helpers/pageBouncer.php";
 require_once "$componentPath/helpers/params.php";
@@ -40,6 +41,7 @@ require_once "$componentPath/helpers/relationalCrudHelper.php";
 require_once "$componentPath/models/form.php";
 require_once "$componentPath/models/formPage.php";
 
+use Components\Forms\Helpers\FormPagesFactory;
 use Components\Forms\Helpers\FormsRouter as RoutesHelper;
 use Components\Forms\Helpers\PageBouncer;
 use Components\Forms\Helpers\Params;
@@ -85,6 +87,7 @@ class FormPages extends SiteController
 			'controller' => $this,
 			'errorSummary' => Lang::txt('COM_FORMS_FORM_SAVE_ERROR')
 		]);
+		$this->_factory = new FormPagesFactory();
 		$this->name = $this->_controller;
 		$this->_params = new Params(
 			['whitelist' => self::$_paramWhitelist]
@@ -105,6 +108,7 @@ class FormPages extends SiteController
 
 		$formId = $this->_params->get('form_id');
 		$form = Form::oneOrFail($formId);
+		$batchUpdateTaskUrl = $this->_routes->batchPagesUpdateUrl();
 
 		$pages = FormPage::all()
 			->whereEquals('form_id', $formId)
@@ -114,6 +118,7 @@ class FormPages extends SiteController
 		$this->view
 			->set('form', $form)
 			->set('pages', $pages)
+			->set('updateAction', $batchUpdateTaskUrl)
 			->display();
 	}
 
@@ -220,6 +225,36 @@ class FormPages extends SiteController
 		else
 		{
 			$this->_crudHelper->failedUpdate($page);
+		}
+	}
+
+	/**
+	 * Attempts to update page records
+	 *
+	 * @return   void
+	 */
+	public function batchUpdateTask()
+	{
+		$formId = $this->_params->getInt('form_id');
+		$form = Form::oneOrFail($formId);
+
+		$this->_bouncer->redirectUnlessCanEditForm($form);
+
+		$currentPages =  $form->getPagesInArray();
+		$submittedPagesInfo = $this->_params->get('pages');
+		$updateResult = $this->_factory->updateFormsPages($currentPages, $submittedPagesInfo);
+
+		if ($updateResult->succeeded())
+		{
+			$forwardingUrl = $this->_routes->formsPagesUrl($formId);
+			$message = Lang::txt('COM_FORMS_NOTICES_PAGES_SUCCESSFUL_UPDATE');
+			$this->_crudHelper->successfulUpdate($forwardingUrl, $message);
+		}
+		else
+		{
+			$forwardingUrl = $this->_routes->formsPagesUrl($formId);
+			$message = Lang::txt('COM_FORMS_NOTICES_PAGES_FAILED_UPDATE');
+			$this->_crudHelper->failedBatchUpdate($forwardingUrl, $updateResult, $message);
 		}
 	}
 

@@ -6,6 +6,13 @@
 }
 
 /*
+ * Fontcon styling
+ */
+.fontcon {
+	font-family: 'Fontcons';
+}
+
+/*
  * No pages notice
  */
 .none-notice {
@@ -15,15 +22,16 @@
 }
 
 /*
- * Add page link
+ * Link row
  */
 .link-row {
 	display: flex;
 	justify-content: flex-end;
 }
 
-.protected-link {
+.link-row > * {
 	font-size: 1.5em;
+	margin: 0 0 0 1em;
 }
 
 /*
@@ -42,3 +50,15 @@
 .page-list .page-item * {
 	color: inherit;
 }
+
+.page-item a:hover {
+	border: none;
+	text-decoration: none;
+}
+
+.page-item input,
+.page-item select {
+	padding: 0 0 0 .5em;
+	width: 100%;
+}
+

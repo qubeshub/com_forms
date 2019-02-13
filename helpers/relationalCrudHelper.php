@@ -81,6 +81,27 @@ class RelationalCrudHelper extends CrudHelper
 	}
 
 	/**
+	 * Handles failed update of records
+	 *
+	 * @param    string   $forwardingUrl
+	 * @param    object   $updateResult
+	 * @param    string   $errorIntro
+	 * @return   void
+	 */
+	public function failedBatchUpdate($forwardingUrl, $updateResult, $errorIntro = '')
+	{
+		if ($errorIntro)
+		{
+			$this->_errorSummary = $errorIntro;
+		}
+
+		parent::failedUpdate($updateResult);
+
+		$this->_router->redirect($forwardingUrl);
+	}
+
+
+	/**
 	 * Forwards user to record edit page
 	 *
 	 * @param    object   $record   Record that failed to be created

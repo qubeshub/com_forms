@@ -59,7 +59,7 @@ $responsesLabel = Lang::txt('COM_FORMS_FIELDS_RESPONSES');
 	</legend>
 
 	<div class="grid">
-		<div class="col span2">
+		<div class="col span5 datetimes-container">
 			<label>
 				<?php echo $openingDateLabel; ?>
 				<div class="datetime-container">
@@ -67,9 +67,7 @@ $responsesLabel = Lang::txt('COM_FORMS_FIELDS_RESPONSES');
 						value="<?php echo $formattedOpeningTime; ?>">
 				</div>
 			</label>
-		</div>
 
-		<div class="col span2">
 			<label>
 				<?php echo $closingDateLabel; ?>
 				<div class="datetime-container">
@@ -109,7 +107,7 @@ $responsesLabel = Lang::txt('COM_FORMS_FIELDS_RESPONSES');
 			</label>
 		</div>
 
-		<div class="col span2">
+		<div class="col span2 omega">
 			<label>
 				<?php echo $archivedLabel; ?>
 				<div class="radios-container">

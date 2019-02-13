@@ -256,4 +256,14 @@ class FormsRouterTest extends Basic
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
 
+	public function testBatchPagesUpdateUrlReturnsCorrectUrl()
+	{
+		$routes = new FormsRouter();
+		$expectedUrl = "/forms/pages/batchupdate";
+
+		$generatedUrl = $routes->batchPagesUpdateUrl();
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
 }

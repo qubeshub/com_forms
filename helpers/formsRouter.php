@@ -356,6 +356,21 @@ class FormsRouter
 	}
 
 	/**
+	 * Generates form's prereqs update url
+	 *
+	 * @param    int      $formId   ID of form to update pages for
+	 * @return   string
+	 */
+	public function batchPagesUpdateUrl()
+	{
+		$segments = ['pages', 'batchupdate'];
+
+		$url = $this->_generateUrl($segments);
+
+		return $url;
+	}
+
+	/**
 	 * Generates URL based on given segments and parameters
 	 *
 	 * @param    array    $segments     URL segments

@@ -35,8 +35,10 @@ use Hubzero\Utility\Arr;
 
 $componentPath = Component::path('com_forms');
 
+require_once "$componentPath/helpers/listErrorMessage.php";
 require_once "$componentPath/helpers/mockProxy.php";
 
+use Components\Forms\Helpers\ListErrorMessage as ErrorMessage;
 use Components\Forms\Helpers\MockProxy;
 
 class CrudHelper
@@ -132,21 +134,19 @@ class CrudHelper
 	}
 
 	/**
-	 * Generates record creation error message
+	 * Generates error message
 	 *
 	 * @param    array    $errors   Record's errors
 	 * @return   void
 	 */
 	protected function _generateErrorMessage($errors)
 	{
-		$errorMessage = "$this->_errorSummary <br/>";
+		$errorMessage = new ErrorMessage([
+			'errorIntro' => $this->_errorSummary,
+			'errors' => $errors
+		]);
 
-		foreach ($errors as $error)
-		{
-			$errorMessage .= "<br/>• $error";
-		}
-
-		return $errorMessage;
+		return $errorMessage->toString();
 	}
 
 }

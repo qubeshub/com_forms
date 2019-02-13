@@ -110,4 +110,29 @@ class FactoryTest extends Basic
 		$this->assertEquals($instance, $model);
 	}
 
+	public function testBatchUpdateInvokesBatchUpdateHelperUpdateDelta()
+	{
+		$updateDelta = $this->mock([
+			'class' => 'UpdateDelta',
+			'methods' => [
+				'getModelsToDestroy' => [],
+				'getModelsToSave' => []
+			]
+		]);
+		$batchUpdateHelper =	$this->mock([
+			'class' => 'BatchUpdateHelper',
+		 	'methods' => ['updateDelta' => $updateDelta]
+		]);
+		$factory = new Factory([
+			'batch_helper' => $batchUpdateHelper,
+			'model_name' => ''
+		]);
+
+		$batchUpdateHelper->expects($this->once())
+			->method('updateDelta');
+
+		$factory->batchUpdate([], []);
+	}
+
+
 }

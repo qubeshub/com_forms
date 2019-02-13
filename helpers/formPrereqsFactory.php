@@ -33,14 +33,9 @@ namespace Components\Forms\Helpers;
 
 $compnentPath = Component::path('com_forms');
 
-require_once "$componentPath/helpers/batchUpdateHelper.php";
-require_once "$componentPath/helpers/crudBatchResult.php";
 require_once "$componentPath/helpers/factory.php";
 
-use Components\Forms\Helpers\BatchUpdateHelper;
-use Components\Forms\Helpers\CrudBatchResult;
 use Components\Forms\Helpers\Factory;
-use Hubzero\Utility\Arr;
 
 class FormPrereqsFactory extends Factory
 {
@@ -55,7 +50,6 @@ class FormPrereqsFactory extends Factory
 	 */
 	public function __construct($args = [])
 	{
-		$this->_batchUpdateHelper = Arr::getValue($args, 'assoc_helper', new BatchUpdateHelper());
 		$args['model_name'] = 'Components\Forms\Models\FormPrerequisite';
 
 		parent::__construct($args);
@@ -70,44 +64,7 @@ class FormPrereqsFactory extends Factory
 	 */
 	public function updateFormsPrereqs($currentPrereqs, $newPrereqsData)
 	{
-		$updateDelta = $this->_calculateUpdateDelta($currentPrereqs, $newPrereqsData);
-
-		$updateResult = $this->_resolveUpdateDelta($updateDelta);
-
-		return $updateResult;
-	}
-
-	/**
-	 * Determines which field records are being added, updated, or removed
-	 *
-	 * @param    object   $currentPrereqs   Form's current prerequisites
-	 * @param    array    $newPrereqsData   Submitted prerequisites' data
-	 * @return   object
-	 */
-	protected function _calculateUpdateDelta($currentPrereqs, $newPrereqsData)
-	{
-		$submittedPrereqs = $this->instantiateMany($newPrereqsData);
-
-		$updateDelta = $this->_batchUpdateHelper->updateDelta(
-			$currentPrereqs,
-			$submittedPrereqs
-		);
-
-		return $updateDelta;
-	}
-
-	/**
-	 * Saves, creates, or destroys fields based on update delta
-	 *
-	 * @param    object   $updateDelta   Update delta
-	 * @return   object
-	 */
-	protected function _resolveUpdateDelta($updateDelta)
-	{
-		$saveResult = $this->_saveMany($updateDelta->getModelsToSave());
-		$destroyResult = $this->_destroyMany($updateDelta->getModelsToDestroy());
-
-		return new CrudBatchResult(['batches' => [$saveResult, $destroyResult]]);
+		return parent::batchUpdate($currentPrereqs, $newPrereqsData);
 	}
 
 }

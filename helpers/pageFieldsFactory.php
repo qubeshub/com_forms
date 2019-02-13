@@ -34,17 +34,10 @@ namespace Components\Forms\Helpers;
 $compnentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/associationReadResult.php";
-require_once "$componentPath/helpers/batchUpdateHelper.php";
-require_once "$componentPath/helpers/crudBatch.php";
-require_once "$componentPath/helpers/crudBatchResult.php";
 require_once "$componentPath/helpers/factory.php";
 
 use Components\Forms\Helpers\AssociationReadResult;
-use Components\Forms\Helpers\BatchUpdateHelper;
-use Components\Forms\Helpers\CrudBatch;
-use Components\Forms\Helpers\CrudBatchResult;
 use Components\Forms\Helpers\Factory;
-use Hubzero\Utility\Arr;
 
 class PageFieldsFactory extends Factory
 {
@@ -59,7 +52,6 @@ class PageFieldsFactory extends Factory
 	 */
 	public function __construct($args = [])
 	{
-		$this->_batchUpdateHelper = Arr::getValue($args, 'assoc_helper', new BatchUpdateHelper());
 		$args['model_name'] = 'Components\Forms\Models\PageField';
 
 		parent::__construct($args);
@@ -85,49 +77,12 @@ class PageFieldsFactory extends Factory
 	 * Updates given pages associated fields
 	 *
 	 * @param    object   $currentFields   Page's current fields
-	 * @param    array    $newFieldsData   Submitted fields' data
+	 * @param    array    $submittedData   Submitted fields' data
 	 * @return   object
 	 */
-	public function updatePagesFields($currentFields, $newFieldsData)
+	public function updatePagesFields($currentFields, $submittedData)
 	{
-		$updateDelta = $this->_calculateUpdateDelta($currentFields, $newFieldsData);
-
-		$updateResult = $this->_resolveUpdateDelta($updateDelta);
-
-		return $updateResult;
-	}
-
-	/**
-	 * Determines which field records are being added, updated, or removed
-	 *
-	 * @param    object   $currentFields         Current fields
-	 * @param    array    $submittedFieldsData   Submitted fields' data
-	 * @return   object
-	 */
-	protected function _calculateUpdateDelta($currentFields, $submittedFieldsData)
-	{
-		$submittedFields = $this->instantiateMany($submittedFieldsData);
-
-		$updateDelta = $this->_batchUpdateHelper->updateDelta(
-			$currentFields,
-			$submittedFields
-		);
-
-		return $updateDelta;
-	}
-
-	/**
-	 * Saves, creates, or destroys fields based on update delta
-	 *
-	 * @param    object   $updateDelta   Update delta
-	 * @return   object
-	 */
-	protected function _resolveUpdateDelta($updateDelta)
-	{
-		$saveResult = $this->_saveMany($updateDelta->getModelsToSave());
-		$destroyResult = $this->_destroyMany($updateDelta->getModelsToDestroy());
-
-		return new CrudBatchResult(['batches' => [$saveResult, $destroyResult]]);
+		return parent::batchUpdate($currentFields, $submittedData);
 	}
 
 }

@@ -33,10 +33,14 @@ namespace Components\Forms\Helpers;
 
 $componentPath = Component::path('com_forms');
 
+require_once "$componentPath/helpers/batchUpdateHelper.php";
 require_once "$componentPath/helpers/crudBatch.php";
+require_once "$componentPath/helpers/crudBatchResult.php";
 require_once "$componentPath/helpers/mockProxy.php";
 
+use Components\Forms\Helpers\BatchUpdateHelper;
 use Components\Forms\Helpers\CrudBatch;
+use Components\Forms\Helpers\CrudBatchResult;
 use Components\Forms\Helpers\MockProxy;
 use Hubzero\Utility\Arr;
 
@@ -51,11 +55,62 @@ class Factory
 	 */
 	public function __construct($args = [])
 	{
+		$this->_batchUpdateHelper = Arr::getValue($args, 'batch_helper', new BatchUpdateHelper());
 		$this->_modelName = $args['model_name'];
 		$this->_modelClass = Arr::getValue(
 			$args, 'model_class', new MockProxy(['class' => $this->_modelName])
 		);
 	}
+
+	/**
+	 * Updates, creates, destroys records based on given data
+	 *
+	 * @param    object   $currentRecords   Current records
+	 * @param    array    $submittedData    Submitted records' data
+	 * @return   object
+	 */
+	public function batchUpdate($existingRecords, $submittedData)
+	{
+		$updateDelta = $this->_calculateUpdateDelta($existingRecords, $submittedData);
+
+		$updateResult = $this->_resolveUpdateDelta($updateDelta);
+
+		return $updateResult;
+	}
+
+	/**
+	 * Determines which records are being added, updated, destroyed
+	 *
+	 * @param    object   $currentRecords   Current records
+	 * @param    array    $submittedData    Submitted records' data
+	 * @return   object
+	 */
+	protected function _calculateUpdateDelta($existingRecords, $submittedData)
+	{
+		$submittedRecords = $this->instantiateMany($submittedData);
+
+		$updateDelta = $this->_batchUpdateHelper->updateDelta(
+			$existingRecords,
+			$submittedRecords
+		);
+
+		return $updateDelta;
+	}
+
+	/**
+	 * Saves, creates, or destroys records based on update delta
+	 *
+	 * @param    object   $updateDelta   Update delta
+	 * @return   object
+	 */
+	protected function _resolveUpdateDelta($updateDelta)
+	{
+		$saveResult = $this->_saveMany($updateDelta->getModelsToSave());
+		$destroyResult = $this->_destroyMany($updateDelta->getModelsToDestroy());
+
+		return new CrudBatchResult(['batches' => [$saveResult, $destroyResult]]);
+	}
+
 
 	/**
 	 * Instantiates many models using provided data

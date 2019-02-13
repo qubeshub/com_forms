@@ -40,7 +40,7 @@ $scopeId = $prereq->get('prerequisite_id');
 $title = $prereq->getParent('name');
 ?>
 
-<li class="prereq-item">
+<li class="prereq-item" data-id="<?php echo $prereqId; ?>">
 	<span class="grid">
 
 		<span class="col span1 offset1">
@@ -50,11 +50,10 @@ $title = $prereq->getParent('name');
 			<input name="prereqs[<?php echo $prereqId; ?>][order]"
 				type="number"
 				min="1"
-				value="<?php echo $order; ?>"
-				class="item-input" >
+				value="<?php echo $order; ?>">
 		</span>
 
-		<span class="col span3">
+		<span class="col span4">
 			<?php
 				$this->view('_form_select')
 					->set('forms', $forms)
@@ -62,6 +61,10 @@ $title = $prereq->getParent('name');
 					->set('scopeId', $scopeId)
 					->display();
 			?>
+		</span>
+
+		<span class="col span1 offset5 omega">
+			<span class="fontcon destroy-button">&#xf014;</span>
 		</span>
 
 	</span>

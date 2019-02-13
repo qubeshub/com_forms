@@ -78,9 +78,10 @@ class FormsAuth extends ComponentAuth
 	protected function _canUserEditForm($form, $userId)
 	{
 		$userIsAdmin = $this->currentIsAuthorized('core.admin');
+		$userCanCreate = $this->currentIsAuthorized('core.create');
 		$userOwnsForm = $form->isOwnedBy($userId);
 
-		$canEdit = $userIsAdmin || $userOwnsForm;
+		$canEdit = $userIsAdmin || ($userCanCreate && $userOwnsForm);
 
 		return $canEdit;
 	}

@@ -6,6 +6,13 @@
 }
 
 /*
+ * Fontcon styling
+ */
+.fontcon {
+	font-family: 'Fontcons';
+}
+
+/*
  * No prereqs notice
  */
 .none-notice {
@@ -44,7 +51,12 @@
 	color: inherit;
 }
 
-.item-input {
+.prereq-item input,
+.prereq-item select {
 	padding: 0 0 0 .5em;
-	width: auto;
+	width: 100%;
+}
+
+.destroy-button:hover {
+	cursor: pointer;
 }

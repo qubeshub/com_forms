@@ -57,7 +57,7 @@ $formLabel = Lang::txt('COM_FORMS_FIELDS_FORM');
 			<div class="col span1">
 				<label>
 					<?php echo $orderLabel; ?>
-					<input name="prereq[order]" type="number" min="0" value="<?php echo $prereqOrder; ?>">
+					<input name="prereq[order]" type="number" min="1" value="<?php echo $prereqOrder; ?>">
 				</label>
 			</div>
 

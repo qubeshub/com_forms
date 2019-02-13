@@ -39,7 +39,7 @@ $order = $page->get('order');
 $title = $page->get('title');
 ?>
 
-<li class="page-item">
+<li class="page-item" data-id="<?php echo $pageId; ?>">
 	<span class="grid">
 
 		<span class="col span1 offset1">
@@ -58,10 +58,13 @@ $title = $page->get('title');
 				value="<?php echo $title; ?>">
 		</span>
 
-		<span class="col span1 offset5 omega">
+		<span class="col span1 offset5 omega crud-buttons">
 			<a href="<?php echo $editUrl; ?>">
 				<span class="fontcon">&#x270E;</span>
 			</a>
+			<span class="fontcon destroy-button">
+				&#xf014;
+			</span>
 		</span>
 
 	</span>

@@ -6,6 +6,15 @@ const prereqsListAreaClass = 'prereqs-list-area'
 const prereqsNoneNotice = 'There are no steps associated with this form at the moment.'
 const prereqsUpdateButtonClass = 'steps-update-button'
 
+$(document).ready(() => {
+	Hubzero.initApi(() => {
+
+		const $destroyButtons = getDestroyButtons()
+
+		registerDestroySubmitHandler($destroyButtons)
+	})
+})
+
 const getDestroyButtons = () => {
 	const $destroyButtons = $(`.${destroyButtonClass}`)
 
@@ -71,12 +80,3 @@ const removeUpdateButton = () => {
 const notifyUser = ({message, status}) => {
 	HUB.FORMS.Notify[status](message)
 }
-
-$(document).ready(() => {
-	Hubzero.initApi(() => {
-
-		const $destroyButtons = getDestroyButtons()
-
-		registerDestroySubmitHandler($destroyButtons)
-	})
-})

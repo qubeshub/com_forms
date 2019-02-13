@@ -62,3 +62,14 @@
 	width: 100%;
 }
 
+
+/*
+ * Item CRUD buttons styles
+ */
+.page-item .crud-buttons > span {
+	margin: 0 0 0 2em;
+}
+
+.destroy-button:hover {
+	cursor: pointer;
+}

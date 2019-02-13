@@ -33,6 +33,12 @@
 defined('_HZEXEC_') or die();
 
 $this->css('formPagesList');
+$this->js('formPagesList')
+	->js('formPage')
+	->js('notify')
+	->js('api');
+
+Html::behavior('core');
 
 $form = $this->form;
 $formId = $form->get('id');
@@ -66,7 +72,7 @@ $this->view('_forms_breadcrumbs', 'shared')
 	<form action="<?php echo $updateAction; ?>">
 		<input type="hidden" name="form_id" value="<?php echo $formId; ?>">
 
-		<div class="row">
+		<div class="row pages-list-area">
 			<?php
 				$this->view('_pages_list_area')
 					->set('pages', $pages)
@@ -75,7 +81,7 @@ $this->view('_forms_breadcrumbs', 'shared')
 		</div>
 
 		<div class="row link-row">
-			<span>
+			<span class="pages-update-button">
 				<?php if ($pages->count() > 0): ?>
 					<input class="btn" type="submit" value="<?php echo $pagesUpdateText; ?>">
 				<?php endif; ?>

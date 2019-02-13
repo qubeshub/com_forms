@@ -252,21 +252,46 @@ class Form extends Relational
 	}
 
 	/**
+	 * Returns associated page models in an array
+	 *
+	 * @return   array
+	 */
+	public function getPagesInArray()
+	{
+		$pagesInArray = $this->_getAssociationsInArray('getPages');
+
+		return $pagesInArray;
+	}
+
+	/**
 	 * Returns associated prerequisite models in an array
 	 *
 	 * @return   array
 	 */
 	public function getPrereqsInArray()
 	{
-		$prereqsArray = [];
-		$prereqs = $this->getPrerequisites()->rows();
+		$prereqsInArray = $this->_getAssociationsInArray('getPrerequisites');
 
-		foreach ($prereqs as $prereq)
+		return $prereqsInArray;
+	}
+
+	/**
+	 * Get associations in array
+	 *
+	 * @param    string   $associationFunc   Name of association getter
+	 * @return   array
+	 */
+	protected function _getAssociationsInArray($associationFunc)
+	{
+		$associatons = [];
+		$models = $this->$associationFunc()->rows();
+
+		foreach ($models as $model)
 		{
-			$prereqsArray[] = $prereq;
+			$associatons[] = $model;
 		}
 
-		return $prereqsArray;
+		return $associatons;
 	}
 
 	/**

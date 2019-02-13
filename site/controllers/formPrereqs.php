@@ -35,18 +35,18 @@ use Hubzero\Component\SiteController;
 
 $componentPath = Component::path('com_forms');
 
+require_once "$componentPath/helpers/formPrereqsFactory.php";
 require_once "$componentPath/helpers/formsRouter.php";
 require_once "$componentPath/helpers/pageBouncer.php";
 require_once "$componentPath/helpers/params.php";
-require_once "$componentPath/helpers/formPrereqsFactory.php";
 require_once "$componentPath/helpers/relationalCrudHelper.php";
 require_once "$componentPath/models/form.php";
 require_once "$componentPath/models/formPrerequisite.php";
 
+use Components\Forms\Helpers\FormPrereqsFactory;
 use Components\Forms\Helpers\FormsRouter as RoutesHelper;
 use Components\Forms\Helpers\Params;
 use Components\Forms\Helpers\PageBouncer;
-use Components\Forms\Helpers\FormPrereqsFactory;
 use Components\Forms\Helpers\RelationalCrudHelper as CrudHelper;
 use Components\Forms\Models\Form;
 use Components\Forms\Models\FormPrerequisite;
@@ -130,10 +130,11 @@ class FormPrereqs extends SiteController
 	 */
 	public function updateTask()
 	{
-		$this->_bouncer->redirectUnlessAuthorized('core.create');
-
 		$formId = $this->_params->getInt('form_id');
 		$form = Form::oneOrFail($formId);
+
+		$this->_bouncer->redirectUnlessCanEditForm($form);
+
 		$currentPrereqs =  $form->getPrereqsInArray();
 		$submittedPrereqsInfo = $this->_params->get('prereqs');
 		$updateResult = $this->_factory->updateFormsPrereqs($currentPrereqs, $submittedPrereqsInfo);

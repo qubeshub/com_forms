@@ -32,8 +32,8 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$openingTime = date_create_from_format('Y-m-d H:i:s', $this->openingTime);
-$now = new \DateTime();
+$openingTime = new DateTime($this->openingTime);
+$now = new DateTime();
 $timeUntilOpen = $now->diff($openingTime);
 
 if ($timeUntilOpen->days > 0)
@@ -50,5 +50,5 @@ else
 	<h3>
 		<?php echo $openTitle; ?>
 	</h3>
-	<?php echo date('F dS, Y', strtotime($this->openingTime)); ?>
+	<?php echo date('F jS, Y', strtotime($this->openingTime)); ?>
 </div>

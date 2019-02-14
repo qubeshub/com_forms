@@ -62,6 +62,7 @@ class PageBouncer
 	 * Redirects user if they cannot edit given form
 	 *
 	 * @param    object   $form   Form record
+	 * @param    string   $url    URL to redirect to
 	 * @return   void
 	 */
 	public function redirectUnlessCanEditForm($form, $url = null)
@@ -73,6 +74,23 @@ class PageBouncer
 		$canEdit = $this->_permitter->canCurrentUserEditForm($form);
 
 		if (!$canEdit)
+		{
+			$this->_router->redirect($url);
+		}
+	}
+
+	/**
+	 * Redirects user if the form is disabled
+	 *
+	 * @param    object   $form   Form record
+	 * @param    string   $url    URL to redirect to
+	 * @return   void
+	 */
+	public function redirectIfFormDisabled($form, $url = null)
+	{
+		$url = $url ? $url : '/forms';
+
+		if ($form->get('disabled'))
 		{
 			$this->_router->redirect($url);
 		}

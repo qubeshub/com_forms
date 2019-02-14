@@ -37,15 +37,19 @@ $id = $form->get('id');
 $pages = $form->getPages();
 $prereqsIncomplete = !$form->prereqsAccepted(User::get('id'));
 $response = $this->get('response');
+$responseIsNew = $response->isNew();
+$formIsActive = !$form->get('disabled');
+$userCanStartResponse = $responseIsNew && $formIsActive;
+$userCanEditResponse = !$responseIsNew && $formIsActive;
 
 if ($prereqsIncomplete):
 	$this->view('_form_response_link_prereqs_incomplete')
 		->display();
-elseif ($response->isNew()):
+elseif ($userCanStartResponse):
 	$this->view('_form_response_link_start')
 		->set('formId', $id)
 		->display();
-else:
+elseif ($userCanEditResponse):
 	$this->view('_form_response_link_pages')
 		->set('formId', $id)
 		->set('pages', $pages)

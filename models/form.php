@@ -234,8 +234,16 @@ class Form extends Relational
 			->rows()
 			->raw();
 
-		$pageArray = array_slice($pages, $position - 1, 1);
-		$page = $pageArray[0];
+		if (!empty($pages))
+		{
+			$pageArray = array_slice($pages, $position - 1, 1);
+			$page = $pageArray[0];
+		}
+		else
+		{
+			$pageClass = self::$_pageClass;
+			$page = $pageClass::blank();
+		}
 
 		return $page;
 	}

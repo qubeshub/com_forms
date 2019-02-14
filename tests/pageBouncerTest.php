@@ -149,4 +149,37 @@ class PageBouncerTest extends Basic
 		$bouncer->redirectUnlessCanEditForm($form);
 	}
 
+	public function testRedirectIfFormDisabledChecksIfFormIsDisabled()
+	{
+		$form = $this->mock(['class' => 'Form', 'methods' => ['get']]);
+		$router = $this->mock(['class' => 'Router', 'methods' => ['redirect']]);
+		$bouncer = new PageBouncer([
+			'component' => 'com_forms',
+			'router' => $router
+		]);
+
+		$form->expects($this->once())
+			->method('get')
+			->with('disabled');
+
+		$bouncer->redirectIfFormDisabled($form);
+	}
+
+	public function testRedirectIfFormDisabledRedirectIfFormIsDisabled()
+	{
+		$form = $this->mock([
+			'class' => 'Form', 'methods' => ['get' => true]
+		]);
+		$router = $this->mock(['class' => 'Router', 'methods' => ['redirect']]);
+		$bouncer = new PageBouncer([
+			'component' => 'com_forms',
+			'router' => $router
+		]);
+
+		$router->expects($this->once())
+			->method('redirect');
+
+		$bouncer->redirectIfFormDisabled($form);
+	}
+
 }

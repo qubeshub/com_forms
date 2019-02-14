@@ -46,7 +46,7 @@ use Components\Forms\Models\Form;
 use Components\Forms\Models\FormPage;
 use Hubzero\Component\SiteController;
 
-class PageResponses extends SiteController
+class FieldResponses extends SiteController
 {
 
 	/**

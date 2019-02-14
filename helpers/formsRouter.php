@@ -356,6 +356,19 @@ class FormsRouter
 	}
 
 	/**
+	 *
+	 *
+	 */
+	public function fieldsResponsesCreateUrl()
+	{
+		$segments = ['fill', 'create'];
+
+		$url = $this->_generateUrl($segments);
+
+		return $url;
+	}
+
+	/**
 	 * Generates form's prereqs update url
 	 *
 	 * @param    int      $formId   ID of form to update pages for

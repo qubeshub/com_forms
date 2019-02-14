@@ -266,4 +266,14 @@ class FormsRouterTest extends Basic
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
 
+	public function testFieldsResponsesCreateUrlReturnsCorrectUrl()
+	{
+		$routes = new FormsRouter();
+		$expectedUrl = "/forms/fill/create";
+
+		$generatedUrl = $routes->fieldsResponsesCreateUrl();
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
 }

@@ -43,6 +43,7 @@ $pageElements = $page->getFields()
 	->rows();
 $pageId = $page->get('id');
 $pageTitle = $page->get('title');
+$responsesCreateUrl = $this->responsesCreateUrl;
 
 $breadcrumbs = [
 	$formName => ['formsDisplayUrl', [$formId]],
@@ -61,8 +62,9 @@ $this->view('_forms_breadcrumbs', 'shared')
 			<div class="col span12 omega">
 				<?php
 					$this->view('_form', 'shared')
-						->set('title', $pageTitle)
+						->set('action', $responsesCreateUrl)
 						->set('elements', $pageElements)
+						->set('title', $pageTitle)
 						->display();
 				?>
 			</div>

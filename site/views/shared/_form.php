@@ -32,12 +32,13 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$noJsNotice = Lang::txt('COM_FORMS_NOTICES_FIELDS_FILL_NO_JS');
+$action = $this->action;
 $elements = $this->elements;
+$noJsNotice = Lang::txt('COM_FORMS_NOTICES_FIELDS_FILL_NO_JS');
 $title = $this->title;
 ?>
 
-<form action="" method="post" id="hubForm">
+<form action="<?php echo $action; ?>" method="post" id="hubForm">
 	<fieldset>
 	<legend><?php echo $title; ?></legend>
 

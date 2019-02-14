@@ -38,12 +38,21 @@ $form = $this->form;
 $formId = $form->get('id');
 $formName = $form->get('name');
 $page = $this->page;
-$pageElements = $page->getFields()
-	->order('order', 'asc')
-	->rows();
+$pageElements = $this->pageElements;
 $pageId = $page->get('id');
+$pageMetadata = (object) ['name' => 'page_id', 'value' => $pageId];
 $pageTitle = $page->get('title');
 $responsesCreateUrl = $this->responsesCreateUrl;
+$submitClasses = 'btn btn-success';
+
+if ($form->isLastPage($page))
+{
+	$submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_SAVE_AND_REVIEW');
+}
+else
+{
+	$submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_SAVE_AND_CONTINUE');
+}
 
 $breadcrumbs = [
 	$formName => ['formsDisplayUrl', [$formId]],
@@ -64,6 +73,9 @@ $this->view('_forms_breadcrumbs', 'shared')
 					$this->view('_form', 'shared')
 						->set('action', $responsesCreateUrl)
 						->set('elements', $pageElements)
+						->set('hiddenMetadata', [$pageMetadata])
+						->set('submitClasses', $submitClasses)
+						->set('submitValue', $submitValue)
 						->set('title', $pageTitle)
 						->display();
 				?>

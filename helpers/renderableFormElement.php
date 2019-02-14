@@ -78,7 +78,7 @@ class RenderableFormElement
 		$elementId = $this->_element->get('id');
 		$metaInputName = self::$_metaInputName;
 
-		$inputName = "[$metaInputName][$elementId]";
+		$inputName = $metaInputName . "[$elementId]";
 
 		return $inputName;
 	}

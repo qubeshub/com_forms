@@ -34,13 +34,17 @@ defined('_HZEXEC_') or die();
 
 $action = $this->action;
 $elements = $this->elements;
+$hiddenMetadata = $this->hiddenMetadata;
 $noJsNotice = Lang::txt('COM_FORMS_NOTICES_FIELDS_FILL_NO_JS');
+$submitClasses = $this->submitClasses;
+$submitValue = $this->submitValue;
 $title = $this->title;
 ?>
 
 <form action="<?php echo $action; ?>" method="post" id="hubForm">
+
 	<fieldset>
-	<legend><?php echo $title; ?></legend>
+		<legend><?php echo $title; ?></legend>
 
 		<?php
 			foreach($elements as $element):
@@ -49,8 +53,22 @@ $title = $this->title;
 					->display();
 			endforeach;
 		?>
-
 	</fieldset>
+
+	<span>
+		<?php foreach($hiddenMetadata as $datum): ?>
+			<input type="hidden"
+				name="<?php echo $datum->name; ?>"
+				value="<?php echo $datum->value; ?>">
+		<?php	endforeach; ?>
+	</span>
+
+	<div class="button-container">
+		<input type="submit"
+			value="<?php echo $submitValue; ?>"
+			class="<?php echo $submitClasses; ?>">
+	</div>
+
 </form>
 
 <noscript>

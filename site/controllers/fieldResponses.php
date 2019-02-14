@@ -34,12 +34,14 @@ namespace Components\Forms\Site\Controllers;
 $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/comFormsPageBouncer.php";
+require_once "$componentPath/helpers/formPageElementDecorator.php";
 require_once "$componentPath/helpers/formsRouter.php";
 require_once "$componentPath/helpers/params.php";
 require_once "$componentPath/models/form.php";
 require_once "$componentPath/models/formPage.php";
 
 use Components\Forms\Helpers\ComFormsPageBouncer as PageBouncer;
+use Components\Forms\Helpers\FormPageElementDecorator as ElementDecorator;
 use Components\Forms\Helpers\FormsRouter as RoutesHelper;
 use Components\Forms\Helpers\Params;
 use Components\Forms\Models\Form;
@@ -77,6 +79,7 @@ class FieldResponses extends SiteController
 	public function execute()
 	{
 		$this->_pageBouncer = new PageBouncer();
+		$this->_decorator = new ElementDecorator();
 		$this->_params = new Params(
 			['whitelist' => self::$_paramWhitelist]
 		);
@@ -98,10 +101,15 @@ class FieldResponses extends SiteController
 		$this->_pageBouncer->redirectIfPrereqsNotAccepted($this->_form);
 
 		$fieldsResponsesCreateUrl = $this->_routes->fieldsResponsesCreateUrl();
+		$pageElements = $this->_page->getFields()
+			->order('order', 'asc')
+			->rows();
+		$decoratedPageElements = $this->_decorator->decorateForRendering($pageElements);
 
 		$this->view
 			->set('form', $this->_form)
 			->set('page', $this->_page)
+			->set('pageElements', $decoratedPageElements)
 			->set('responsesCreateUrl', $fieldsResponsesCreateUrl)
 			->display();
 	}

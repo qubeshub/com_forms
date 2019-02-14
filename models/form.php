@@ -284,6 +284,24 @@ class Form extends Relational
 	}
 
 	/**
+	 * Determines if given page is form's last page
+	 *
+	 * @param    object   $page   Page record
+	 * @return   bool
+	 */
+	public function isLastPage($page)
+	{
+		$pageId = $page->get('id');
+
+		$isLast = $this->getPages()
+			->order('order', 'asc')
+			->rows()
+			->isLast($pageId);
+
+		return $isLast;
+	}
+
+	/**
 	 * Get associations in array
 	 *
 	 * @param    string   $associationFunc   Name of association getter

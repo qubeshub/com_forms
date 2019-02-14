@@ -122,8 +122,9 @@ class Forms extends SiteController
 		$searchFormAction = $this->routes->queryUpdateUrl();
 		$query = Query::load();
 
-		$forms = $this->search->findBy($query->toArray());
-		$forms = $forms->paginated('limitstart', 'limit');
+		$forms = $this->search->findBy($query->toArray())
+			->paginated('limitstart', 'limit')
+			->order('name', 'asc');
 
 		$this->view
 			->set('formListUrl', $formListUrl)

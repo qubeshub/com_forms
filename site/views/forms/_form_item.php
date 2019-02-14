@@ -40,8 +40,8 @@ $formattedClosingTime = $closingTime->format('F j, Y');
 $displayUrl = $this->displayUrl;
 $formId = $form->get('id');
 $disabled = $form->get('disabled');
-$openingTime = new DateTime($form->get('closing_time'));
-$formattedOpeningTime = $closingTime->format('F j, Y');
+$openingTime = new DateTime($form->get('opening_time'));
+$formattedOpeningTime = $openingTime->format('F j, Y');
 ?>
 
 <li class="form-item">

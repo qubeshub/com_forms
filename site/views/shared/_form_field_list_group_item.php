@@ -35,13 +35,16 @@ defined('_HZEXEC_') or die();
 $inline = $this->inline;
 $name = htmlspecialchars($this->name, ENT_COMPAT);
 $option = $this->option;
-$value = htmlspecialchars($option->value);
 $label = htmlspecialchars($option->label);
+$isSelected = isset($option->selected) && $option->selected;
+$value = htmlspecialchars($option->value);
 $type = htmlspecialchars($this->type);
 ?>
 
 <label class="list-item <?php if(!$inline) echo 'block'; ?>">
-	<input type="<?php echo $type; ?>" name="<?php echo $name; ?>"
-		value="<?php echo $value; ?>">
+	<input type="<?php echo $type; ?>"
+		name="<?php echo $name; ?>"
+		value="<?php echo $value; ?>"
+		<?php if ($isSelected) echo 'checked'; ?>>
 	<?php echo $label; ?>
 </label>

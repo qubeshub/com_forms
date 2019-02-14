@@ -39,10 +39,11 @@ $componentPath = Component::path('com_forms');
 $defaultControllerName = 'forms';
 $controllerName = Request::getCmd('controller', $defaultControllerName);
 $controllerNameMap = [
-	'responses' => 'formResponses',
+	'fill' => 'pageResponses',
 	'forms' => 'forms',
 	'pages' => 'formPages',
-	'fill' => 'pageResponses',
+	'queries' => 'queries',
+	'responses' => 'formResponses',
 	'steps' => 'formPrereqs'
 ];
 

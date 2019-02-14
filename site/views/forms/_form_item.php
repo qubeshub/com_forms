@@ -58,10 +58,6 @@ $formattedOpeningTime = $closingTime->format('F j, Y');
 				<?php echo $formattedClosingTime; ?>
 			</span>
 
-			<span class="col span2 omega">
-				<?php echo ($disabled) ? 'Disabled' : 'Enabled'; ?>
-			</span>
-
 		</span>
 	</a>
 </li>

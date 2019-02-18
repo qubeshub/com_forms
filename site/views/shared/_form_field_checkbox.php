@@ -32,9 +32,11 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$field = $this->field;
 $inline = $this->inline;
-$name = $this->name;
 $option = $this->option;
+$label = $option->label;
+$name = "$this->name[response][$label]";
 
 $this->view('_form_field_list_group_item')
 	->set('inline', $inline)
@@ -42,3 +44,7 @@ $this->view('_form_field_list_group_item')
 	->set('option', $option)
 	->set('type', 'checkbox')
 	->display();
+
+$this->view('_form_field_metadata_fields')
+  ->set('field', $field)
+  ->display();

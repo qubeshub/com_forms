@@ -32,19 +32,25 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$field = $this->field;
-$default = $field->get('default_value');
-$fieldName = $field->get('name');
-$userInputName = $fieldName . '[response]';
+$inline = $this->inline;
+$fieldName = htmlspecialchars($this->name, ENT_COMPAT);
+$checkboxPrefix = $fieldName . '[response][other]';
+$checkboxName = $checkboxPrefix . '[selected]';
+$textInputName = $checkboxPrefix . '[text]';
+$option = [
+	'label' => 'other',
+	'value' => 1
+];
+$optionObject = (object) $option;
+
+$this->view('_form_field_list_group_item')
+	->set('inline', $inline)
+	->set('name', $checkboxName)
+	->set('option', $optionObject)
+	->set('type', 'checkbox')
+	->display();
 ?>
 
-<div class="field-wrap">
-	<input type="date" name="<?php echo $userInputName; ?>"
-		value="<?php echo $default; ?>">
-
-	<?php
-		$this->view('_form_field_metadata_fields')
-			->set('field', $field)
-			->display();
-	?>
-</div>
+<label>
+	<input type="text" name="<?php echo $textInputName; ?>" />
+</label>

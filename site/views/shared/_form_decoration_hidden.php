@@ -33,8 +33,19 @@
 defined('_HZEXEC_') or die();
 
 $input = $this->decoration;
-$name = htmlspecialchars($input->get('name'));
-$value = htmlspecialchars($input->get('default_value'));
+$fieldName = $input->get('name');
+$userInputName = $fieldName . '[response]';
+$value = $input->get('default_value');
 ?>
 
-<input type="hidden" name="<?php echo $name; ?>" value="<?php echo $value; ?>">
+<div>
+	<input type="hidden"
+		name="<?php echo $userInputName; ?>"
+		value="<?php echo $value; ?>">
+
+	<?php
+		$this->view('_form_field_metadata_fields')
+			->set('field', $input)
+			->display();
+	?>
+</div>

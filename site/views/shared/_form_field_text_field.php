@@ -33,15 +33,23 @@
 defined('_HZEXEC_') or die();
 
 $field = $this->field;
-$default = htmlspecialchars($field->get('default_value'), ENT_COMPAT);
-$maxLength = htmlspecialchars($field->get('max_length'), ENT_COMPAT);
-$name = htmlspecialchars($field->get('name'), ENT_COMPAT);
+$fieldName = $field->get('name');
+$default = $field->get('default_value');
+$maxLength = $field->get('max_length');
 $size = $maxLength;
+$userInputName = $fieldName . '[response]';
 ?>
 
 <div class="field-wrap">
 	<input type="text"
 		maxlength="<?php echo $maxLength; ?>"
+		name="<?php echo $userInputName; ?>"
 		size="<?php echo $size; ?>"
 		value="<?php echo $default; ?>">
+
+	<?php
+		$this->view('_form_field_metadata_fields')
+			->set('field', $field)
+			->display();
+	?>
 </div>

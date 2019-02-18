@@ -38,7 +38,7 @@ $type = $this->type;
 
 $otherOption = new stdClass();
 $otherOption->label = 'other';
-$otherOption->value = '';
+$otherOption->value = '1';
 
 $this->view("_form_field_$type")
 	->set('inline', $inline)

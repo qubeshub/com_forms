@@ -44,6 +44,7 @@ $type = $this->type;
 	<?php
 		foreach($options as $option):
 			$this->view("_form_field_$type")
+				->set('field', $field)
 				->set('inline', $inline)
 				->set('name', $name)
 				->set('option', $option)
@@ -51,10 +52,9 @@ $type = $this->type;
 		endforeach;
 
 		if ($renderOther):
-			$this->view("_form_field_list_group_item_other")
+			$this->view('_form_field_' . $type . '_other')
 				->set('inline', $inline)
 				->set('name', $name)
-				->set('type', $type)
 				->display();
 		endif;
 	?>

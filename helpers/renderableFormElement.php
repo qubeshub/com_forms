@@ -60,6 +60,16 @@ class RenderableFormElement
 		{
 			case 'name':
 				$value = $this->_getInputName();
+				$value = $this->_sanitize($value);
+				break;
+			case 'default_value':
+			case 'max':
+			case 'max_length':
+			case 'min':
+			case 'rows':
+			case 'step':
+				$value = $this->_element->get($key, $default);
+				$value = $this->_sanitize($value);
 				break;
 			default:
 				$value = $this->_element->get($key, $default);
@@ -81,6 +91,17 @@ class RenderableFormElement
 		$inputName = $metaInputName . "[$elementId]";
 
 		return $inputName;
+	}
+
+	/**
+	 * Sanitizes for rendering
+	 *
+	 * @param    mixed    $value   Attribute value
+	 * @return   string
+	 */
+	protected function _sanitize($value)
+	{
+		return htmlspecialchars($value, ENT_COMPAT);
 	}
 
 	/**

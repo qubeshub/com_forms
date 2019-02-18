@@ -33,17 +33,24 @@
 defined('_HZEXEC_') or die();
 
 $field = $this->field;
-$default = htmlspecialchars($field->get('default_value'), ENT_COMPAT);
-$min = htmlspecialchars($field->get('min'), ENT_COMPAT);
-$max = htmlspecialchars($field->get('max'), ENT_COMPAT);
-$name = htmlspecialchars($field->get('name'), ENT_COMPAT);
-$step = htmlspecialchars($field->get('step'), ENT_COMPAT);
+$default = $field->get('default_value');
+$min = $field->get('min');
+$max = $field->get('max');
+$fieldName = $field->get('name');
+$step = $field->get('step');
+$userInputName = $fieldName . '[response]';
 ?>
 
 <div class="field-wrap">
-	<input type="number" name="<?php echo $name; ?>"
+	<input type="number" name="<?php echo $userInputName; ?>"
 		min="<?php echo $min; ?>"
 		max="<?php echo $max; ?>"
 		step="<?php echo $step; ?>"
 		value="<?php echo $default; ?>">
+
+	<?php
+		$this->view('_form_field_metadata_fields')
+			->set('field', $field)
+			->display();
+	?>
 </div>

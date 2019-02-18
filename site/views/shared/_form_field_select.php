@@ -33,12 +33,13 @@
 defined('_HZEXEC_') or die();
 
 $field = $this->field;
+$fieldName = $field->get('name');
 $multiple = $field->get('multiple') ? 'multiple' : '';
-$name = htmlspecialchars($field->get('name'), ENT_COMPAT);
 $options = $field->getOptions();
+$userInputName = $fieldName . '[response]';
 ?>
 
-<select name="<?php echo $name; ?>" <?php echo $multiple; ?>>
+<select name="<?php echo $userInputName; ?>" <?php echo $multiple; ?>>
 
 	<?php
 		foreach($options as $option):
@@ -46,6 +47,10 @@ $options = $field->getOptions();
 				->set('option', $option)
 				->display();
 		endforeach;
+
+		$this->view('_form_field_metadata_fields')
+			->set('field', $field)
+			->display();
 	?>
 
 </select>

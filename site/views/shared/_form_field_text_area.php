@@ -33,16 +33,23 @@
 defined('_HZEXEC_') or die();
 
 $field = $this->field;
-$default = htmlspecialchars($field->get('default_value'), ENT_COMPAT);
-$maxLength = htmlspecialchars($field->get('max_length'), ENT_COMPAT);
-$name = htmlspecialchars($field->get('name'), ENT_COMPAT);
-$rows = htmlspecialchars($field->get('rows'), ENT_COMPAT);
+$fieldName = $field->get('name');
+$default = $field->get('default_value');
+$maxLength = $field->get('max_length');
+$rows = $field->get('rows');
+$userInputName = $fieldName . '[response]';
 ?>
 
-<textarea name="<?php echo $name; ?>"
+<textarea name="<?php echo $userInputName; ?>"
 	maxlength="<?php echo $maxLength; ?>"
 	rows="<?php echo $rows; ?>">
 
 	<?php echo $default; ?>
 
 </textarea>
+
+<?php
+	$this->view('_form_field_metadata_fields')
+		->set('field', $field)
+		->display();
+?>

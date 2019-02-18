@@ -68,6 +68,18 @@ class FormPage extends Relational
 		'order' => 'positive'
 	];
 
+	/**
+	 * Returns associated page's form's ID
+	 *
+	 * @return   object
+	 */
+	public function getFormId()
+	{
+		$form = $this->getForm();
+
+		return $form->get('id');
+	}
+
 	/*
 	 * Retrieves associated form record
 	 *

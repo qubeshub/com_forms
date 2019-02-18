@@ -36,6 +36,9 @@ use Hubzero\Database\Relational;
 class PageField extends Relational
 {
 
+	static protected $_responseClass = 'Components\Forms\Models\FieldResponse';
+	static protected $_pageModelName = 'Components\Forms\Models\FormPage';
+
 	/**
 	 * Records table
 	 *
@@ -73,6 +76,117 @@ class PageField extends Relational
 		$decodedOptions = json_decode($options);
 
 		return $decodedOptions;
+	}
+
+	/**
+	 * Returns field response for current user
+	 *
+	 * @return   object
+	 */
+	public function getCurrentUsersResponse()
+	{
+		$currentUserId = self::_getCurrentUsersId();
+
+		$response = $this->getResponse($currentUserId);
+
+		return $response;
+	}
+
+	/**
+	 * Returns field response for given user
+	 *
+	 * @param    int      $userId   User's ID
+	 * @return   object
+	 */
+	public function getResponse($userId)
+	{
+		$responses = $this->getResponses();
+
+		$response = $responses
+			->whereEquals('user_id', $userId)
+			->rows()
+			->current();
+
+		if (!$response)
+		{
+			$fieldId = $this->get('id');
+			$response = self::_nullResponse([
+				'field_id' => $fieldId,
+				'user_id' => $userId
+			]);
+		}
+
+		return $response;
+	}
+
+	/**
+	 * Returns associated field responses
+	 *
+	 * @return   object
+	 */
+	public function getResponses()
+	{
+		$responseModelClass = self::$_responseClass;
+		$foreignKey = 'field_id';
+
+		$responses = $this->oneToMany($responseModelClass, $foreignKey);
+
+		return $responses;
+	}
+
+	/**
+	 * Returns page's form's ID
+	 *
+	 * @return   int
+	 */
+	public function getFormId()
+	{
+		$page = $this->getPage();
+
+		return $page->getFormId();
+	}
+
+	/**
+	 * Returns associated page
+	 *
+	 * @return   object
+	 */
+	public function getPage()
+	{
+		$pageModelName = self::$_pageModelName;
+		$foreignKey = 'page_id';
+
+		$page = $this->belongsToOne($pageModelName, $foreignKey)
+			->row();
+
+		return $page;
+	}
+
+	/**
+	 * Returns current user's ID
+	 *
+	 * @return   int
+	 */
+	protected static function _getCurrentUsersId()
+	{
+		$currentUsersId = User::get('id');
+
+		return $currentUsersId;
+	}
+
+	/**
+	 * Instantiates null response object for given field
+	 *
+	 * @param    object   $state   Instantiation state
+	 * @return   object
+	 */
+	protected static function _nullResponse($state)
+	{
+		$response = FieldResponse::blank();
+
+		$response->set($state);
+
+		return $response;
 	}
 
 }

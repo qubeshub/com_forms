@@ -37,15 +37,17 @@ class FieldResponse extends Relational
 {
 
 	protected $table = '#__forms_fields_responses';
+	protected static $_fieldModelName = 'Components\Forms\Models\PageField';
+	protected static $_responseModelName = 'Components\Forms\Models\FormResponse';
 
-	/*
+	/**
 	 * Attributes to be populated on record creation
 	 *
 	 * @var array
 	 */
 	public $initiate = ['created'];
 
-	/*
+	/**
 	 * Attribute validation
 	 *
 	 * @var  array
@@ -54,5 +56,117 @@ class FieldResponse extends Relational
 		'form_response_id' => 'notempty',
 		'field_id' => 'notempty'
 	];
+
+	/**
+	 * Returns associated form response ID
+	 *
+	 * @return   int
+	 */
+	public function getFormResponseId()
+	{
+		$formResponse = $this->getFormResponse();
+
+		return $formResponse->get('id');
+	}
+
+	/**
+	 * Returns associated form response
+	 *
+	 * @return   object
+	 */
+	public function getFormResponse()
+	{
+		if ($this->isNew())
+		{
+			$formResponse = $this->_lookupFormResponse();
+		}
+		else
+		{
+			$formResponse = $this->_getFormResponseByAssociation();
+		}
+
+		return $formResponse;
+	}
+
+	/**
+	 * Returns associated form response based on user_id & form_id
+	 *
+	 * @return   object
+	 */
+	protected function _lookupFormResponse()
+	{
+		$userId = $this->get('user_id');
+		$formId = $this->_getFormId();
+
+		$formResponse = self::_formResponseFor($formId, $userId);
+
+		return $formResponse;
+	}
+
+	/**
+	 * Returns FormResponse for given form and user
+	 *
+	 * @return   object
+	 */
+	protected static function _formResponseFor($formId, $userId)
+	{
+		$formResponsesHelper = self::_getFormResponsesHelper();
+
+		$formResponse = $formResponsesHelper::all()
+			->whereEquals('form_id', $formId)
+			->whereEquals('user_id', $userId)
+			->row();
+
+		return $formResponse;
+	}
+
+	protected static function _getFormResponsesHelper()
+	{
+		return self::$_responseModelName;
+	}
+
+	/**
+	 * Returns field's form's ID
+	 *
+	 * @return   int
+	 */
+	protected function _getFormId()
+	{
+		$field = $this->getField();
+
+		return $field->getFormId();
+	}
+
+	/**
+	 * Returns associated field by association
+	 *
+	 * @return   object
+	 */
+	public function getField()
+	{
+		$fieldModelName = self::$_fieldModelName;
+		$foreignKey = 'field_id';
+
+		$field = $this->belongsToOne($fieldModelName, $foreignKey)
+			->row();
+
+		return $field;
+	}
+
+	/**
+	 * Returns associated form response by association
+	 *
+	 * @return   object
+	 */
+	protected function _getFormResponseByAssociation()
+	{
+		$responseModelName = self::$_responseModelName;
+		$foreignKey = 'form_response_id';
+
+		$formResponse = $this->belongsToOne($responseModelName, $foreignKey)
+			->row();
+
+		return $formResponse;
+	}
 
 }

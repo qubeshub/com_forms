@@ -125,7 +125,9 @@ class FormResponse extends Relational
 	{
 		$requiredFields = $this->_getRequiredFields();
 		$requiredCount = $requiredFields->count();
-		$responsesCount = $this->_getResponsesTo($requiredFields)->count();
+		$responsesCount = $this->_getResponsesTo($requiredFields)
+			->where('response', '!=', "")
+			->count();
 
 		if ($requiredCount > 0)
 		{

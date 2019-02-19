@@ -259,6 +259,55 @@ class FormPage extends Relational
 	}
 
 	/**
+	 * Indicates if page is last in response sequence
+	 *
+	 * @return   bool
+	 */
+	public function isLast()
+	{
+		$formsPages = $this->_getFormsPages();
+		$order = $this->get('order');
+
+		$isLast = !$formsPages
+			->where('order', '>', $order)
+			->count();
+
+		return $isLast;
+	}
+
+	/**
+	 * Returns position of $this relative to the number of pages before it
+	 *
+	 * @return   int
+	 */
+	public function ordinalPosition()
+	{
+		$order = $this->get('order');
+		$pages = $this->_getFormsPages()
+			->order('order', 'asc')
+			->rows()
+			->fieldsByKey('order');
+
+		$position = array_search($order, $pages) + 1;
+
+		return $position;
+	}
+
+	/**
+	 * Retrieves all pages associated with parent form
+	 *
+	 * @return   object
+	 */
+	protected function _getFormsPages()
+	{
+		$form = $this->getForm();
+
+		$pages = $form->getPages();
+
+		return $pages;
+	}
+
+	/**
 	 * Returns name of the FieldResponse class
 	 *
 	 * @return   string

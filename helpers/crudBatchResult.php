@@ -70,10 +70,7 @@ class CrudBatchResult
 		$failedSaves = $this->getFailedSaves();
 
 		$errors = array_map(function($record) {
-			$id = $record->get('id');
-			$errors = $record->getErrors();
-			array_unshift($errors, "Record $id");
-			return $errors;
+			return $this->_collectRecordsErrors($record);
 		}, $failedSaves);
 
 		if ($errors)
@@ -82,6 +79,19 @@ class CrudBatchResult
 		}
 
 		return $errors;
+	}
+
+	/**
+	 * Collects records errors under record identifier
+	 *
+	 * @param    object   $record   Relational record
+	 * @return   array
+	 */
+	protected function _collectRecordsErrors($record)
+	{
+		$id = $record->get('id');
+		$errors = $record->getErrors();
+		return ["Record $id" => $errors];
 	}
 
 	/**

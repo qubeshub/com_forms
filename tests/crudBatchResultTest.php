@@ -131,7 +131,7 @@ class CrudBatchResultTest extends Basic
 
 		$errors = $result->getErrors();
 
-		$this->assertEquals(['Record 1', 'a', 'Record 2', 'b'], $errors);
+		$this->assertEquals(['Record 1' => ['a'], 'Record 2' => ['b']], $errors);
 	}
 
 }

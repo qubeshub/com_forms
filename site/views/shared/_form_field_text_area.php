@@ -42,10 +42,7 @@ $userInputName = $fieldName . '[response]';
 
 <textarea name="<?php echo $userInputName; ?>"
 	maxlength="<?php echo $maxLength; ?>"
-	rows="<?php echo $rows; ?>">
-
-	<?php echo $default; ?>
-
+	rows="<?php echo $rows; ?>"><?php echo $default; ?>
 </textarea>
 
 <?php

@@ -120,6 +120,11 @@ class FieldResponse extends Relational
 		return $formResponse;
 	}
 
+	/**
+	 * Returns name of the FormResponse class
+	 *
+	 * @return   string
+	 */
 	protected static function _getFormResponsesHelper()
 	{
 		return self::$_responseModelName;

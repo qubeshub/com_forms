@@ -37,36 +37,65 @@ require_once "$componentPath/helpers/factory.php";
 
 use Components\Forms\Helpers\Factory;
 
-class FormPagesFactory extends Factory
+class FieldsResponsesFactory extends Factory
 {
 
-	protected $_modelName;
-
 	/**
-	 * Constructs FormPrereqsFactory instance
+	 * Constructs FieldsResponsesFactory instance
 	 *
 	 * @param    array   $args   Instantiation state
 	 * @return   void
 	 */
 	public function __construct($args = [])
 	{
-		$args['model_name'] = 'Components\Forms\Models\FormPage';
+		$args['model_name'] = 'Components\Forms\Models\FieldResponse';
 
 		parent::__construct($args);
 	}
 
 	/**
-	 * Updates form's associated prerequisites
+	 * Updates fields' responses
 	 *
-	 * @param    object   $currentPages        Form's current pages
-	 * @param    array    $submittedPageData   Submitted pages' data
+	 * @param    array    $submittedResponsesData   Submitted responses data
 	 * @return   object
 	 */
-	public function updateFormsPages($currentPages, $submittedPageData)
+	public function updateFieldsResponses($currentResponses, $submittedResponsesData)
 	{
-		return parent::batchUpdate($currentPages, $submittedPageData);
+    $parsedData = $this->_parseResponsesData($submittedResponsesData);
+
+		return parent::batchUpdate($currentResponses, $parsedData);
+	}
+
+	/**
+	 * Parses given responses' data
+	 *
+	 * @return array
+	 */
+	protected function _parseResponsesData($responsesData)
+	{
+		$parsedData = array_map(function($data) {
+			return $this->_parseResponseData($data);
+		}, $responsesData);
+
+		return $parsedData;
+	}
+
+	/**
+	 * Parses given response's data
+	 *
+	 * @return array
+	 */
+	protected function _parseResponseData($responseData)
+	{
+		$parsedData = $responseData;
+		$parsedData['user_id'] = User::get('id');
+
+		if (is_array($responseData['response']))
+		{
+			$parsedData['response'] = json_encode($responseData['response']);
+		}
+
+		return $parsedData;
 	}
 
 }
-
-

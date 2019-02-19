@@ -43,6 +43,8 @@ class FormPage extends Relational
 
 	static $FORM_MODEL_NAME = 'Components\Forms\Models\Form';
 	static $FIELD_MODEL_NAME = 'Components\Forms\Models\PageField';
+	static $FIELD_RESPONSE_MODEL_NAME = 'Components\Forms\Models\FieldResponse';
+	static $FORM_RESPONSE_MODEL_NAME = 'Components\Forms\Models\FormResponse';
 
 	/**
 	 * Records table
@@ -165,6 +167,115 @@ class FormPage extends Relational
 		}
 
 		return $destroyed;
+	}
+
+	/**
+	 * Returns responses for given user in an array
+	 *
+	 * @param    int     $userId   Given user's ID
+	 * @return   array
+	 */
+	public function responsesInArray($userId)
+	{
+		$responses = $this->responsesFor($userId);
+		$responsesArray = [];
+
+		foreach ($responses as $response)
+		{
+			$responsesArray[] = $response;
+		}
+
+		return $responsesArray;
+	}
+
+	/**
+	 * Returns responses for given user
+	 *
+	 * @param    int      $userId   Given user's ID
+	 * @return   object
+	 */
+	public function responsesFor($userId)
+	{
+		$fieldResponsesHelper = self::_getFieldResponsesHelper();
+		$formResponseId = $this->_getFormResponseId($userId);
+		$fieldIds = $this->getFieldIds();
+
+		$responses = $fieldResponsesHelper::all()
+			->whereEquals('form_response_id', $formResponseId)
+			->whereEquals('user_id', $userId)
+			->whereIn('field_id', $fieldIds);
+
+		return $responses;
+	}
+
+	/**
+	 * Returns ID for the user's form response
+	 *
+	 * @param    int   $userId   Given user's ID
+	 * @return   int
+	 */
+	protected function _getFormResponseId($userId)
+	{
+		$formResponse = $this->_getFormResponse($userId);
+
+		$formResponseId = $formResponse->get('id');
+
+		return $formResponseId;
+	}
+
+	/**
+	 * Returns given user's form response
+	 *
+	 * @param    int   $userId   Given user's ID
+	 * @return   int
+	 */
+	protected function _getFormResponse($userId)
+	{
+		$formId = $this->getFormId();
+		$formResponsesHelper = self::_getFormResponsesHelper();
+
+		$formResponse = $formResponsesHelper::all()
+			->whereEquals('form_id', $formId)
+			->whereEquals('user_id', $userId)
+			->row();
+
+		return $formResponse;
+	}
+
+	/**
+	 * Returns IDs of associated fields
+	 *
+	 * @return   array
+	 */
+	public function getFieldIds()
+	{
+		$fields = $this->getFieldsInArray();
+
+		$fieldIds = array_map(function($field) {
+			return $field->get('id');
+		}, $fields);
+
+		return $fieldIds;
+	}
+
+	/**
+	 * Returns name of the FieldResponse class
+	 *
+	 * @return   string
+	 */
+	protected static function _getFieldResponsesHelper()
+	{
+		return self::$FIELD_RESPONSE_MODEL_NAME;
+	}
+
+	/**
+	 * Returns name of the FormResponse class
+	 *
+	 * @return   string
+	 */
+	protected static function _getFormResponsesHelper()
+	{
+		return self::$FORM_RESPONSE_MODEL_NAME;
 	}
 
 }

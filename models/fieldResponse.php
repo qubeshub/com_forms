@@ -58,6 +58,102 @@ class FieldResponse extends Relational
 	];
 
 	/**
+	 * Executes setup at the end of construction
+	 *
+	 * @return   void
+	 */
+	public function setup()
+	{
+		$this->_addCustomRules();
+	}
+
+	/**
+	 * Adds custom validation rules
+	 *
+	 * @return   void
+	 */
+	protected function _addCustomRules()
+	{
+		$this->addRule('response', function($allData) {
+			$error = false;
+			$responseValue = $allData['response'];
+
+			if (!$this->_responseValid($responseValue))
+			{
+				$error = Lang::txt('COM_FORMS_MODELS_ERRORS_FIELD_RESPONSE_EMPTY');
+			}
+
+			return $error;
+		});
+	}
+
+	/**
+	 * Indicates if owning field is required
+	 *
+	 * @return   bool
+	 */
+	protected function _fieldIsRequired()
+	{
+		$field = $this->getField();
+
+		return $field->get('required');
+	}
+
+	/**
+	 * Indicates if submitted response value is valid
+	 *
+	 * @return   bool
+	 */
+	protected function _responseValid($responseValue)
+	{
+		$isValid = true;
+		$isRequired =	$this->_fieldIsRequired();
+
+		if($isRequired)
+		{
+			$isValid = !$this->_responseEmpty($responseValue);
+		}
+
+		return $isValid;
+	}
+
+	/**
+	 * Indicates if submitted response value is empty
+	 *
+	 * @return   bool
+	 */
+	protected function _responseEmpty($responseValue)
+	{
+		$type = $this->getFieldType();
+
+		switch ($type)
+		{
+			case 'checkbox-group':
+				$responseEmpty = $responseValue === '{"other":{"text":""}}';
+				break;
+			case 'radio-group':
+				$responseEmpty = $responseValue === '{"text":""}';
+				break;
+			default:
+				$responseEmpty = empty($responseValue);
+		}
+
+		return $responseEmpty;
+	}
+
+	/**
+	 * Return's parent field's type
+	 *
+	 * @return   string
+	 */
+	public function getFieldType()
+	{
+		$field = $this->getField();
+
+		return $field->get('type');
+	}
+
+	/**
 	 * Returns associated form response ID
 	 *
 	 * @return   int

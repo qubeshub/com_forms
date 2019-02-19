@@ -148,7 +148,7 @@ class FieldResponses extends SiteController
 		}
 		else
 		{
-			$forwardingUrl = $this->_pagesRouter->pageUrl($this->_page);
+			$forwardingUrl = $this->_routes->formsPageResponseUrl(['page_id' => $pageId]);
 			$message = Lang::txt('COM_FORMS_NOTICES_FIELD_RESPONSES_FAILED_UPDATE');
 			$this->_crudHelper->failedBatchUpdate($forwardingUrl, $updateResult, $message);
 		}

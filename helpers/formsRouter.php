@@ -384,6 +384,22 @@ class FormsRouter
 	}
 
 	/**
+	 * Generates URL to form response review page
+	 *
+	 * @param    int      $formId   Given form's ID
+	 * @return   string
+	 */
+	public function formResponseReviewUrl($formId)
+	{
+		$segments = ['fill', 'review'];
+		$params = ['form_id' => $formId];
+
+		$url = $this->_generateUrl($segments, $params);
+
+		return $url;
+	}
+
+	/**
 	 * Generates URL based on given segments and parameters
 	 *
 	 * @param    array    $segments     URL segments

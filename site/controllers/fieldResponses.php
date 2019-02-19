@@ -34,16 +34,24 @@ namespace Components\Forms\Site\Controllers;
 $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/comFormsPageBouncer.php";
+require_once "$componentPath/helpers/fieldsResponsesFactory.php";
 require_once "$componentPath/helpers/formPageElementDecorator.php";
 require_once "$componentPath/helpers/formsRouter.php";
+require_once "$componentPath/helpers/pagesRouter.php";
 require_once "$componentPath/helpers/params.php";
+require_once "$componentPath/helpers/relationalCrudHelper.php";
+require_once "$componentPath/models/fieldResponse.php";
 require_once "$componentPath/models/form.php";
 require_once "$componentPath/models/formPage.php";
 
 use Components\Forms\Helpers\ComFormsPageBouncer as PageBouncer;
+use Components\Forms\Helpers\FieldsResponsesFactory;
 use Components\Forms\Helpers\FormPageElementDecorator as ElementDecorator;
 use Components\Forms\Helpers\FormsRouter as RoutesHelper;
+use Components\Forms\Helpers\PagesRouter;
 use Components\Forms\Helpers\Params;
+use Components\Forms\Helpers\RelationalCrudHelper as CrudHelper;
+use Components\Forms\Models\FieldResponse;
 use Components\Forms\Models\Form;
 use Components\Forms\Models\FormPage;
 use Hubzero\Component\SiteController;
@@ -78,8 +86,11 @@ class FieldResponses extends SiteController
 	 */
 	public function execute()
 	{
-		$this->_pageBouncer = new PageBouncer();
+		$this->_crudHelper = new CrudHelper(['controller' => $this]);
 		$this->_decorator = new ElementDecorator();
+		$this->_factory = new FieldsResponsesFactory();
+		$this->_pageBouncer = new PageBouncer();
+		$this->_pagesRouter = new PagesRouter();
 		$this->_params = new Params(
 			['whitelist' => self::$_paramWhitelist]
 		);
@@ -96,7 +107,6 @@ class FieldResponses extends SiteController
 	public function fillTask()
 	{
 		$this->_setFormAndPage();
-
 		$this->_pageBouncer->redirectIfFormDisabled($this->_form);
 		$this->_pageBouncer->redirectIfPrereqsNotAccepted($this->_form);
 
@@ -112,6 +122,36 @@ class FieldResponses extends SiteController
 			->set('pageElements', $decoratedPageElements)
 			->set('responsesCreateUrl', $fieldsResponsesCreateUrl)
 			->display();
+	}
+
+	/**
+	 * Attempts to create field response records
+	 *
+	 * @return   void
+	 */
+	public function createTask()
+	{
+		$this->_setFormAndPage();
+		$this->_pageBouncer->redirectIfFormDisabled($this->_form);
+
+		$pageId = $this->_page->get('id');
+		$userId = User::get('id');
+		$responses = $this->_page->responsesInArray($userId);
+		$responsesData = $this->_params->get('responses', []);
+		$updateResult = $this->_factory->updateFieldsResponses($responses, $responsesData);
+
+		if ($updateResult->succeeded())
+		{
+			$forwardingUrl = $this->_pagesRouter->nextPageUrl($this->_page);
+			$message = Lang::txt('COM_FORMS_NOTICES_FIELD_RESPONSES_SUCCESSFUL_UPDATE');
+			$this->_crudHelper->successfulUpdate($forwardingUrl, $message);
+		}
+		else
+		{
+			$forwardingUrl = $this->_pagesRouter->pageUrl($this->_page);
+			$message = Lang::txt('COM_FORMS_NOTICES_FIELD_RESPONSES_FAILED_UPDATE');
+			$this->_crudHelper->failedBatchUpdate($forwardingUrl, $updateResult, $message);
+		}
 	}
 
 	/**

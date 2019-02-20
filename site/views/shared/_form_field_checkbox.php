@@ -35,11 +35,19 @@ defined('_HZEXEC_') or die();
 $field = $this->field;
 $inline = $this->inline;
 $option = $this->option;
+$isSelected = isset($option->selected) && $option->selected;
 $label = $option->label;
 $name = "$this->name[response][$label]";
+$userResponse = json_decode($field->getInputValue());
+
+if ($userResponse && isset($userResponse->$label))
+{
+	$isSelected = true;
+}
 
 $this->view('_form_field_list_group_item')
 	->set('inline', $inline)
+	->set('isSelected', $isSelected)
 	->set('name', $name)
 	->set('option', $option)
 	->set('type', 'checkbox')

@@ -32,25 +32,38 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$field = $this->field;
+$fieldValue = json_decode($field->getInputValue());
 $inline = $this->inline;
+$isSelected = false;
 $fieldName = htmlspecialchars($this->name, ENT_COMPAT);
 $radioPrefix = $fieldName . '[response]';
 $radioName = $radioPrefix . '[selected]';
 $textInputName = $radioPrefix . '[text]';
-$option = [
-	'label' => 'other',
+$label = 'other';
+$option = (object) [
+	'label' => $label,
 	'value' => 'other'
 ];
-$optionObject = (object) $option;
+$otherText = '';
+
+if ($fieldValue && $fieldValue->selected === $option->value)
+{
+	$isSelected = true;
+	$otherText = $fieldValue->text;
+}
 
 $this->view('_form_field_list_group_item')
 	->set('inline', $inline)
+	->set('isSelected', $isSelected)
 	->set('name', $radioName)
-	->set('option', $optionObject)
+	->set('option', $option)
 	->set('type', 'radio')
 	->display();
 ?>
 
 <label>
-	<input type="text" name="<?php echo $textInputName; ?>" />
+	<input type="text"
+		name="<?php echo $textInputName; ?>" /
+		value="<?php echo $otherText; ?>" />
 </label>

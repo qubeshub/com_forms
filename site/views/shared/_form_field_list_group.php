@@ -53,6 +53,7 @@ $type = $this->type;
 
 		if ($renderOther):
 			$this->view('_form_field_' . $type . '_other')
+				->set('field', $field)
 				->set('inline', $inline)
 				->set('name', $name)
 				->display();

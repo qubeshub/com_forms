@@ -36,7 +36,7 @@ $inline = $this->inline;
 $name = htmlspecialchars($this->name, ENT_COMPAT);
 $option = $this->option;
 $label = htmlspecialchars($option->label);
-$isSelected = isset($option->selected) && $option->selected;
+$isSelected = $this->isSelected;
 $value = htmlspecialchars($option->value);
 $type = htmlspecialchars($this->type);
 ?>

@@ -110,6 +110,9 @@ class ComFormsFieldTranslator {
 		let parsedValue
 
 		switch(name) {
+			case 'default_value':
+				parsedValue = this._parseUndefinedForServer(value)
+				break;
 			case 'inline':
 			case 'multiple':
 			case 'other':
@@ -122,6 +125,17 @@ class ComFormsFieldTranslator {
 				break;
 			default:
 				parsedValue = value
+		}
+
+		return parsedValue
+	}
+
+	_parseUndefinedForServer(value)
+	{
+		let parsedValue = value
+
+		if (value === undefined) {
+			parsedValue = null
 		}
 
 		return parsedValue

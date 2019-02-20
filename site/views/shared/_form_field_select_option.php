@@ -33,16 +33,11 @@
 defined('_HZEXEC_') or die();
 
 $option = $this->option;
-$selected = '';
 $value = htmlspecialchars($option->value);
 $label = htmlspecialchars($option->label);
-
-if (isset($option->selected) && $option->selected)
-{
-	$selected = 'selected';
-}
+$selected = $this->selected;
 ?>
 
-<option value="<?php echo $value; ?>" <?php echo $selected; ?>>
+<option value="<?php echo $value; ?>" <?php if ($selected) echo 'selected'; ?>>
 	<?php echo $label; ?>
 </option>

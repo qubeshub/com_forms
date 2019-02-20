@@ -34,7 +34,7 @@ defined('_HZEXEC_') or die();
 
 $field = $this->field;
 $fieldName = $field->get('name');
-$default = $field->get('default_value');
+$inputValue = $field->getInputValue();
 $maxLength = $field->get('max_length');
 $rows = $field->get('rows');
 $userInputName = $fieldName . '[response]';
@@ -42,7 +42,7 @@ $userInputName = $fieldName . '[response]';
 
 <textarea name="<?php echo $userInputName; ?>"
 	maxlength="<?php echo $maxLength; ?>"
-	rows="<?php echo $rows; ?>"><?php echo $default; ?>
+	rows="<?php echo $rows; ?>"><?php echo $inputValue; ?>
 </textarea>
 
 <?php

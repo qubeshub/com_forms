@@ -129,10 +129,12 @@ class FieldResponse extends Relational
 		switch ($type)
 		{
 			case 'checkbox-group':
-				$responseEmpty = $responseValue === '{"other":{"text":""}}';
+				$responseEmpty = empty($responseValue);
+				$responseEmpty = $responseEmpty || $responseValue === '{"other":{"text":""}}';
 				break;
 			case 'radio-group':
-				$responseEmpty = $responseValue === '{"text":""}';
+				$responseEmpty = empty($responseValue);
+				$responseEmpty = $responseEmpty || $responseValue === '{"text":""}';
 				break;
 			default:
 				$responseEmpty = empty($responseValue);

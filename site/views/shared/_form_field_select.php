@@ -36,6 +36,7 @@ $field = $this->field;
 $fieldName = $field->get('name');
 $multiple = $field->get('multiple') ? 'multiple' : '';
 $options = $field->getOptions();
+$selectedOptionValue = $field->getInputValue();
 $userInputName = $fieldName . '[response]';
 ?>
 
@@ -43,8 +44,11 @@ $userInputName = $fieldName . '[response]';
 
 	<?php
 		foreach($options as $option):
+			$selected = $option->value === $selectedOptionValue;
+			$selected = $selected ? $selected : (isset($option->selected) && $option->selected);
 			$this->view("_form_field_select_option")
 				->set('option', $option)
+				->set('selected', $selected)
 				->display();
 		endforeach;
 

@@ -34,7 +34,7 @@ defined('_HZEXEC_') or die();
 
 $field = $this->field;
 $fieldName = $field->get('name');
-$default = $field->get('default_value');
+$inputValue = $field->getInputValue();
 $maxLength = $field->get('max_length');
 $size = $maxLength;
 $userInputName = $fieldName . '[response]';
@@ -45,7 +45,7 @@ $userInputName = $fieldName . '[response]';
 		maxlength="<?php echo $maxLength; ?>"
 		name="<?php echo $userInputName; ?>"
 		size="<?php echo $size; ?>"
-		value="<?php echo $default; ?>">
+		value="<?php echo $inputValue; ?>">
 
 	<?php
 		$this->view('_form_field_metadata_fields')

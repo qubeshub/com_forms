@@ -90,7 +90,11 @@ class FieldsResponsesFactory extends Factory
 		$parsedData = $responseData;
 		$parsedData['user_id'] = User::get('id');
 
-		if (is_array($responseData['response']))
+		if (!isset($responseData['response']))
+		{
+			$parsedData['response'] = null;
+		}
+		else if (is_array($responseData['response']))
 		{
 			$parsedData['response'] = json_encode($responseData['response']);
 		}

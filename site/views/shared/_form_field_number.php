@@ -33,10 +33,10 @@
 defined('_HZEXEC_') or die();
 
 $field = $this->field;
-$default = $field->get('default_value');
+$fieldName = $field->get('name');
+$inputValue = $field->getInputValue();
 $min = $field->get('min');
 $max = $field->get('max');
-$fieldName = $field->get('name');
 $step = $field->get('step');
 $userInputName = $fieldName . '[response]';
 ?>
@@ -46,7 +46,7 @@ $userInputName = $fieldName . '[response]';
 		min="<?php echo $min; ?>"
 		max="<?php echo $max; ?>"
 		step="<?php echo $step; ?>"
-		value="<?php echo $default; ?>">
+		value="<?php echo $inputValue; ?>">
 
 	<?php
 		$this->view('_form_field_metadata_fields')

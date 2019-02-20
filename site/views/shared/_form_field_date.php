@@ -33,14 +33,14 @@
 defined('_HZEXEC_') or die();
 
 $field = $this->field;
-$default = $field->get('default_value');
 $fieldName = $field->get('name');
+$inputValue = $field->getInputValue();
 $userInputName = $fieldName . '[response]';
 ?>
 
 <div class="field-wrap">
 	<input type="date" name="<?php echo $userInputName; ?>"
-		value="<?php echo $default; ?>">
+		value="<?php echo $inputValue; ?>">
 
 	<?php
 		$this->view('_form_field_metadata_fields')

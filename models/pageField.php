@@ -79,6 +79,27 @@ class PageField extends Relational
 	}
 
 	/**
+	 * Returns value to populate field with
+	 *
+	 * @return   string
+	 */
+	public function getInputValue()
+	{
+		$userResponse = $this->getCurrentUsersResponse();
+
+		if ($userResponseValue = $userResponse->get('response'))
+		{
+			$inputValue = $userResponseValue;
+		}
+		else
+		{
+			$inputValue = $this->get('default_value');
+		}
+
+		return $inputValue;
+	}
+
+	/**
 	 * Returns field response for current user
 	 *
 	 * @return   object

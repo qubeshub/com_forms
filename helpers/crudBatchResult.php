@@ -89,9 +89,30 @@ class CrudBatchResult
 	 */
 	protected function _collectRecordsErrors($record)
 	{
-		$id = $record->get('id');
 		$errors = $record->getErrors();
-		return ["Record $id" => $errors];
+		$recordIdentifier = $this->_getRecordIdentifier($record);
+
+		return [$recordIdentifier => $errors];
+	}
+
+	/**
+	 * Retrieves given records user identifier or uses default
+	 *
+	 * @param    object    $record   Given record
+	 * @return   string
+	 */
+	protected function _getRecordIdentifier($record)
+	{
+		if (method_exists($record, 'getUserIdentifier'))
+		{
+			$identifier = $record->getUserIdentifier();
+		}
+		else
+		{
+			$identifier = 'Record ' . $record->get('id');
+		}
+
+		return $identifier;
 	}
 
 	/**

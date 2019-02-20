@@ -88,18 +88,6 @@ class FieldResponse extends Relational
 	}
 
 	/**
-	 * Indicates if owning field is required
-	 *
-	 * @return   bool
-	 */
-	protected function _fieldIsRequired()
-	{
-		$field = $this->getField();
-
-		return $field->get('required');
-	}
-
-	/**
 	 * Indicates if submitted response value is valid
 	 *
 	 * @return   bool
@@ -115,6 +103,18 @@ class FieldResponse extends Relational
 		}
 
 		return $isValid;
+	}
+
+	/**
+	 * Indicates if owning field is required
+	 *
+	 * @return   bool
+	 */
+	protected function _fieldIsRequired()
+	{
+		$field = $this->getField();
+
+		return $field->get('required');
 	}
 
 	/**
@@ -142,7 +142,7 @@ class FieldResponse extends Relational
 	}
 
 	/**
-	 * Return's parent field's type
+	 * Returns parent field's type
 	 *
 	 * @return   string
 	 */
@@ -151,6 +151,18 @@ class FieldResponse extends Relational
 		$field = $this->getField();
 
 		return $field->get('type');
+	}
+
+	/**
+	 * Returns parent field's label
+	 *
+	 * @return   string
+	 */
+	public function getFieldLabel()
+	{
+		$field = $this->getField();
+
+		return $field->get('label');
 	}
 
 	/**
@@ -268,6 +280,16 @@ class FieldResponse extends Relational
 			->row();
 
 		return $formResponse;
+	}
+
+	/**
+	 * Returns field's label as identifier for user messages
+	 *
+	 * @return   string
+	 */
+	public function getUserIdentifier()
+	{
+		return $this->getFieldLabel();
 	}
 
 }

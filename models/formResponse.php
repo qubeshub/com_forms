@@ -131,7 +131,7 @@ class FormResponse extends Relational
 
 		if ($requiredCount > 0)
 		{
-			$requiredCompletionPercentage = ($responsesCount / $requiredCount) * 100;
+			$requiredCompletionPercentage = round(($responsesCount / $requiredCount) * 100);
 		}
 		else
 		{

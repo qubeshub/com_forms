@@ -67,7 +67,8 @@ class FormPage extends Relational
 	 */
 	public $rules = [
 		'form_id' => 'positive',
-		'order' => 'positive'
+		'order' => 'positive',
+		'title' => 'notempty'
 	];
 
 	/**
@@ -325,6 +326,25 @@ class FormPage extends Relational
 	protected static function _getFormResponsesHelper()
 	{
 		return self::$FORM_RESPONSE_MODEL_NAME;
+	}
+
+	/**
+	 * Returns page's identifier for user messages
+	 *
+	 * @return   string
+	 */
+	public function getUserIdentifier()
+	{
+		if ($title = $this->get('title'))
+		{
+			$userIdentifier = $title;
+		}
+		else
+		{
+			$userIdentifier = 'Page ' . $this->get('order');
+		}
+
+		return $userIdentifier;
 	}
 
 }

@@ -42,12 +42,13 @@ $radioName = $radioPrefix . '[selected]';
 $textInputName = $radioPrefix . '[text]';
 $label = 'other';
 $option = (object) [
+	'id' => $label,
 	'label' => $label,
 	'value' => 'other'
 ];
 $otherText = '';
 
-if ($fieldValue && $fieldValue->selected === $option->value)
+if ($fieldValue && $fieldValue->selected == $option->id)
 {
 	$isSelected = true;
 	$otherText = $fieldValue->text;

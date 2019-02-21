@@ -35,14 +35,25 @@ defined('_HZEXEC_') or die();
 $field = $this->field;
 $inline = $this->inline;
 $option = $this->option;
-$isSelected = isset($option->selected) && $option->selected;
+$optionId = $option->id;
+$option->value = $optionId;
 $label = $option->label;
-$name = "$this->name[response][selected]";
+$namePrefix = "$this->name[response]";
+$name = $namePrefix . '[selected]';
+$idFieldName = $namePrefix . '[id]';
 $userResponse = json_decode($field->getInputValue());
 
-if ($userResponse && $userResponse->selected === $option->value)
+if ($userResponse && $userResponse->selected == $optionId)
 {
 	$isSelected = true;
+}
+else if (!$userResponse)
+{
+	$isSelected = isset($option->selected) && $option->selected;
+}
+else
+{
+	$isSelected = false;
 }
 
 $this->view('_form_field_list_group_item')
@@ -56,3 +67,4 @@ $this->view('_form_field_list_group_item')
 $this->view('_form_field_metadata_fields')
   ->set('field', $field)
   ->display();
+

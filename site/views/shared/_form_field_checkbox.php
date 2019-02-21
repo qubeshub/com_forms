@@ -36,11 +36,12 @@ $field = $this->field;
 $inline = $this->inline;
 $option = $this->option;
 $isSelected = isset($option->selected) && $option->selected;
-$label = $option->label;
-$name = "$this->name[response][$label]";
+$optionId = $option->id;
+$name = "$this->name[response][$optionId]";
 $userResponse = json_decode($field->getInputValue());
+$selectedOptionsIds = get_object_vars($userResponse);
 
-if ($userResponse && isset($userResponse->$label))
+if ($userResponse && isset($userResponse->$optionId))
 {
 	$isSelected = true;
 }

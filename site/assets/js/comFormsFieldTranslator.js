@@ -121,7 +121,7 @@ class ComFormsFieldTranslator {
 				parsedValue = value ? 1 : 0
 				break;
 			case 'values':
-				parsedValue = JSON.stringify(value)
+				parsedValue = this._parseValuesForServer(value)
 				break;
 			default:
 				parsedValue = value
@@ -139,6 +139,18 @@ class ComFormsFieldTranslator {
 		}
 
 		return parsedValue
+	}
+
+	_parseValuesForServer(values)
+	{
+		values = values || []
+
+		let parsedValues = values.map((value, i) => {
+			value.id = i + 1
+			return value
+		})
+
+		return JSON.stringify(parsedValues)
 	}
 
 	_sourceAttr(destinationAttr) {

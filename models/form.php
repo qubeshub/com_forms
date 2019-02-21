@@ -361,4 +361,32 @@ class Form extends Relational
 		return $possiblePrereqs;
 	}
 
+	/**
+	 * Indicates if form should be disabled for given user
+	 *
+	 * @param    int    $userId   User ID
+	 * @return   bool
+	 */
+	public function isDisabledFor($userId)
+	{
+		$disabled = $this->get('disabled');
+		$responsesLocked = $this->get('responses_locked');
+		$submitted = $this->responseSubmittedBy($userId);
+
+		return $disabled || ($submitted && $responsesLocked);
+	}
+
+	/**
+	 * Indicates if given user has submitted response for form
+	 *
+	 * @param    int    $userId   User ID
+	 * @return   bool
+	 */
+	public function responseSubmittedBy($userId)
+	{
+		$response = $this->getResponse($userId);
+
+		return !!$response->get('submitted');
+	}
+
 }

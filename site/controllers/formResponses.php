@@ -35,14 +35,22 @@ use Hubzero\Component\SiteController;
 
 $componentPath = Component::path('com_forms');
 
+require_once "$componentPath/helpers/comFormsPageBouncer.php";
+require_once "$componentPath/helpers/formPageElementDecorator.php";
 require_once "$componentPath/helpers/formsRouter.php";
 require_once "$componentPath/helpers/params.php";
+require_once "$componentPath/helpers/relationalCrudHelper.php";
 require_once "$componentPath/helpers/virtualCrudHelper.php";
+require_once "$componentPath/models/form.php";
 require_once "$componentPath/models/formResponse.php";
 
+use Components\Forms\Helpers\FormPageElementDecorator as ElementDecorator;
 use Components\Forms\Helpers\FormsRouter as RoutesHelper;
+use Components\Forms\Helpers\ComFormsPageBouncer as PageBouncer;
 use Components\Forms\Helpers\Params;
+use Components\Forms\Helpers\RelationalCrudHelper as RCrudHelper;
 use Components\Forms\Helpers\VirtualCrudHelper as VCrudHelper;
+use Components\Forms\Models\Form;
 use Components\Forms\Models\FormResponse;
 use Date;
 
@@ -77,6 +85,11 @@ class FormResponses extends SiteController
 		$this->_crudHelper = new VCrudHelper([
 			'errorSummary' => Lang::txt('COM_FORMS_NOTICES_FAILED_START')
 		]);
+		$this->_rCrudHelper = new RCrudHelper([
+			'controller' => $this
+		]);
+		$this->_decorator = new ElementDecorator();
+		$this->_pageBouncer = new PageBouncer();
 		$this->_params = new Params(
 			['whitelist' => self::$_paramWhitelist]
 		);
@@ -129,9 +142,73 @@ class FormResponses extends SiteController
 
 		$response = FormResponse::blank();
 		$response->set($combinedData);
+
 		$response->save();
 
 		return $response;
+	}
+
+	/**
+	 * Renders response review page
+	 *
+	 * @return   void
+	 */
+	public function reviewTask()
+	{
+		$formId = $this->_params->getInt('form_id');
+		$form = Form::oneOrFail($formId);
+
+		$this->_pageBouncer->redirectIfFormDisabled($form);
+		$this->_pageBouncer->redirectIfPrereqsNotAccepted($form);
+
+		$responseSubmitUrl = $this->_routes->formResponseSubmitUrl();
+		$pageElements = $form->getFieldsOrdered();
+		$decoratedPageElements = $this->_decorator->decorateForRendering($pageElements);
+
+		foreach ($pageElements as $element)
+		{
+			$element->_returnDefault = false;
+		}
+
+		$this->view
+			->set('form', $form)
+			->set('pageElements', $decoratedPageElements)
+			->set('responseSubmitUrl', $responseSubmitUrl)
+			->display();
+	}
+
+	/**
+	 * Attempts to handle the submission of a form response for review
+	 *
+	 * @return   void
+	 */
+	public function submitTask()
+	{
+		$currentUsersId = User::get('id');
+		$formId = $this->_params->getInt('form_id');
+		$form = Form::oneOrFail($formId);
+		$response = $form->getResponse($currentUsersId);
+
+		$this->_pageBouncer->redirectIfResponseSubmitted($response);
+		$this->_pageBouncer->redirectIfFormDisabled($form);
+		$this->_pageBouncer->redirectIfPrereqsNotAccepted($form);
+
+		$currentTime = Date::toSql();
+		$response->set('modified', $currentTime);
+		$response->set('submitted', $currentTime);
+
+		if ($response->save())
+		{
+			$forwardingUrl = $this->_routes->formListUrl();
+			$successMessage = Lang::txt('COM_FORMS_NOTICES_FORM_RESPONSE_SUBMIT_SUCCESS');
+			$this->_rCrudHelper->successfulUpdate($forwardingUrl, $successMessage);
+		}
+		else
+		{
+			$errorSummary = Lang::txt('COM_FORMS_NOTICES_FORM_RESPONSE_SUBMIT_ERROR');
+			$forwardingUrl = $this->_routes->formResponseReviewUrl($formId);
+			$this->_rCrudHelper->failedBatchUpdate($forwardingUrl, $response, $errorSummary);
+		}
 	}
 
 }

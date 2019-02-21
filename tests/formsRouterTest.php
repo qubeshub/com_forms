@@ -278,7 +278,7 @@ class FormsRouterTest extends Basic
 
 	public function testFormResponseReviewReturnsCorrectUrl()
 	{
-		$expectedUrl = '/forms/fill/review?form_id=1';
+		$expectedUrl = '/forms/responses/review?form_id=1';
 		$formId = 1;
 		$routes = new FormsRouter();
 

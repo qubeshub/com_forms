@@ -155,33 +155,6 @@ class FieldResponses extends SiteController
 	}
 
 	/**
-	 * Renders response review page
-	 *
-	 * @return   void
-	 */
-	public function reviewTask()
-	{
-		$this->_setFormAndPage();
-		$this->_pageBouncer->redirectIfFormDisabled($this->_form);
-		$this->_pageBouncer->redirectIfPrereqsNotAccepted($this->_form);
-
-		$responseSubmitUrl = $this->_routes->formResponseSubmitUrl();
-		$pageElements = $this->_form->getFieldsOrdered();
-		$decoratedPageElements = $this->_decorator->decorateForRendering($pageElements);
-
-		foreach ($pageElements as $element)
-		{
-			$element->_returnDefault = false;
-		}
-
-		$this->view
-			->set('form', $this->_form)
-			->set('pageElements', $decoratedPageElements)
-			->set('responseSubmitUrl', $responseSubmitUrl)
-			->display();
-	}
-
-	/**
 	 * Sets form and page using request data
 	 *
 	 * @return   void

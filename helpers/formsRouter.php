@@ -391,7 +391,7 @@ class FormsRouter
 	 */
 	public function formResponseReviewUrl($formId)
 	{
-		$segments = ['fill', 'review'];
+		$segments = ['responses', 'review'];
 		$params = ['form_id' => $formId];
 
 		$url = $this->_generateUrl($segments, $params);

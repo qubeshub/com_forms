@@ -97,6 +97,23 @@ class PageBouncer
 	}
 
 	/**
+	 * Redirects user if form response has been submitted
+	 *
+	 * @param    object   $response   Form response
+	 * @param    string   $url    URL to redirect to
+	 * @return   void
+	 */
+	public function redirectIfResponseSubmitted($response, $url = '/forms')
+	{
+		$url = $url ? $url : '/forms';
+
+		if ($response->get('submitted'))
+		{
+			$this->_router->redirect($url);
+		}
+	}
+
+	/**
 	 * Redirects users without given permission
 	 *
 	 * @param    string   $permission   Permission name

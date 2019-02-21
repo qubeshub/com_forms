@@ -33,17 +33,18 @@
 defined('_HZEXEC_') or die();
 
 $action = $this->action;
+$disabled = isset($this->disabled) ? $this->disabled : false;
 $elements = $this->elements;
-$hiddenMetadata = $this->hiddenMetadata;
+$hiddenMetadata = isset($this->hiddenMetadata) ? $this->hiddenMetadata : [];
 $noJsNotice = Lang::txt('COM_FORMS_NOTICES_FIELDS_FILL_NO_JS');
-$submitClasses = $this->submitClasses;
-$submitValue = $this->submitValue;
-$title = $this->title;
+$submitClasses = isset($this->submitClasses) ? $this->submitClasses : 'btn';
+$submitValue = isset($this->submitValue) ? $this->submitValue : 'Submit';
+$title = isset($this->title) ? $this->title : '';
 ?>
 
 <form action="<?php echo $action; ?>" method="post" id="hubForm">
 
-	<fieldset>
+	<fieldset <?php if ($disabled) echo 'disabled'; ?>>
 		<legend><?php echo $title; ?></legend>
 
 		<?php
@@ -63,11 +64,13 @@ $title = $this->title;
 		<?php	endforeach; ?>
 	</span>
 
-	<div class="button-container">
-		<input type="submit"
-			value="<?php echo $submitValue; ?>"
-			class="<?php echo $submitClasses; ?>">
-	</div>
+	<?php if (!$disabled): ?>
+		<div class="button-container">
+			<input type="submit"
+				value="<?php echo $submitValue; ?>"
+				class="<?php echo $submitClasses; ?>">
+		</div>
+	<?php endif; ?>
 
 </form>
 

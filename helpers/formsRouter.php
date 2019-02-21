@@ -406,7 +406,7 @@ class FormsRouter
 	 */
 	public function formResponseSubmitUrl()
 	{
-		$segments = ['fill', 'submit'];
+		$segments = ['responses', 'submit'];
 
 		$url = $this->_generateUrl($segments);
 

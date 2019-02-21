@@ -289,7 +289,7 @@ class FormsRouterTest extends Basic
 
 	public function testFormResponseSubmitReturnsCorrectUrl()
 	{
-		$expectedUrl = '/forms/fill/submit';
+		$expectedUrl = '/forms/responses/submit';
 		$routes = new FormsRouter();
 
 		$generatedUrl = $routes->formResponseSubmitUrl();

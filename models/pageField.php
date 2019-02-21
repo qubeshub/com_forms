@@ -32,6 +32,7 @@
 namespace Components\Forms\Models;
 
 use Hubzero\Database\Relational;
+use Hubzero\Utility\Arr;
 
 class PageField extends Relational
 {
@@ -65,6 +66,19 @@ class PageField extends Relational
 	];
 
 	/**
+	 * Constructs PageField instance
+	 *
+	 * @param    array   $args Instantiation state
+	 * @return   void
+	 */
+	public function __construct($args = [])
+	{
+		$this->_returnDefault = Arr::getValue($args, 'return_default', true);
+
+		parent::__construct();
+	}
+
+	/**
 	 * Returns field's options
 	 *
 	 * @return   array
@@ -85,13 +99,14 @@ class PageField extends Relational
 	 */
 	public function getInputValue()
 	{
+		$inputValue = null;
 		$userResponse = $this->getCurrentUsersResponse();
 
 		if ($userResponseValue = $userResponse->get('response'))
 		{
 			$inputValue = $userResponseValue;
 		}
-		else
+		else if ($this->_returnDefault)
 		{
 			$inputValue = $this->get('default_value');
 		}

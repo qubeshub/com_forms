@@ -400,6 +400,20 @@ class FormsRouter
 	}
 
 	/**
+	 * Generates form response submission URL
+	 *
+	 * @return   string
+	 */
+	public function formResponseSubmitUrl()
+	{
+		$segments = ['fill', 'submit'];
+
+		$url = $this->_generateUrl($segments);
+
+		return $url;
+	}
+
+	/**
 	 * Generates URL based on given segments and parameters
 	 *
 	 * @param    array    $segments     URL segments

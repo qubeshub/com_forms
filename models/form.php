@@ -163,6 +163,29 @@ class Form extends Relational
 	}
 
 	/**
+	 * Get associated fields in order by page
+	 *
+	 * @return   array
+	 */
+	public function getFieldsOrdered()
+	{
+		$pages = $this->getPages()->order('order', 'asc')->rows();
+		$orderedFields = [];
+
+		foreach ($pages as $page)
+		{
+			$fields = $page->getFields()->order('order', 'asc');
+
+			foreach ($fields as $field)
+			{
+				$orderedFields[$field->get('id')] = $field;
+			}
+		}
+
+		return $orderedFields;
+	}
+
+	/**
 	 * Get associated fields
 	 *
 	 * @return   object

@@ -32,40 +32,14 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$classes = 'btn btn-success';
-$formId = $this->formId;
-$isLastPage = $this->isLastPage;
-$pagePosition = $this->pagePosition;
-$userShouldNotEditResponse = $this->formDisabled || true;
+$classes = isset($this->classes) ? $this->classes : '';
+$text = Lang::txt($this->textKey);
+$urlFunction = $this->urlFunction;
+$urlFunctionArgs = $this->urlFunctionArgs;
 
-if ($isLastPage)
-{
-	$urlFunction = 'formResponseReviewUrl';
-	$urlFunctionArgs = [$formId];
-	$textKey = 'COM_FORMS_FIELDS_VALUES_REVIEW_RESPONSES';
-}
-else
-{
-	$urlFunction = 'formsPageResponseUrl';
-	$urlFunctionArgs = [[
-		'form_id' => $formId,
-		'ordinal' => ($pagePosition + 1)
-	]];
-	$textKey = 'COM_FORMS_FIELDS_VALUES_NEXT_PAGE';
-}
-?>
-
-<?php if ($userShouldNotEditResponse):	?>
-	<span class="button-container">
-
-		<?php
-			$this->view('_link_lang', 'shared')
-				->set('classes', $classes)
-				->set('urlFunction', $urlFunction)
-				->set('urlFunctionArgs', $urlFunctionArgs)
-				->set('textKey', $textKey)
-				->display();
-		?>
-
-	</span>
-<?php endif; ?>
+$this->view('_link')
+	->set('classes', $classes)
+	->set('content', $text)
+	->set('urlFunction', $urlFunction)
+	->set('urlFunctionArgs', $urlFunctionArgs)
+	->display();

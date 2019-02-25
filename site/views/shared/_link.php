@@ -41,13 +41,12 @@ use Components\Forms\Helpers\FormsRouter;
 $routes = new FormsRouter();
 
 $classes = isset($this->classes) ? $this->classes : '';
-$textKey = $this->textKey;
-$text = Lang::txt($textKey);
+$content = $this->content;
 $urlFunction = $this->urlFunction;
 $urlFunctionArgs = $this->urlFunctionArgs;
 $url = $routes->$urlFunction(...$urlFunctionArgs);
 ?>
 
 <a href="<?php echo $url; ?>" class="protected-link <?php echo $classes; ?>">
-	<?php echo $text; ?>
+	<?php echo $content; ?>
 </a>

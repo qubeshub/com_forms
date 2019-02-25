@@ -49,7 +49,7 @@ $urlFunction = $this->urlFunction;
 $urlFunctionArgs = isset($this->urlFunctionArgs) ? $this->urlFunctionArgs : [];
 
 if ($isAuthorized):
-	$this->view('_link')
+	$this->view('_link_lang')
 		->set('classes', $classes)
 		->set('textKey', $textKey)
 		->set('urlFunction', $urlFunction)

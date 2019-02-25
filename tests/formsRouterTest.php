@@ -297,4 +297,26 @@ class FormsRouterTest extends Basic
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
 
+	public function testFormResponseListReturnsCorrectUrl()
+	{
+		$formId = 976;
+		$expectedUrl = "/forms/admin/responses?form_id=$formId";
+		$routes = new FormsRouter();
+
+		$generatedUrl = $routes->formsResponseList($formId);
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
+	public function testUserProfileUrlReturnsCorrectUrl()
+	{
+		$userId = 91;
+		$expectedUrl = "/members/$userId";
+		$routes = new FormsRouter();
+
+		$generatedUrl = $routes->userProfileUrl($userId);
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
 }

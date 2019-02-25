@@ -33,23 +33,22 @@ namespace Components\Forms\Helpers;
 
 $componentPath = Component::path('com_forms');
 
-require_once "$componentPath/helpers/urlBuilder.php";
+require_once "$componentPath/helpers/componentRouter.php";
 
-class FormsRouter
+class FormsRouter extends ComponentRouter
 {
 
-	protected $_baseSegment, $_urlBuilder;
-
 	/**
-	 * Constructs ComponentRouter instance
+	 * Constructs FormsRouter instance
 	 *
 	 * @param    array   $args   Instantiation state
 	 * @return   void
 	 */
 	public function __construct($args = [])
 	{
-		$this->_urlBuilder = new UrlBuilder();
-		$this->_baseSegment = 'forms';
+		$args['base_segment'] = 'forms';
+
+		parent::__construct($args);
 	}
 
 	/**
@@ -61,7 +60,7 @@ class FormsRouter
 	{
 		$segments = ['forms', 'new'];
 
-		$url = $this->_generateUrl($segments);
+		$url = $this->_generateComponentUrl($segments);
 
 		return $url;
 	}
@@ -75,7 +74,7 @@ class FormsRouter
 	{
 		$segments = ['forms', 'create'];
 
-		$url = $this->_generateUrl($segments);
+		$url = $this->_generateComponentUrl($segments);
 
 		return $url;
 	}
@@ -90,7 +89,7 @@ class FormsRouter
 	{
 		$segments = ['forms', $formId, 'edit'];
 
-		$url = $this->_generateUrl($segments);
+		$url = $this->_generateComponentUrl($segments);
 
 		return $url;
 	}
@@ -105,7 +104,7 @@ class FormsRouter
 	{
 		$segments = ['forms', $formId, 'update'];
 
-		$url = $this->_generateUrl($segments);
+		$url = $this->_generateComponentUrl($segments);
 
 		return $url;
 	}
@@ -119,7 +118,7 @@ class FormsRouter
 	{
 		$segments = ['forms', 'list'];
 
-		$url = $this->_generateUrl($segments);
+		$url = $this->_generateComponentUrl($segments);
 
 		return $url;
 	}
@@ -133,7 +132,7 @@ class FormsRouter
 	{
 		$segments = ['queries', 'update'];
 
-		$url = $this->_generateUrl($segments);
+		$url = $this->_generateComponentUrl($segments);
 
 		return $url;
 	}
@@ -148,7 +147,7 @@ class FormsRouter
 	{
 		$segments = ['forms', $formId, 'display'];
 
-		$url = $this->_generateUrl($segments);
+		$url = $this->_generateComponentUrl($segments);
 
 		return $url;
 	}
@@ -164,7 +163,7 @@ class FormsRouter
 		$segments = ['pages'];
 		$parameters = ['form_id' => $formId];
 
-		$url = $this->_generateUrl($segments, $parameters);
+		$url = $this->_generateComponentUrl($segments, $parameters);
 
 		return $url;
 	}
@@ -180,7 +179,7 @@ class FormsRouter
 		$segments = ['pages', 'new'];
 		$parameters = ['form_id' => $formId];
 
-		$url = $this->_generateUrl($segments, $parameters);
+		$url = $this->_generateComponentUrl($segments, $parameters);
 
 		return $url;
 	}
@@ -196,7 +195,7 @@ class FormsRouter
 		$segments = ['pages', 'create'];
 		$parameters = ['form_id' => $formId];
 
-		$url = $this->_generateUrl($segments, $parameters);
+		$url = $this->_generateComponentUrl($segments, $parameters);
 
 		return $url;
 	}
@@ -211,7 +210,7 @@ class FormsRouter
 	{
 		$segments = ['pages', $pageId, 'edit'];
 
-		$url = $this->_generateUrl($segments);
+		$url = $this->_generateComponentUrl($segments);
 
 		return $url;
 	}
@@ -226,7 +225,7 @@ class FormsRouter
 	{
 		$segments = ['pages', $pageId, 'update'];
 
-		$url = $this->_generateUrl($segments);
+		$url = $this->_generateComponentUrl($segments);
 
 		return $url;
 	}
@@ -242,7 +241,7 @@ class FormsRouter
 		$segments = ['fields'];
 		$parameters = ['page_id' => $pageId];
 
-		$url = $this->_generateUrl($segments, $parameters);
+		$url = $this->_generateComponentUrl($segments, $parameters);
 
 		return $url;
 	}
@@ -258,7 +257,7 @@ class FormsRouter
 		$segments = ['responses', 'start'];
 		$parameters = ['form_id' => $formId];
 
-		$url = $this->_generateUrl($segments, $parameters);
+		$url = $this->_generateComponentUrl($segments, $parameters);
 
 		return $url;
 	}
@@ -273,7 +272,7 @@ class FormsRouter
 	{
 		$segments = ['fill'];
 
-		$url = $this->_generateUrl($segments, $params);
+		$url = $this->_generateComponentUrl($segments, $params);
 
 		return $url;
 	}
@@ -289,7 +288,7 @@ class FormsRouter
 		$segments = ['steps'];
 		$params = ['form_id' => $formId];
 
-		$url = $this->_generateUrl($segments, $params);
+		$url = $this->_generateComponentUrl($segments, $params);
 
 		return $url;
 	}
@@ -304,7 +303,7 @@ class FormsRouter
 	{
 		$segments = ['steps', $prereqId, 'edit'];
 
-		$url = $this->_generateUrl($segments);
+		$url = $this->_generateComponentUrl($segments);
 
 		return $url;
 	}
@@ -320,7 +319,7 @@ class FormsRouter
 		$segments = ['steps', 'new'];
 		$parameters = ['form_id' => $formId];
 
-		$url = $this->_generateUrl($segments, $parameters);
+		$url = $this->_generateComponentUrl($segments, $parameters);
 
 		return $url;
 	}
@@ -336,7 +335,7 @@ class FormsRouter
 		$segments = ['steps', 'update'];
 		$parameters = ['form_id' => $formId];
 
-		$url = $this->_generateUrl($segments, $parameters);
+		$url = $this->_generateComponentUrl($segments, $parameters);
 
 		return $url;
 	}
@@ -350,7 +349,7 @@ class FormsRouter
 	{
 		$segments = ['steps', 'create'];
 
-		$url = $this->_generateUrl($segments);
+		$url = $this->_generateComponentUrl($segments);
 
 		return $url;
 	}
@@ -363,7 +362,7 @@ class FormsRouter
 	{
 		$segments = ['fill', 'create'];
 
-		$url = $this->_generateUrl($segments);
+		$url = $this->_generateComponentUrl($segments);
 
 		return $url;
 	}
@@ -378,7 +377,7 @@ class FormsRouter
 	{
 		$segments = ['pages', 'batchupdate'];
 
-		$url = $this->_generateUrl($segments);
+		$url = $this->_generateComponentUrl($segments);
 
 		return $url;
 	}
@@ -394,7 +393,7 @@ class FormsRouter
 		$segments = ['responses', 'review'];
 		$params = ['form_id' => $formId];
 
-		$url = $this->_generateUrl($segments, $params);
+		$url = $this->_generateComponentUrl($segments, $params);
 
 		return $url;
 	}
@@ -408,23 +407,38 @@ class FormsRouter
 	{
 		$segments = ['responses', 'submit'];
 
-		$url = $this->_generateUrl($segments);
+		$url = $this->_generateComponentUrl($segments);
 
 		return $url;
 	}
 
 	/**
-	 * Generates URL based on given segments and parameters
+	 * Generates  admin response review URL
 	 *
-	 * @param    array    $segments     URL segments
-	 * @param    array    $parameters   URL parameters
+	 * @param    int      $formId   Form ID
 	 * @return   string
 	 */
-	protected function _generateUrl($segments, $parameters = [])
+	public function formsResponseList($formId)
 	{
-		array_unshift($segments, $this->_baseSegment);
+		$params = ['form_id' => $formId];
+		$segments = ['admin', 'responses'];
 
-		$url = $this->_urlBuilder->generateUrl($segments, $parameters);
+		$url = $this->_generateComponentUrl($segments, $params);
+
+		return $url;
+	}
+
+	/**
+	 * Generates URL for given user's profile
+	 *
+	 * @param    int   $userId   Given user's ID
+	 * @return   string
+	 */
+	public function userProfileUrl($userId)
+	{
+		$segments = ['members', $userId];
+
+		$url = $this->_generateHubUrl($segments);
 
 		return $url;
 	}

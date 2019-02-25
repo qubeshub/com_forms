@@ -47,6 +47,7 @@ class Form extends Relational
 
 	static protected $_pageClass = 'Components\Forms\Models\FormPage';
 	static protected $_prerequisiteClass = 'Components\Forms\Models\FormPrerequisite';
+	static protected $_responseClass = 'Components\Forms\Models\FormResponse';
 
 	protected $table = '#__forms_forms';
 
@@ -387,6 +388,21 @@ class Form extends Relational
 		$response = $this->getResponse($userId);
 
 		return !!$response->get('submitted');
+	}
+
+	/**
+	 * Get associated responses
+	 *
+	 * @return   object
+	 */
+	public function getResponses()
+	{
+		$responseModelClass = self::$_responseClass;
+		$foreignKey = 'form_id';
+
+		$responses = $this->oneToMany($responseModelClass, $foreignKey);
+
+		return $responses;
 	}
 
 }

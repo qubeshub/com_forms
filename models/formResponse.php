@@ -215,4 +215,16 @@ class FormResponse extends Relational
 		return $fieldsResponses;
 	}
 
+	/**
+	 * Returns associated user
+	 *
+	 * @return   int
+	 */
+	public function getUser()
+	{
+		$userId = $this->get('user_id');
+
+		return User::one($userId);
+	}
+
 }

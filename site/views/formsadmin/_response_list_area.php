@@ -25,40 +25,20 @@
  * HUBzero is a registered trademark of Purdue University.
  *
  * @package   hubzero-cms
- * @author    Anthony Fuentes <fuentesa@purdue.edu>
  * @copyright Copyright 2005-2015 HUBzero Foundation, LLC.
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Forms\Site;
+// No direct access
+defined('_HZEXEC_') or die();
 
-use Hubzero\Utility\Arr;
-use Request;
+$responses = $this->responses;
 
-$componentPath = Component::path('com_forms');
-$defaultControllerName = 'forms';
-$controllerName = Request::getCmd('controller', $defaultControllerName);
-$controllerNameMap = [
-	'admin' => 'formsAdmin',
-	'fill' => 'fieldResponses',
-	'forms' => 'forms',
-	'pages' => 'formPages',
-	'queries' => 'queries',
-	'responses' => 'formResponses',
-	'steps' => 'formPrereqs'
-];
-
-$mappedName = Arr::getValue($controllerNameMap, $controllerName, $defaultControllerName);
-$controllerPath = "$componentPath/site/controllers/$mappedName.php";
-
-if (!file_exists($controllerPath))
-{
-	$controller = $defaultControllerName;
-}
-
-require_once "$componentPath/site/controllers/$mappedName.php";
-
-$namespacedName = __NAMESPACE__ . "\\Controllers\\$mappedName";
-
-$controller = new $namespacedName();
-$controller->execute();
+if (count($responses) > 0):
+	$this->view('_response_list')
+		->set('responses', $responses)
+		->display();
+else:
+	$this->view('_response_list_none_notice')
+		->display();
+endif;

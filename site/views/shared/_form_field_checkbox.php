@@ -38,8 +38,10 @@ $option = $this->option;
 $isSelected = isset($option->selected) && $option->selected;
 $optionId = $option->id;
 $name = "$this->name[response][$optionId]";
-$userResponse = json_decode($field->getInputValue());
-$selectedOptionsIds = get_object_vars($userResponse);
+$userResponse = $field->getInputValue();
+$decodedResponse = json_decode($userResponse);
+$responseObject = $decodedResponse ? $decodedResponse : (object) [];
+$selectedOptionsIds = get_object_vars($responseObject);
 
 if ($userResponse && isset($userResponse->$optionId))
 {

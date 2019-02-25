@@ -30,35 +30,45 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Forms\Site;
+// No direct access
+defined('_HZEXEC_') or die();
 
-use Hubzero\Utility\Arr;
-use Request;
+$this->css('formAdminResponses');
 
-$componentPath = Component::path('com_forms');
-$defaultControllerName = 'forms';
-$controllerName = Request::getCmd('controller', $defaultControllerName);
-$controllerNameMap = [
-	'admin' => 'formsAdmin',
-	'fill' => 'fieldResponses',
-	'forms' => 'forms',
-	'pages' => 'formPages',
-	'queries' => 'queries',
-	'responses' => 'formResponses',
-	'steps' => 'formPrereqs'
+$form = $this->form;
+$formId = $form->get('id');
+$formName = $form->get('name');
+$responses = $this->responses;
+$responseListUrl = $this->responseListUrl;
+
+$breadcrumbs = [
+	 $formName => ['formsDisplayUrl', [$formId]],
+	'Admin' => ['formsEditUrl', [$formId]],
+	'Responses' => ['formsResponseList', [$formId]]
 ];
 
-$mappedName = Arr::getValue($controllerNameMap, $controllerName, $defaultControllerName);
-$controllerPath = "$componentPath/site/controllers/$mappedName.php";
+$this->view('_forms_breadcrumbs', 'shared')
+	->set('breadcrumbs', $breadcrumbs)
+	->set('page', 'Forms list')
+	->display();
 
-if (!file_exists($controllerPath))
-{
-	$controller = $defaultControllerName;
-}
+?>
 
-require_once "$componentPath/site/controllers/$mappedName.php";
+<section class="main section">
+	<div class="grid">
 
-$namespacedName = __NAMESPACE__ . "\\Controllers\\$mappedName";
+		<div class="col span12 omega">
+			<?php
+				$this->view('_response_list_area')
+					->set('responses', $responses)
+					->display();
+			?>
 
-$controller = new $namespacedName();
-$controller->execute();
+			<form method="POST" action="<?php echo $responseListUrl; ?>">
+				<?php echo $responses->pagination; ?>
+			</form>
+		</div>
+
+
+	</div>
+</section>

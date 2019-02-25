@@ -25,40 +25,45 @@
  * HUBzero is a registered trademark of Purdue University.
  *
  * @package   hubzero-cms
- * @author    Anthony Fuentes <fuentesa@purdue.edu>
  * @copyright Copyright 2005-2015 HUBzero Foundation, LLC.
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Forms\Site;
+// No direct access
+defined('_HZEXEC_') or die();
 
-use Hubzero\Utility\Arr;
-use Request;
-
-$componentPath = Component::path('com_forms');
-$defaultControllerName = 'forms';
-$controllerName = Request::getCmd('controller', $defaultControllerName);
-$controllerNameMap = [
-	'admin' => 'formsAdmin',
-	'fill' => 'fieldResponses',
-	'forms' => 'forms',
-	'pages' => 'formPages',
-	'queries' => 'queries',
-	'responses' => 'formResponses',
-	'steps' => 'formPrereqs'
+$checkboxesName = 'responses_ids[]';
+$responses = $this->responses;
+$responseColumns = [
+	'ID',
+	'User',
+	'Completion Status',
+	'Started',
+	'Last Activity',
+	'Submitted'
 ];
+?>
 
-$mappedName = Arr::getValue($controllerNameMap, $controllerName, $defaultControllerName);
-$controllerPath = "$componentPath/site/controllers/$mappedName.php";
+<table class="response-list">
+	<thead>
+		<tr>
+			<td>
+				<input type="checkbox" name="<?php echo $checkboxesName; ?>" value="all">
+			</td>
+			<?php foreach ($responseColumns as $columnHeader): ?>
+				<td><?php echo $columnHeader; ?></td>
+			<?php endforeach; ?>
+		</tr>
+	</thead>
 
-if (!file_exists($controllerPath))
-{
-	$controller = $defaultControllerName;
-}
-
-require_once "$componentPath/site/controllers/$mappedName.php";
-
-$namespacedName = __NAMESPACE__ . "\\Controllers\\$mappedName";
-
-$controller = new $namespacedName();
-$controller->execute();
+	<tbody>
+		<?php
+			foreach ($responses as $response):
+				$this->view('_response_item')
+					->set('checkboxName', $checkboxesName)
+					->set('response', $response)
+					->display();
+			endforeach;
+		?>
+	</tbody>
+</table>

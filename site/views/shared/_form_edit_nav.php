@@ -48,7 +48,7 @@ $steps = [
 	'Form Info' => $routes->formsEditUrl($formId),
 	'Pages' => $routes->formsPagesUrl($formId),
 	'Steps' => $routes->formsPrereqsUrl($formId),
-	'Responses' => ""
+	'Responses' => $routes->formsResponseList($formId)
 ];
 
 $this->view('_ul_nav', 'shared')

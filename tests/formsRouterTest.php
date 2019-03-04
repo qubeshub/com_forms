@@ -319,4 +319,15 @@ class FormsRouterTest extends Basic
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
 
+	public function testAdminResponseReviewUrlReturnsCorrectUrl()
+	{
+		$responseId = 1;
+		$expectedUrl = "/forms/admin/response?response_id=$responseId";
+		$routes = new FormsRouter();
+
+		$generatedUrl = $routes->adminResponseReviewUrl($responseId);
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
 }

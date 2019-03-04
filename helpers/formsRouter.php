@@ -429,6 +429,22 @@ class FormsRouter extends ComponentRouter
 	}
 
 	/**
+	 * Generates URL to admin form response review page
+	 *
+	 * @param    int      $responseId   Given response's ID
+	 * @return   string
+	 */
+	public function adminResponseReviewUrl($responseId)
+	{
+		$segments = ['admin', 'response'];
+		$params = ['response_id' => $responseId];
+
+		$url = $this->_generateComponentUrl($segments, $params);
+
+		return $url;
+	}
+
+	/**
 	 * Generates URL for given user's profile
 	 *
 	 * @param    int   $userId   Given user's ID

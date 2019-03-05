@@ -31,15 +31,21 @@
 
 namespace Components\Forms\Site\Controllers;
 
+require_once "$componentPath/helpers/formPageElementDecorator.php";
 require_once "$componentPath/helpers/formsRouter.php";
 require_once "$componentPath/helpers/pageBouncer.php";
 require_once "$componentPath/helpers/params.php";
+require_once "$componentPath/helpers/relationalCrudHelper.php";
 require_once "$componentPath/models/form.php";
+require_once "$componentPath/models/formResponse.php";
 
+use Components\Forms\Helpers\FormPageElementDecorator as ElementDecorator;
 use Components\Forms\Helpers\FormsRouter as RoutesHelper;
 use Components\Forms\Helpers\PageBouncer;
 use Components\Forms\Helpers\Params;
+use Components\Forms\Helpers\RelationalCrudHelper as CrudHelper;
 use Components\Forms\Models\Form;
+use Components\Forms\Models\FormResponse;
 use Hubzero\Component\SiteController;
 
 $componentPath = Component::path('com_forms');
@@ -66,6 +72,8 @@ class FormsAdmin extends SiteController
 		$this->_bouncer = new PageBouncer([
 			'component' => $this->_option
 		]);
+		$this->_crudHelper = new CrudHelper(['controller' => $this]);
+		$this->_decorator = new ElementDecorator();
 		$this->_params = new Params(
 			['whitelist' => self::$_paramWhitelist]
 		);
@@ -75,7 +83,7 @@ class FormsAdmin extends SiteController
 	}
 
 	/**
-	 * Renders list of reviews for given form
+	 * Renders list of responses for given form
 	 *
 	 * @return   void
 	 */
@@ -96,6 +104,68 @@ class FormsAdmin extends SiteController
 			->set('responseListUrl', $responseListUrl)
 			->set('responses', $formResponses)
 			->display();
+	}
+
+	/**
+	 * Renders given form response
+	 *
+	 * @return   void
+	 */
+	public function responseTask()
+	{
+		$this->_bouncer->redirectUnlessAuthorized('core.create');
+
+		$responseId = $this->_params->getInt('response_id');
+		$response = FormResponse::oneOrFail($responseId);
+		$userId = $response->get('user_id');
+		$form = $response->getForm();
+		$pageElements = $form->getFieldsOrdered();
+		$decoratedPageElements = $this->_decorator->decorateForRendering($pageElements, $userId);
+		$reponseAcceptanceUrl = $this->_routes->responseApprovalUrl();
+
+		foreach ($pageElements as $element)
+		{
+			$element->_returnDefault = false;
+		}
+
+		$this->view
+			->set('acceptanceAction', $reponseAcceptanceUrl)
+			->set('form', $form)
+			->set('pageElements', $decoratedPageElements)
+			->set('response', $response)
+			->display();
+	}
+
+	/**
+	 * Updates approval status of given form response
+	 *
+	 * @return   void
+	 */
+	public function approveTask()
+	{
+		$this->_bouncer->redirectUnlessAuthorized('core.create');
+
+		$responseAccepted = !!$this->_params->get('accepted');
+		$accepted = $responseAccepted ? Date::toSql() : null;
+		$responseId = $this->_params->getInt('response_id');
+		$response = FormResponse::oneOrFail($responseId);
+		$formId = $response->getFormId();
+
+		$response->set('reviewed_by', User::get('id'));
+		$response->set('accepted', $accepted);
+
+		if ($response->save())
+		{
+			$forwardingUrl = $this->_routes->formsResponseList($formId);
+			$message = Lang::txt('Response acceptance udpated');
+			$this->_crudHelper->successfulUpdate($forwardingUrl, $message);
+		}
+		else
+		{
+			$forwardingUrl = $this->_routes->adminResponseReviewUrl($responseId);
+			$message = Lang::txt('The issues below prevented the response from being udpated.');
+			$this->_crudHelper->failedBatchUpdate($forwardingUrl, $response, $message);
+		}
 	}
 
 }

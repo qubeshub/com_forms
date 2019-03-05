@@ -34,11 +34,18 @@ defined('_HZEXEC_') or die();
 
 $checkboxName = $this->checkboxName;
 $response = $this->response;
+$reviewer = $response->getReviewer();
+$reviewerId = $reviewer->get('id');
+$reviewerName = $reviewer->get('name');
+$responseAccepted = $response->get('accepted');
+$responseCreated = $response->get('created');
 $responseId = $response->get('id');
+$responseModified = $response->get('modified');
+$responseProgress = $response->requiredCompletionPercentage();
+$responseSubmitted = $response->get('submitted');
 $user = $response->getUser();
 $userId = $user->get('id');
 $usersName = $user->get('name');
-$usersUrl = $user->get('name');
 ?>
 
 <tr class="response-item">
@@ -49,7 +56,15 @@ $usersUrl = $user->get('name');
 			value="<?php echo $responseId; ?>">
 	</td>
 
-	<td><?php echo $responseId; ?></td>
+	<td>
+		<?php
+			$this->view('_link', 'shared')
+				->set('content', $responseId)
+				->set('urlFunction', 'adminResponseReviewUrl')
+				->set('urlFunctionArgs', [$responseId])
+				->display();
+		?>
+	</td>
 
 	<td>
 		<?php
@@ -57,6 +72,52 @@ $usersUrl = $user->get('name');
 				->set('content', $usersName)
 				->set('urlFunction', 'userProfileUrl')
 				->set('urlFunctionArgs', [$userId])
+				->display();
+		?>
+	</td>
+
+	<td>
+		<?php echo "$responseProgress%"; ?>
+	</td>
+
+	<td>
+		<?php
+			$this->view('_date', 'shared')
+				->set('date', $responseCreated)
+				->display();
+		?>
+	</td>
+
+	<td>
+		<?php
+			$this->view('_date', 'shared')
+				->set('date', $responseModified)
+				->display();
+		?>
+	</td>
+
+	<td>
+		<?php
+			$this->view('_date', 'shared')
+				->set('date', $responseSubmitted)
+				->display();
+		?>
+	</td>
+
+	<td>
+		<?php
+			$this->view('_date', 'shared')
+				->set('date', $responseAccepted)
+				->display();
+		?>
+	</td>
+
+	<td>
+		<?php
+			$this->view('_link', 'shared')
+				->set('content', $reviewerName)
+				->set('urlFunction', 'userProfileUrl')
+				->set('urlFunctionArgs', [$reviewerId])
 				->display();
 		?>
 	</td>

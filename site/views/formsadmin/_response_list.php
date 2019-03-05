@@ -40,7 +40,9 @@ $responseColumns = [
 	'Completion Status',
 	'Started',
 	'Last Activity',
-	'Submitted'
+	'Submitted',
+	'Accepted',
+	'Reviewed By'
 ];
 ?>
 

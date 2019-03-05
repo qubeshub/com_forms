@@ -86,10 +86,30 @@ class PageField extends Relational
 	public function getOptions()
 	{
 		$options = $this->get('values', []);
-
 		$decodedOptions = json_decode($options);
 
+		if (!$this->_returnDefault)
+		{
+			$decodedOptions = $this->_removeOptionDefaults($decodedOptions);
+		}
+
 		return $decodedOptions;
+	}
+
+	/**
+	 * Prevents options from being selected by default
+	 *
+	 * @param    array   $options   Field's options
+	 * @return   array
+	 */
+	protected function _removeOptionDefaults($options)
+	{
+		$updatedOptions = array_map(function($option) {
+			$option->selected = false;
+			return $option;
+		}, $options);
+
+		return $updatedOptions;
 	}
 
 	/**

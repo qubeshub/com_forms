@@ -170,7 +170,17 @@ class FormResponse extends Relational
 	}
 
 	/**
-	 * Gets all forms fields
+	 * Gets associated form's ID
+	 *
+	 * @return   object
+	 */
+	public function getFormId()
+	{
+		return $this->getForm()->get('id');
+	}
+
+	/**
+	 * Gets associated form
 	 *
 	 * @return   object
 	 */
@@ -218,13 +228,25 @@ class FormResponse extends Relational
 	/**
 	 * Returns associated user
 	 *
-	 * @return   int
+	 * @return   object
 	 */
 	public function getUser()
 	{
 		$userId = $this->get('user_id');
 
 		return User::one($userId);
+	}
+
+	/**
+	 * Returns user who reviewed response
+	 *
+	 * @return   object
+	 */
+	public function getReviewer()
+	{
+		$reviewerId = $this->get('reviewed_by');
+
+		return User::oneOrNew($reviewerId);
 	}
 
 }

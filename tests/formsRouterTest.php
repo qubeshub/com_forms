@@ -330,4 +330,14 @@ class FormsRouterTest extends Basic
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
 
+	public function testResponseApprovalUrlReturnsCorrectUrl()
+	{
+		$expectedUrl = "/forms/admin/response/approve";
+		$routes = new FormsRouter();
+
+		$generatedUrl = $routes->responseApprovalUrl();
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
 }

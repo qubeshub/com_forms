@@ -413,7 +413,7 @@ class FormsRouter extends ComponentRouter
 	}
 
 	/**
-	 * Generates  admin response review URL
+	 * Generates admin response review URL
 	 *
 	 * @param    int      $formId   Form ID
 	 * @return   string
@@ -458,5 +458,20 @@ class FormsRouter extends ComponentRouter
 
 		return $url;
 	}
+
+	/**
+	 * Generates URL to form response approval task
+	 *
+	 * @return   string
+	 */
+	public function responseApprovalUrl()
+	{
+		$segments = ['admin', 'response', 'approve'];
+
+		$url = $this->_generateComponentUrl($segments);
+
+		return $url;
+	}
+
 
 }

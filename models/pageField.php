@@ -97,10 +97,10 @@ class PageField extends Relational
 	 *
 	 * @return   string
 	 */
-	public function getInputValue()
+	public function getInputValue($userId)
 	{
 		$inputValue = null;
-		$userResponse = $this->getCurrentUsersResponse();
+		$userResponse = $this->getResponse($userId);
 
 		if ($userResponseValue = $userResponse->get('response'))
 		{

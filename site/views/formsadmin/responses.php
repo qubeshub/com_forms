@@ -49,9 +49,8 @@ $breadcrumbs = [
 
 $this->view('_forms_breadcrumbs', 'shared')
 	->set('breadcrumbs', $breadcrumbs)
-	->set('page', 'Forms list')
+	->set('page', "$formName Responses")
 	->display();
-
 ?>
 
 <section class="main section">

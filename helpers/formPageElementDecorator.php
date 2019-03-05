@@ -45,15 +45,16 @@ class FormPageElementDecorator
 	 * Decorates given for fields to facilitate in rendering
 	 *
 	 * @param    object   $pageElements   Page elements
+	 * @param    int      $respondentId   ID of responding user
 	 * @return   array
 	 */
-	public function decorateForRendering($pageElements)
+	public function decorateForRendering($pageElements, $respondentId)
 	{
 		$decoratedElements = [];
 
 		foreach ($pageElements as $element)
 		{
-			$decoratedElements[] = $this->_decorateElement($element);
+			$decoratedElements[] = $this->_decorateElement($element, $respondentId);
 		}
 
 		return $decoratedElements;
@@ -63,11 +64,15 @@ class FormPageElementDecorator
 	 * Decorates given for fields to facilitate in rendering
 	 *
 	 * @param    object   $pageElements   Page elements
+	 * @param    int      $respondentId   ID of responding user
 	 * @return   array
 	 */
-	protected function _decorateElement($element)
+	protected function _decorateElement($element, $respondentId)
 	{
-		return new RenderableFormElement(['element' => $element]);
+		return new RenderableFormElement([
+			'element' => $element,
+			'respondent_id' => $respondentId
+		]);
 	}
 
 }

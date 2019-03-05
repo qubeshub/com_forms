@@ -114,7 +114,8 @@ class FieldResponses extends SiteController
 		$pageElements = $this->_page->getFields()
 			->order('order', 'asc')
 			->rows();
-		$decoratedPageElements = $this->_decorator->decorateForRendering($pageElements);
+		$userId = User::get('id');
+		$decoratedPageElements = $this->_decorator->decorateForRendering($pageElements, $userId);
 
 		$this->view
 			->set('form', $this->_form)

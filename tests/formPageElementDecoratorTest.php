@@ -49,7 +49,7 @@ class FormPageElementDecoratorTest extends Basic
 		$elements = ['a'];
 		$decorator = new FormPageElementDecorator();
 
-		$decoratedElements = $decorator->decorateForRendering($elements);
+		$decoratedElements = $decorator->decorateForRendering($elements, 2);
 		$element = $decoratedElements[0];
 		$elementClass = get_class($element);
 

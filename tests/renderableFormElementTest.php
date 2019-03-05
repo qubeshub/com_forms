@@ -52,7 +52,10 @@ class RenderableFormElementTest extends Basic
 			'methods' => ['get' => $id]
 		]);
 
-		$renderableElement = new RenderableFormElement(['element' => $element]);
+		$renderableElement = new RenderableFormElement([
+			'element' => $element,
+			'respondent_id' => 0
+		]);
 		$name = $renderableElement->get('name');
 
 		$this->assertEquals("responses[$id]", $name);
@@ -65,7 +68,10 @@ class RenderableFormElementTest extends Basic
 		]);
 		$unhandledGetDefault = [];
 		$unhandledGetKey = 'test';
-		$renderableElement = new RenderableFormElement(['element' => $element]);
+		$renderableElement = new RenderableFormElement([
+			'element' => $element,
+			'respondent_id' => 0
+		]);
 
 		$element->expects($this->once())
 			->method('get')

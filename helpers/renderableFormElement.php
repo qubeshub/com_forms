@@ -45,6 +45,7 @@ class RenderableFormElement
 	public  function __construct($args = [])
 	{
 		$this->_element = $args['element'];
+		$this->_respondentId = $args['respondent_id'];
 	}
 
 	/**
@@ -76,6 +77,16 @@ class RenderableFormElement
 		}
 
 		return $value;
+	}
+
+	/**
+	 * Returns input value based on given respondent
+	 *
+	 * @return   mixed
+	 */
+	public function getInputValue()
+	{
+		return $this->_element->getInputValue($this->_respondentId);
 	}
 
 	/**

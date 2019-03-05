@@ -161,9 +161,10 @@ class FormResponses extends SiteController
 		$this->_pageBouncer->redirectIfFormDisabled($form);
 		$this->_pageBouncer->redirectIfPrereqsNotAccepted($form);
 
-		$responseSubmitUrl = $this->_routes->formResponseSubmitUrl();
 		$pageElements = $form->getFieldsOrdered();
-		$decoratedPageElements = $this->_decorator->decorateForRendering($pageElements);
+		$responseSubmitUrl = $this->_routes->formResponseSubmitUrl();
+		$userId = User::get('id');
+		$decoratedPageElements = $this->_decorator->decorateForRendering($pageElements, $userId);
 
 		foreach ($pageElements as $element)
 		{

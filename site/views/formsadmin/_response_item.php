@@ -51,12 +51,6 @@ $usersName = $user->get('name');
 <tr class="response-item">
 
 	<td>
-		<input type="checkbox"
-			name="<?php echo $checkboxName; ?>"
-			value="<?php echo $responseId; ?>">
-	</td>
-
-	<td>
 		<?php
 			$this->view('_link', 'shared')
 				->set('content', $responseId)

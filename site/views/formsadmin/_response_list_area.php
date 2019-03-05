@@ -32,7 +32,7 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$responses = $this->responses;
+$responses = $this->responses->rows();
 
 if (count($responses) > 0):
 	$this->view('_response_list')

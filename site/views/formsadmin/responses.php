@@ -56,6 +56,15 @@ $this->view('_forms_breadcrumbs', 'shared')
 <section class="main section">
 	<div class="grid">
 
+		<div class="col span12 nav omega">
+			<?php
+				$this->view('_form_edit_nav', 'shared')
+					->set('current', 'Responses')
+					->set('formId', $formId)
+					->display();
+			?>
+		</div>
+
 		<div class="col span12 omega">
 			<?php
 				$this->view('_response_list_area')

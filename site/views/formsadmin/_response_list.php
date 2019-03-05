@@ -49,9 +49,6 @@ $responseColumns = [
 <table class="response-list">
 	<thead>
 		<tr>
-			<td>
-				<input type="checkbox" name="<?php echo $checkboxesName; ?>" value="all">
-			</td>
 			<?php foreach ($responseColumns as $columnHeader): ?>
 				<td><?php echo $columnHeader; ?></td>
 			<?php endforeach; ?>

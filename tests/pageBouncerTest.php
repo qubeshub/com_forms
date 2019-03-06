@@ -165,7 +165,7 @@ class PageBouncerTest extends Basic
 		$bouncer->redirectIfFormDisabled($form);
 	}
 
-	public function testRedirectIfFormDisabledRedirectIfFormIsDisabled()
+	public function testRedirectIfFormDisabledRedirectsIfFormIsDisabled()
 	{
 		$form = $this->mock([
 			'class' => 'Form', 'methods' => ['get' => true]
@@ -180,6 +180,76 @@ class PageBouncerTest extends Basic
 			->method('redirect');
 
 		$bouncer->redirectIfFormDisabled($form);
+	}
+
+	public function testRedirectIfFormNotOpenChecksIfFormIsOpen()
+	{
+		$form = $this->mock([
+			'class' => 'Form',
+			'methods' => ['get' => false, 'isOpen' => true]
+		]);
+		$router = $this->mock(['class' => 'Router']);
+		$bouncer = new PageBouncer([
+			'component' => 'com_forms',
+			'router' => $router
+		]);
+
+		$form->expects($this->once())
+			->method('isOpen');
+
+		$bouncer->redirectIfFormNotOpen($form);
+	}
+
+	public function testRedirectIfFormNotOpenChecksIfFormIsDisabled()
+	{
+		$form = $this->mock(['class' => 'Form',
+			'methods' => ['get', 'isOpen' => 'false']
+		]);
+		$router = $this->mock(['class' => 'Router', 'methods' => ['redirect']]);
+		$bouncer = new PageBouncer([
+			'component' => 'com_forms',
+			'router' => $router
+		]);
+
+		$form->expects($this->once())
+			->method('get')
+			->with('disabled');
+
+		$bouncer->redirectIfFormNotOpen($form);
+	}
+
+	public function testRedirectIfFormNotOpenRedirectsIfFormNotOpen()
+	{
+		$form = $this->mock(['class' => 'Form',
+			'methods' => ['get', 'isOpen' => false]
+		]);
+		$router = $this->mock(['class' => 'Router', 'methods' => ['redirect']]);
+		$bouncer = new PageBouncer([
+			'component' => 'com_forms',
+			'router' => $router
+		]);
+
+		$router->expects($this->once())
+			->method('redirect');
+
+		$bouncer->redirectIfFormNotOpen($form);
+	}
+
+	public function testRedirectIfFormNotOpenRedirectsIfFormDisabled()
+	{
+		$form = $this->mock(['class' => 'Form',
+			'methods' => ['get' => true, 'isOpen' => true]
+		]);
+		$router = $this->mock(['class' => 'Router', 'methods' => ['redirect']]);
+		$bouncer = new PageBouncer([
+			'component' => 'com_forms',
+			'router' => $router
+		]);
+
+		$router->expects($this->once())
+			->method('redirect');
+
+		$bouncer->redirectIfFormNotOpen($form);
 	}
 
 }

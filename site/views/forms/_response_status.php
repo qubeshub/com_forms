@@ -33,22 +33,29 @@
 defined('_HZEXEC_') or die();
 
 $statusTitle = Lang::txt('COM_FORMS_HEADINGS_STATUS');
+$form = $this->form;
+$isClosed = $form->isClosed();
+$isOpen = $form->isOpen();
 $response = $this->response;
-?>
 
-<?php
-	if ($response->isNew()):
-		$statusMessage = Lang::txt('COM_FORMS_RESPONSE_STATUS_START');
-	elseif ($submissionDate = $response->get('submitted')):
-		$formattedDate = date('F jS, Y', strtotime($submissionDate));
-		$statusMessage = Lang::txt('COM_FORMS_RESPONSE_STATUS_SUBMITTED', $formattedDate);
-	elseif ($acceptedDate = $response->get('accepted')):
-		$formattedDate = date('F jS, Y', strtotime($acceptedDate));
-		$statusMessage = Lang::txt('COM_FORMS_RESPONSE_STATUS_ACCEPTED', $formattedDate);
-	else:
-		$completionPercentage = $response->requiredCompletionPercentage();
-		$statusMessage = Lang::txt('COM_FORMS_RESPONSE_STATUS_PERCENT', $completionPercentage);
-	endif;
+if ($acceptedDate = $response->get('accepted')):
+	$formattedDate = date('F jS, Y', strtotime($acceptedDate));
+	$statusMessage = Lang::txt('COM_FORMS_RESPONSE_STATUS_ACCEPTED', $formattedDate);
+elseif ($submissionDate = $response->get('submitted')):
+	$formattedDate = date('F jS, Y', strtotime($submissionDate));
+	$statusMessage = Lang::txt('COM_FORMS_RESPONSE_STATUS_SUBMITTED', $formattedDate);
+elseif ($isClosed):
+	$statusMessage = Lang::txt('COM_FORMS_RESPONSE_STATUS_REVIEW');
+elseif ($form->get('disabled')):
+	$statusMessage = Lang::txt('COM_FORMS_NOTICES_FORM_RESPONSE_WAITING');
+elseif (!$isOpen):
+	$statusMessage = Lang::txt('COM_FORMS_NOTICES_FORM_RESPONSE_WAITING');
+elseif ($response->isNew()):
+	$statusMessage = Lang::txt('COM_FORMS_RESPONSE_STATUS_START');
+else:
+	$completionPercentage = $response->requiredCompletionPercentage();
+	$statusMessage = Lang::txt('COM_FORMS_RESPONSE_STATUS_PERCENT', $completionPercentage);
+endif;
 ?>
 
 <div>

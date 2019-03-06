@@ -370,11 +370,49 @@ class Form extends Relational
 	 */
 	public function isDisabledFor($userId)
 	{
-		$disabled = $this->get('disabled');
+		$isActive = $this->isActive();
 		$responsesLocked = $this->get('responses_locked');
 		$submitted = $this->responseSubmittedBy($userId);
 
-		return $disabled || ($submitted && $responsesLocked);
+		return !$isActive || ($submitted && $responsesLocked);
+	}
+
+	/**
+	 * Indicates if form is active based on time bounds and disabled status
+	 *
+	 * @return   bool
+	 */
+	public function isActive()
+	{
+		$isClosed = $this->isClosed();
+		$isOpen = $this->isOpen();
+		$isDisabled = $this->get('disabled');
+
+		return !$isDisabled && $isOpen && !$isClosed;
+	}
+
+	/**
+	 * Indicates if form is closed based on closing time
+	 *
+	 * @return   bool
+	 */
+	public function isClosed()
+	{
+		$closingTime = strtotime($this->get('closing_time'));
+
+		return time() > $closingTime;
+	}
+
+	/**
+	 * Indicates if form is open based on opening time
+	 *
+	 * @return   bool
+	 */
+	public function isOpen()
+	{
+		$openingTime = strtotime($this->get('opening_time'));
+
+		return time() > $openingTime;
 	}
 
 	/**

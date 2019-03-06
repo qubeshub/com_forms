@@ -114,6 +114,23 @@ class PageBouncer
 	}
 
 	/**
+	 * Redirects user if the form is not open or is disabled
+	 *
+	 * @param    object   $form   Form record
+	 * @param    string   $url    URL to redirect to
+	 * @return   void
+	 */
+	public function redirectIfFormNotOpen($form, $url = null)
+	{
+		$url = $url ? $url : '/forms';
+
+		if (!$form->isOpen() || $form->get('disabled'))
+		{
+			$this->_router->redirect($url);
+		}
+	}
+
+	/**
 	 * Redirects users without given permission
 	 *
 	 * @param    string   $permission   Permission name

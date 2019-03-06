@@ -158,7 +158,7 @@ class FormResponses extends SiteController
 		$formId = $this->_params->getInt('form_id');
 		$form = Form::oneOrFail($formId);
 
-		$this->_pageBouncer->redirectIfFormDisabled($form);
+		$this->_pageBouncer->redirectIfFormNotOpen($form);
 		$this->_pageBouncer->redirectIfPrereqsNotAccepted($form);
 
 		$pageElements = $form->getFieldsOrdered();
@@ -191,7 +191,7 @@ class FormResponses extends SiteController
 		$response = $form->getResponse($currentUsersId);
 
 		$this->_pageBouncer->redirectIfResponseSubmitted($response);
-		$this->_pageBouncer->redirectIfFormDisabled($form);
+		$this->_pageBouncer->redirectIfFormNotOpen($form);
 		$this->_pageBouncer->redirectIfPrereqsNotAccepted($form);
 
 		$currentTime = Date::toSql();

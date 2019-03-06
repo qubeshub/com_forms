@@ -39,6 +39,7 @@ $form = $this->form;
 	<div class="col span6">
 		<?php
 			$this->view('_forms_dates_open')
+				->set('isOpen', $form->isOpen())
 				->set('openingTime', $form->get('opening_time'))
 				->display();
 		?>
@@ -47,6 +48,7 @@ $form = $this->form;
 	<div class="col span6 omega">
 		<?php
 			$this->view('_forms_dates_closes')
+				->set('isClosed', $form->isClosed())
 				->set('closingTime', $form->get('closing_time'))
 				->display();
 		?>

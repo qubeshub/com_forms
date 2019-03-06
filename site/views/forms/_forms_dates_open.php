@@ -32,17 +32,16 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$openingTime = new DateTime($this->openingTime);
-$now = new DateTime();
-$timeUntilOpen = $now->diff($openingTime);
+$isOpen = $this->isOpen;
+$openingTime = $this->openingTime;
 
-if ($timeUntilOpen->days > 0)
+if ($isOpen)
 {
-	$openTitle = Lang::txt('COM_FORMS_HEADINGS_DATES_OPENS');
+	$openTitle = Lang::txt('COM_FORMS_HEADINGS_DATES_OPENED');
 }
 else
 {
-	$openTitle = Lang::txt('COM_FORMS_HEADINGS_DATES_OPENED');
+	$openTitle = Lang::txt('COM_FORMS_HEADINGS_DATES_OPENS');
 }
 ?>
 
@@ -50,5 +49,5 @@ else
 	<h3>
 		<?php echo $openTitle; ?>
 	</h3>
-	<?php echo date('F jS, Y', strtotime($this->openingTime)); ?>
+	<?php echo date('F jS, Y', strtotime($openingTime)); ?>
 </div>

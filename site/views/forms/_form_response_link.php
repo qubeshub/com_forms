@@ -34,13 +34,13 @@ defined('_HZEXEC_') or die();
 
 $form = $this->form;
 $id = $form->get('id');
+$isActive = $form->isActive();
 $pages = $form->getPages();
 $prereqsIncomplete = !$form->prereqsAccepted(User::get('id'));
 $response = $this->get('response');
 $responseIsNew = $response->isNew();
-$formIsActive = !$form->get('disabled');
-$userCanStartResponse = $responseIsNew && $formIsActive;
-$userCanEditResponse = !$responseIsNew && $formIsActive;
+$userCanStartResponse = $responseIsNew && $isActive;
+$userCanViewResponse = !$responseIsNew;
 
 if ($prereqsIncomplete):
 	$this->view('_form_response_link_prereqs_incomplete')
@@ -49,7 +49,7 @@ elseif ($userCanStartResponse):
 	$this->view('_form_response_link_start')
 		->set('formId', $id)
 		->display();
-elseif ($userCanEditResponse):
+elseif ($userCanViewResponse):
 	$this->view('_form_response_link_pages')
 		->set('formId', $id)
 		->set('pages', $pages)

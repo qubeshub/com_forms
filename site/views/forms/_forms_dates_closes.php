@@ -32,17 +32,16 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$closingTime = date_create_from_format('Y-m-d H:i:s', $this->closingTime);
-$now = new \DateTime();
-$timeUntilClose = $now->diff($closingTime);
+$isClosed = $this->isClosed;
+$closingTime = $this->closingTime;
 
-if ($timeUntilClose->days > 0)
+if ($isClosed)
 {
-	$closeTitle = Lang::txt('COM_FORMS_HEADINGS_DATES_CLOSES');
+	$closeTitle = Lang::txt('COM_FORMS_HEADINGS_DATES_CLOSED');
 }
 else
 {
-	$closeTitle = Lang::txt('COM_FORMS_HEADINGS_DATES_CLOSED');
+	$closeTitle = Lang::txt('COM_FORMS_HEADINGS_DATES_CLOSES');
 }
 ?>
 
@@ -50,5 +49,5 @@ else
 	<h3>
 		<?php echo $closeTitle; ?>
 	</h3>
-	<?php echo date('F dS, Y', strtotime($this->closingTime)); ?>
+	<?php echo date('F dS, Y', strtotime($closingTime)); ?>
 </div>

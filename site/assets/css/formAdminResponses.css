@@ -14,3 +14,11 @@
 thead td {
 	font-weight: bold;
 }
+.response-list {
+	margin: 0 0 3em 0;
+}
+
+.hidden {
+	display: none;
+}
+

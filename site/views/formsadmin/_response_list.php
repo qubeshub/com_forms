@@ -32,26 +32,35 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('formsAdminResponsesList');
+$this->js('formsAdminResponsesList');
+
 $checkboxesName = 'responses_ids[]';
-$responses = $this->responses;
-$responseColumns = [
-	'ID',
-	'User',
-	'Completion Status',
-	'Started',
-	'Last Activity',
-	'Submitted',
-	'Accepted',
-	'Reviewed By'
+$columns = [
+	'ID' => 'id',
+	'User' => 'user_id',
+	'Completion Percentage' => 'completion_percentage',
+	'Started' => 'created',
+	'Last Activity' => 'modified',
+	'Submitted' => 'submitted',
+	'Accepted' => 'accepted',
+	'Reviewed By' => 'reviewed_by'
 ];
+$formId = $this->formId;
+$responses = $this->responses;
+$sortingAction = $this->sortingAction;
+$sortingCriteria = $this->sortingCriteria;
 ?>
 
 <table class="response-list">
 	<thead>
 		<tr>
-			<?php foreach ($responseColumns as $columnHeader): ?>
-				<td><?php echo $columnHeader; ?></td>
-			<?php endforeach; ?>
+			<?php
+				$this->view('_sortable_column_headers', 'shared')
+					->set('columns', $columns)
+					->set('sortingCriteria', $sortingCriteria)
+					->display();
+			?>
 		</tr>
 	</thead>
 
@@ -66,3 +75,9 @@ $responseColumns = [
 		?>
 	</tbody>
 </table>
+
+<form id="sort-form" action="<?php echo $sortingAction; ?>">
+	<input type="hidden" name="form_id" value="<?php echo $formId; ?>">
+	<input type="hidden" name="sort_direction">
+	<input type="hidden" name="sort_field">
+</form>

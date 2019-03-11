@@ -143,6 +143,7 @@ class FieldResponses extends SiteController
 
 		if ($updateResult->succeeded())
 		{
+			$this->_updateFormResponse($responses);
 			$forwardingUrl = $this->_pagesRouter->nextPageUrl($this->_page);
 			$message = Lang::txt('COM_FORMS_NOTICES_FIELD_RESPONSES_SUCCESSFUL_UPDATE');
 			$this->_crudHelper->successfulUpdate($forwardingUrl, $message);
@@ -152,6 +153,21 @@ class FieldResponses extends SiteController
 			$forwardingUrl = $this->_routes->formsPageResponseUrl(['page_id' => $pageId]);
 			$message = Lang::txt('COM_FORMS_NOTICES_FIELD_RESPONSES_FAILED_UPDATE');
 			$this->_crudHelper->failedBatchUpdate($forwardingUrl, $updateResult, $message);
+		}
+	}
+
+	/**
+	 * Updates form responses modified attribute
+	 *
+	 * @return   void
+	 */
+	protected function _updateFormResponse($responses)
+	{
+		if (count($responses) > 0)
+		{
+			$response = $responses[0]->getFormResponse();
+			$response->set('modified', Date::toSql());
+			$response->save();
 		}
 	}
 

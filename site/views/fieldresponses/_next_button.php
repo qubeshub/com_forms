@@ -36,7 +36,7 @@ $classes = 'btn btn-success';
 $formId = $this->formId;
 $isLastPage = $this->isLastPage;
 $pagePosition = $this->pagePosition;
-$userShouldNotEditResponse = $this->formDisabled || true;
+$userShouldNotEditResponse = $this->formDisabled;
 
 if ($isLastPage)
 {

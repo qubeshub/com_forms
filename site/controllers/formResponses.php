@@ -212,4 +212,24 @@ class FormResponses extends SiteController
 		}
 	}
 
+	/**
+	 * Renders list of users responses
+	 *
+	 * @return   void
+	 */
+	public function listTask()
+	{
+		$currentUserId = User::get('id');
+		$responses = FormResponse::all()
+			->whereEquals('user_id', $currentUserId)
+			->paginated('limitstart', 'limit')
+			->rows();
+		$responsesListUrl = $this->_routes->usersResponsesUrl();
+
+		$this->view
+			->set('responses', $responses)
+			->set('listUrl', $responsesListUrl)
+			->display();
+	}
+
 }

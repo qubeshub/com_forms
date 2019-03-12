@@ -1,7 +1,7 @@
 /*
  * Sidebar styles
  */
-.landing-sidebar > .row:last-child {
+.link-container {
 	font-size: 1.5em;
 	text-align: center;
 }

@@ -55,10 +55,21 @@ $searchFormAction = $this->searchFormAction;
 		?>
 	</div>
 
-	<div class="row">
+	<div class="row link-container">
 		<?php
 			$this->view('_form_create_link')
 				->display();
 		?>
 	</div>
+
+	<div class="row link-container">
+		<?php
+			$this->view('_link_lang', 'shared')
+				->set('textKey', 'COM_FORMS_LINKS_MY_RESPONSES')
+				->set('urlFunction', 'usersResponsesUrl')
+				->set('urlFunctionArgs', [])
+				->display();
+		?>
+	</div>
+
 </div>

@@ -443,4 +443,80 @@ class Form extends Relational
 		return $responses;
 	}
 
+	/**
+	 * Calculates number of days until form opens
+	 *
+	 * @return   float
+	 */
+	public function getDaysUntilOpen()
+	{
+		return $this->_secondsToDays($this->_getSecondsUntilOpen());
+	}
+
+	/**
+	 * Calculates number of days until form closes
+	 *
+	 * @return   float
+	 */
+	public function getDaysUntilClose()
+	{
+		return $this->_secondsToDays($this->_getSecondsUntilClose());
+	}
+
+	/**
+	 * Calculates number of days since form closed
+	 *
+	 * @return   float
+	 */
+	public function getDaysSinceClose()
+	{
+		return $this->_secondsToDays($this->_getSecondsSinceClose());
+	}
+
+	/**
+	 * Calculates number of seconds until form opens
+	 *
+	 * @return   float
+	 */
+	protected function _getSecondsUntilOpen()
+	{
+		$openingTime = strtotime($this->get('opening_time'));
+
+		return $openingTime - time();
+	}
+
+	/**
+	 * Calculates number of seconds since form closed
+	 *
+	 * @return   float
+	 */
+	protected function _getSecondsSinceClose()
+	{
+		return -$this->_getSecondsUntilClose();
+	}
+
+	/**
+	 * Calculates number of seconds until form closes
+	 *
+	 * @return   float
+	 */
+	protected function _getSecondsUntilClose()
+	{
+		$closingTime = strtotime($this->get('closing_time'));
+
+		return $closingTime - time();
+	}
+
+	/**
+	 * Converts seconds to days
+	 *
+	 * @return   float
+	 */
+	protected function _secondsToDays($seconds)
+	{
+		$secondsPerDay = 60 * 60 * 24;
+
+		return $seconds / $secondsPerDay;
+	}
+
 }

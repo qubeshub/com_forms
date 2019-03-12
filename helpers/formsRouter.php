@@ -473,5 +473,18 @@ class FormsRouter extends ComponentRouter
 		return $url;
 	}
 
+	/**
+	 * Generates URL to user's responses list
+	 *
+	 * @return   string
+	 */
+	public function usersResponsesUrl()
+	{
+		$segments = ['responses', 'list'];
+
+		$url = $this->_generateComponentUrl($segments);
+
+		return $url;
+	}
 
 }

@@ -15,9 +15,8 @@ $formId = $form->get('id');
 $formName = $form->get('name');
 $responses = $this->responses;
 $responseListUrl = $this->responseListUrl;
-$paginationClass = $responses->count() > 4 ? '' : 'hidden';
 $sortingCriteria = $this->sortingCriteria;
-
+$responsesCount = $responses->count();
 $breadcrumbs = [
 	 $formName => ['formsDisplayUrl', [$formId]],
 	'Admin' => ['formsEditUrl', [$formId]],
@@ -50,13 +49,14 @@ $this->view('_forms_breadcrumbs', 'shared')
 					->set('sortingAction', $responseListUrl)
 					->set('sortingCriteria', $sortingCriteria)
 					->display();
-			?>
 
-			<div class="<?php echo $paginationClass; ?>">
-				<form method="POST" action="<?php echo $responseListUrl; ?>">
-					<?php echo $responses->pagination; ?>
-				</form>
-			</div>
+				$this->view('_pagination', 'shared')
+					->set('minDisplayLimit', 4)
+					->set('pagination', $responses->pagination)
+					->set('paginationUrl', $responseListUrl)
+					->set('recordsCount', $responsesCount)
+					->display();
+			?>
 		</div>
 
 	</div>

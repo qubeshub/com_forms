@@ -11,6 +11,7 @@ defined('_HZEXEC_') or die();
 $this->css('formResponsesList');
 
 $responses = $this->responses;
+$responsesCount = $responses->count();
 $responsesListUrl = $this->listUrl;
 
 $breadcrumbs = [
@@ -31,11 +32,14 @@ $this->view('_forms_breadcrumbs', 'shared')
 				$this->view('_response_list')
 					->set('responses', $responses)
 					->display();
-			?>
 
-			<form method="POST" action="<?php echo $responsesListUrl; ?>">
-				<?php echo $responses->pagination; ?>
-			</form>
+				$this->view('_pagination', 'shared')
+					->set('minDisplayLimit', 1)
+					->set('pagination', $responses->pagination)
+					->set('paginationUrl', $responsesListUrl)
+					->set('recordsCount', $responsesCount)
+					->display();
+				?>
 		</div>
 
 	</div>

@@ -92,7 +92,7 @@ class FormPrerequisite extends Relational
 
 			$prereqId = $this->get('prerequisite_id');
 
-			$this->_prereq= $prereqClass::one($prereqId);
+			$this->_prereq= $prereqClass::oneOrNew($prereqId);
 		}
 	}
 

@@ -13,7 +13,7 @@ $this->css('formDisplay');
 $form = $this->form;
 $formId = $form->get('id');
 $formName = $form->get('name');
-$response = $this->get('response');
+$response = $this->response;
 
 $this->view('_forms_breadcrumbs', 'shared')
 	->set('breadcrumbs', [$formName => ['formsDisplayUrl', [$formId]]])

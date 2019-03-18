@@ -7,23 +7,28 @@
 
 namespace Components\Forms\Site\Controllers;
 
+require_once "$componentPath/helpers/csvHelper.php";
 require_once "$componentPath/helpers/formPageElementDecorator.php";
 require_once "$componentPath/helpers/formsRouter.php";
 require_once "$componentPath/helpers/pageBouncer.php";
 require_once "$componentPath/helpers/params.php";
 require_once "$componentPath/helpers/relationalCrudHelper.php";
+require_once "$componentPath/helpers/responsesCsvDecorator.php";
 require_once "$componentPath/helpers/sortableResponses.php";
 require_once "$componentPath/models/form.php";
 require_once "$componentPath/models/formResponse.php";
 
+use Components\Forms\Helpers\CsvHelper;
 use Components\Forms\Helpers\FormPageElementDecorator as ElementDecorator;
 use Components\Forms\Helpers\FormsRouter as RoutesHelper;
 use Components\Forms\Helpers\PageBouncer;
 use Components\Forms\Helpers\Params;
 use Components\Forms\Helpers\RelationalCrudHelper as CrudHelper;
+use Components\Forms\Helpers\ResponsesCsvDecorator as CsvDecorator;
 use Components\Forms\Helpers\SortableResponses;
 use Components\Forms\Models\Form;
 use Components\Forms\Models\FormResponse;
+use Hubzero\Content\Server;
 use Hubzero\Component\SiteController;
 
 $componentPath = Component::path('com_forms');
@@ -51,7 +56,9 @@ class FormsAdmin extends SiteController
 			'component' => $this->_option
 		]);
 		$this->_crudHelper = new CrudHelper(['controller' => $this]);
+		$this->_csvHelper = new CsvHelper();
 		$this->_decorator = new ElementDecorator();
+		$this->_fileServer = new Server();
 		$this->_params = new Params(
 			['whitelist' => self::$_paramWhitelist]
 		);
@@ -163,6 +170,46 @@ class FormsAdmin extends SiteController
 			$message = Lang::txt('The issues below prevented the response from being udpated.');
 			$this->_crudHelper->failedBatchUpdate($forwardingUrl, $response, $message);
 		}
+	}
+
+	/**
+	 * Exports users' responses to CSV
+	 *
+	 * @return   void
+	 */
+	public function exportResponsesTask()
+	{
+		$formId = $this->_params->getInt('form_id');
+		$form = Form::oneOrFail($formId);
+
+		$this->_bouncer->redirectUnlessCanEditForm($form);
+
+		$responses = $form->getResponses()->rows();
+		$csvResponses = new CsvDecorator(['responses' => $responses]);
+		$csvFile = $this->_csvHelper->generateCsv('responses', $csvResponses);
+
+		if (!$this->_serve($csvFile->getPath()))
+		{
+			App::abort(500, Lang::txt('COM_FORMS_NOTICES_RESPONSES_EXPORT_ERROR'));
+		}
+
+		exit;
+	}
+
+	/**
+	 * Serves file at given path
+	 *
+	 * @return   bool
+	 */
+	protected function _serve($filePath)
+	{
+		$server = $this->_fileServer;
+
+		$server->filename($filePath);
+		$server->disposition('attachment');
+		$server->acceptranges(false);
+
+		return $server->serve();
 	}
 
 }

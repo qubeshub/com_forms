@@ -326,4 +326,15 @@ class FormsRouterTest extends Basic
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
 
+	public function testFormResponsesExportUrl()
+	{
+		$id = 65;
+		$expectedUrl = "/forms/admin/exportResponses?form_id=$id";
+		$routes = new FormsRouter();
+
+		$generatedUrl = $routes->formResponsesExportUrl($id);
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
 }

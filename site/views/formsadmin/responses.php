@@ -57,6 +57,18 @@ $this->view('_forms_breadcrumbs', 'shared')
 					->set('recordsCount', $responsesCount)
 					->display();
 			?>
+
+			<div>
+				<?php
+					$this->view('_protected_link', 'shared')
+						->set('authMethod', 'canCurrentUserEditForm')
+						->set('authArgs', [$form])
+						->set('textKey', 'COM_FORMS_FIELDS_RESPONSES_EXPORT')
+						->set('urlFunction', 'formResponsesExportUrl')
+						->set('urlFunctionArgs', [$formId])
+						->display();
+				?>
+			</div>
 		</div>
 
 	</div>

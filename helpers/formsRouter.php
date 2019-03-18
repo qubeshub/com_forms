@@ -463,4 +463,20 @@ class FormsRouter extends ComponentRouter
 		return $url;
 	}
 
+	/**
+	 * Generates URL to form response export task
+	 *
+	 * @param    int      $formId   Form's ID
+	 * @return   string
+	 */
+	public function formResponsesExportUrl($formId)
+	{
+		$segments = ['admin', 'exportResponses'];
+		$params = ['form_id' => $formId];
+
+		$url = $this->_generateComponentUrl($segments, $params);
+
+		return $url;
+	}
+
 }

@@ -9,7 +9,10 @@
 defined('_HZEXEC_') or die();
 
 $this->css('formsAdminResponsesList');
-$this->js('formsAdminResponsesList');
+
+$this->js('formsAdminResponsesListSorting')
+	->js('formsAdminResponsesListCheckbox')
+	->js('formsAdminResponsesList');
 
 $checkboxesName = 'responses_ids[]';
 $columns = [
@@ -31,6 +34,10 @@ $sortingCriteria = $this->sortingCriteria;
 <table class="response-list">
 	<thead>
 		<tr>
+			<td>
+				<input id="master-checkbox" type="checkbox" name="response_ids[]">
+			</td>
+
 			<?php
 				$this->view('_sortable_column_headers', 'shared')
 					->set('columns', $columns)

@@ -51,12 +51,18 @@ class ResponsesCsvDecoratorTest extends Basic
 	{
 		$expectedColumns = ['user_id', 'user_name', 'modified', 'text_a', 'select_a'];
 		$fieldA = $this->mock([
-			'class' => 'Field', 'methods' => ['get' => 'text_a']
+			'class' => 'Field',
+			'methods' => ['get' => 'text_a', 'isFillable' => true]
 		]);
 		$fieldB = $this->mock([
-			'class' => 'Field', 'methods' => ['get' => 'select_a']
+			'class' => 'Field',
+			'methods' => ['get' => 'paragraph', 'isFillable' => false]
 		]);
-		$fields = [$fieldA, $fieldB];
+		$fieldC = $this->mock([
+			'class' => 'Field',
+			'methods' => ['get' => 'select_a', 'isFillable' => true]
+		]);
+		$fields = [$fieldA, $fieldB, $fieldC];
 		$form = $this->mock([
 			'class' => 'Form', 'methods' => ['getFieldsOrdered' => $fields]
 		]);

@@ -30,6 +30,8 @@ class ResponsesCsvDecorator implements \Iterator
 		$this->_decorator = Arr::getValue(
 			$args, 'decorator', new MockProxy(['class' => 'Components\Forms\Helpers\ResponseCsvDecorator'])
 		);
+		$this->_fields = null;
+		$this->_fillableFields = null;
 		$this->_form = Arr::getValue($args, 'form', null);
 		$this->_formHelper = Arr::getValue(
 			$args, 'forms', new MockProxy(['class' => 'Components\Forms\Models\Form'])
@@ -46,7 +48,7 @@ class ResponsesCsvDecorator implements \Iterator
 	public function getColumns()
 	{
 		$metadata = ['user_id', 'user_name', 'modified'];
-		$fieldNames = $this->_getFormFieldNames();
+		$fieldNames = $this->_getFillableFieldNames();
 
 		$columns = array_merge($metadata, $fieldNames);
 
@@ -58,11 +60,11 @@ class ResponsesCsvDecorator implements \Iterator
 	 *
 	 * @return   array
 	 */
-	protected function _getFormFieldNames()
+	protected function _getFillableFieldNames()
 	{
 		$form = $this->_getForm();
 
-		$fieldNames = $this->_mapFields('name');
+		$fieldNames = $this->_mapFillableFields('name');
 
 		return $fieldNames;
 	}
@@ -155,7 +157,7 @@ class ResponsesCsvDecorator implements \Iterator
 	 */
 	protected function _getOrder()
 	{
-		return $this->_mapFields('id');
+		return $this->_mapFillableFields('id');
 	}
 
 	/**
@@ -164,11 +166,43 @@ class ResponsesCsvDecorator implements \Iterator
 	 * @param    string    $attribute   Attribute to map fields by
 	 * @return   array
 	 */
-	protected function _mapFields($attribute)
+	protected function _mapFillableFields($attribute)
 	{
 		return array_map(function($field) use($attribute) {
 			return $field->get($attribute);
-		}, $this->_getForm()->getFieldsOrdered());
+		}, $this->_getFillableFields());
+	}
+
+	/**
+	 * Gets all fields that user can fill
+	 *
+	 * @return   array
+	 */
+	protected function _getFillableFields()
+	{
+		if (!$this->_fillableFields)
+		{
+			$this->_fillableFields = array_filter($this->_getFields(), function($field) {
+				return $field->isFillable();
+			});
+		}
+
+		return $this->_fillableFields;
+	}
+
+	/**
+	 * Gets form's fields
+	 *
+	 * @return   array
+	 */
+	protected function _getFields()
+	{
+		if (!$this->_fields)
+		{
+			$this->_fields = $this->_getForm()->getFieldsOrdered();
+		}
+
+		return $this->_fields;
 	}
 
 	/**

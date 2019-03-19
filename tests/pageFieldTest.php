@@ -53,4 +53,104 @@ class PageFieldTest extends Basic
 		$this->assertEquals('notempty', $validation);
 	}
 
+	public function testIsFillableReturnsTrueForCheckboxGroup()
+	{
+		$field = PageField::blank();
+
+		$field->set('type', 'checkbox-group');
+		$isFillable = $field->isFillable();
+
+		$this->assertEquals(true, $isFillable);
+	}
+
+	public function testIsFillableReturnsTrueForDate()
+	{
+		$field = PageField::blank();
+
+		$field->set('type', 'date');
+		$isFillable = $field->isFillable();
+
+		$this->assertEquals(true, $isFillable);
+	}
+
+	public function testIsFillableReturnsTrueForHidden()
+	{
+		$field = PageField::blank();
+
+		$field->set('type', 'hidden');
+		$isFillable = $field->isFillable();
+
+		$this->assertEquals(true, $isFillable);
+	}
+
+	public function testIsFillableReturnsTrueForNumber()
+	{
+		$field = PageField::blank();
+
+		$field->set('type', 'number');
+		$isFillable = $field->isFillable();
+
+		$this->assertEquals(true, $isFillable);
+	}
+
+	public function testIsFillableReturnsTrueForRadioGroup()
+	{
+		$field = PageField::blank();
+
+		$field->set('type', 'radio-group');
+		$isFillable = $field->isFillable();
+
+		$this->assertEquals(true, $isFillable);
+	}
+
+	public function testIsFillableReturnsTrueForSelect()
+	{
+		$field = PageField::blank();
+
+		$field->set('type', 'select');
+		$isFillable = $field->isFillable();
+
+		$this->assertEquals(true, $isFillable);
+	}
+
+	public function testIsFillableReturnsTrueForText()
+	{
+		$field = PageField::blank();
+
+		$field->set('type', 'text');
+		$isFillable = $field->isFillable();
+
+		$this->assertEquals(true, $isFillable);
+	}
+
+	public function testIsFillableReturnsTrueForTextArea()
+	{
+		$field = PageField::blank();
+
+		$field->set('type', 'textarea');
+		$isFillable = $field->isFillable();
+
+		$this->assertEquals(true, $isFillable);
+	}
+
+	public function testIsFillableReturnsFalseForHeader()
+	{
+		$field = PageField::blank();
+
+		$field->set('type', 'header');
+		$isFillable = $field->isFillable();
+
+		$this->assertEquals(false, $isFillable);
+	}
+
+	public function testIsFillableReturnsFalseForParagraph()
+	{
+		$field = PageField::blank();
+
+		$field->set('type', 'paragraph');
+		$isFillable = $field->isFillable();
+
+		$this->assertEquals(false, $isFillable);
+	}
+
 }

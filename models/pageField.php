@@ -16,6 +16,17 @@ class PageField extends Relational
 	static protected $_responseClass = 'Components\Forms\Models\FieldResponse';
 	static protected $_pageModelName = 'Components\Forms\Models\FormPage';
 
+	static protected $_fillableTypes = [
+		'checkbox-group',
+		'date',
+		'hidden',
+		'number',
+		'radio-group',
+		'select',
+		'text',
+		'textarea'
+	];
+
 	/**
 	 * Records table
 	 *
@@ -219,6 +230,18 @@ class PageField extends Relational
 		$response->set($state);
 
 		return $response;
+	}
+
+	/**
+	 * Indicates if the user can provide input for this field
+	 *
+	 * @return   bool
+	 */
+	public function isFillable()
+	{
+		$type = $this->get('type');
+
+		return in_array($type, self::$_fillableTypes);
 	}
 
 }

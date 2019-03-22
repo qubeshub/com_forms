@@ -1,75 +1,78 @@
 
-var $sortForm
-const sortFormId = 'sort-form'
-const directionDataAttribute = 'sort-direction'
-const directionOpposites = { asc: 'desc', desc: 'asc' }
-const fieldDataAttribute = 'sort-field'
-const sortDirectionInputName="sort_direction"
-const sortFieldInputName="sort_field"
+var FORMS = FORMS || {}
 
-const getResponsesList = () => {
-	return $('table')
+FORMS.$sortForm
+FORMS.sortFormId = 'sort-form'
+FORMS.directionDataAttribute = 'sort-direction'
+FORMS.directionOpposites = { asc: 'desc', desc: 'asc' }
+FORMS.fieldDataAttribute = 'sort-field'
+FORMS.responsesListId = 'response-list'
+FORMS.sortDirectionInputName="sort_direction"
+FORMS.sortFieldInputName="sort_field"
+
+FORMS.getResponsesList = () => {
+	return $(`#${FORMS.responsesListId}`)
 }
 
-const registerSortHandlers = ($list) => {
-	$list.on('click', '.sortable', sortByField)
+FORMS.registerSortHandlers = ($list) => {
+	$list.on('click', '.sortable', FORMS.sortByField)
 }
 
-const sortByField = (e) => {
-	const sortData = getSortData(e)
+FORMS.sortByField = (e) => {
+	const sortData = FORMS.getSortData(e)
 
- submitSortForm(sortData)
+	FORMS.submitSortForm(sortData)
 }
 
-const getSortData = (e) => {
-	const $columnHeader = getColumnHeader(e)
+FORMS.getSortData = (e) => {
+	const $columnHeader = FORMS.getColumnHeader(e)
 
 	return {
-		direction: $columnHeader.data(directionDataAttribute),
-		field: $columnHeader.data(fieldDataAttribute )
+		direction: $columnHeader.data(FORMS.directionDataAttribute),
+		field: $columnHeader.data(FORMS.fieldDataAttribute)
 	}
 }
 
-const getColumnHeader = (e) => {
+FORMS.getColumnHeader = (e) => {
 	const $target = $(e.target)
 
 	return $target.closest('td')
 }
 
-const submitSortForm = (sortingData) => {
-	setSortForm()
-	populateSortForm(sortingData)
-	$sortForm.submit()
+FORMS.submitSortForm = (sortingData) => {
+	FORMS.setSortForm()
+	FORMS.populateSortForm(sortingData)
+	FORMS.$sortForm.submit()
 }
 
-const setSortForm = () => {
-	if ($sortForm == undefined) {
-		$sortForm = $(`#${sortFormId}`)
+FORMS.setSortForm = () => {
+	if (FORMS.$sortForm == undefined) {
+		FORMS.$sortForm = $(`#${FORMS.sortFormId}`)
 	}
 }
 
-const populateSortForm = (sortingData) => {
-	populateDirection(sortingData)
-	populateField(sortingData)
+FORMS.populateSortForm = (sortingData) => {
+	FORMS.populateDirection(sortingData)
+	FORMS.populateField(sortingData)
 }
 
-const populateDirection = ({direction}) => {
-	const newDirection = getNewDirection(direction)
-	const $directionInput = getInput(sortDirectionInputName)
+FORMS.populateDirection = ({direction}) => {
+	const newDirection = FORMS.getNewDirection(direction)
+	const $directionInput = FORMS.getInput(FORMS.sortDirectionInputName)
 
 	$directionInput.val(newDirection)
 }
 
-const getNewDirection = (direction) => {
-	return directionOpposites[direction]
+FORMS.getNewDirection = (direction) => {
+	return FORMS.directionOpposites[direction]
 }
 
-const populateField = ({field}) => {
-	const $fieldInput = getInput(sortFieldInputName)
+FORMS.populateField = ({field}) => {
+	const $fieldInput = FORMS.getInput(FORMS.sortFieldInputName)
 
 	$fieldInput .val(field)
 }
 
-const getInput = (inputName) => {
-	return $sortForm.find(`[name="${inputName}"]`)
+FORMS.getInput = (inputName) => {
+	return FORMS.$sortForm.find(`[name="${inputName}"]`)
 }

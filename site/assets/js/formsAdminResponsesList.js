@@ -1,10 +1,12 @@
 
 $(document).ready(() => {
 
-	const $masterCheckbox = getMasterCheckbox()
-	const $responsesList = getResponsesList()
+	FORMS.$emailButton = FORMS.getEmailButton()
+	FORMS.$masterCheckbox = FORMS.getMasterCheckbox()
+	FORMS.$responsesList = FORMS.getResponsesList()
 
-	registerCheckboxHandlers($masterCheckbox)
-	registerSortHandlers($responsesList)
+	FORMS.registerCheckboxHandlers(FORMS.$masterCheckbox)
+	FORMS.registerEmailHandlers(FORMS.$emailButton)
+	FORMS.registerSortHandlers(FORMS.$responsesList)
 
 })

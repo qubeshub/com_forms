@@ -1,23 +1,25 @@
 
-const masterCheckboxId = 'master-checkbox'
+var FORMS = FORMS || {}
 
-const getMasterCheckbox = () => {
-	return $(`#${masterCheckboxId}`)
+FORMS.masterCheckboxId = 'master-checkbox'
+
+FORMS.getMasterCheckbox = () => {
+	return $(`#${FORMS.masterCheckboxId}`)
 }
 
-const registerCheckboxHandlers = ($masterCheckbox) => {
+FORMS.registerCheckboxHandlers = ($masterCheckbox) => {
   $masterCheckbox.on('click', () => {
-    toggleCheckboxes($masterCheckbox)
+    FORMS.toggleCheckboxes($masterCheckbox)
   })
 }
 
-const toggleCheckboxes = ($masterCheckbox) => {
+FORMS.toggleCheckboxes = ($masterCheckbox) => {
   let checked = $masterCheckbox.prop('checked')
 
-  toggleItemCheckboxes(checked)
+  FORMS.toggleItemCheckboxes(checked)
 }
 
-const toggleItemCheckboxes = (checked) => {
+FORMS.toggleItemCheckboxes = (checked) => {
   const checkboxes = $('input[type="checkbox"]', '.response-item')
 
   checkboxes.prop('checked', checked)

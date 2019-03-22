@@ -6,3 +6,8 @@
 .sortable:hover {
 	cursor: pointer;
 }
+
+.list-action:hover {
+  cursor: pointer;
+  color: #000;
+}

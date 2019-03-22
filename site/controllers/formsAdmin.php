@@ -7,6 +7,8 @@
 
 namespace Components\Forms\Site\Controllers;
 
+$componentPath = Component::path('com_forms');
+
 require_once "$componentPath/helpers/csvHelper.php";
 require_once "$componentPath/helpers/formPageElementDecorator.php";
 require_once "$componentPath/helpers/formsRouter.php";
@@ -30,8 +32,6 @@ use Components\Forms\Models\Form;
 use Components\Forms\Models\FormResponse;
 use Hubzero\Content\Server;
 use Hubzero\Component\SiteController;
-
-$componentPath = Component::path('com_forms');
 
 class FormsAdmin extends SiteController
 {
@@ -79,12 +79,14 @@ class FormsAdmin extends SiteController
 		$formId = $this->_params->getInt('form_id');
 		$form = Form::oneOrFail($formId);
 
+		$responsesEmailUrl = $this->_routes->responsesEmailUrl($formId);
 		$responses = $form->getResponses()
 			->paginated('limitstart', 'limit');
 		$responses = $this->_sortResponses($responses);
 		$responseListUrl = $this->_routes->formsResponseList($formId);
 
 		$this->view
+			->set('responsesEmailUrl', $responsesEmailUrl)
 			->set('form', $form)
 			->set('responseListUrl', $responseListUrl)
 			->set('responses', $responses)

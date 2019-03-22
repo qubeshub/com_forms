@@ -14,11 +14,24 @@
 thead td {
 	font-weight: bold;
 }
-.response-list {
+
+#response-list {
 	margin: 0 0 3em 0;
+}
+
+#response-list td {
+  padding-left: 0;
 }
 
 .hidden {
 	display: none;
 }
 
+.fontcon {
+	font-family: 'Fontcons';
+}
+
+.list-actions {
+  font-size: 1.35em;
+  margin: 0 0 1em 0;
+}

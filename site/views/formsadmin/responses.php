@@ -8,8 +8,14 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('formAdminResponses');
+$this->css('formsAdminResponses');
 
+$this->js('formsAdminResponsesListCheckbox')
+	->js('formsAdminResponsesListEmail')
+	->js('formsAdminResponsesListSorting')
+	->js('formsAdminResponsesList');
+
+$responsesEmailUrl = $this->responsesEmailUrl;
 $form = $this->form;
 $formId = $form->get('id');
 $formName = $form->get('name');
@@ -39,6 +45,17 @@ $this->view('_forms_breadcrumbs', 'shared')
 					->set('formId', $formId)
 					->display();
 			?>
+		</div>
+
+		<div class="col span12 omega list-actions">
+			<span id="email-respondents-button" class="list-action">
+				<?php
+					$this->view('_email_respondents_form')
+						->set('action', $responsesEmailUrl)
+						->set('formId', $formId)
+						->display();
+				?>
+			</span>
 		</div>
 
 		<div class="col span12 omega">

@@ -8,10 +8,11 @@ searchForm.CARET_CLASS = 'caret'
 searchForm.CONTENT_CLASS = 'content'
 searchForm.MASTER_CARET_CLASS = 'master-caret'
 searchForm.ROW_CLASS = 'row'
+searchForm.sidebarClass = '.landing-sidebar'
 
 searchForm.init = () => {
 	// Collect row content wrappers
-	searchForm.rowContentWrappers = $(`.${searchForm.CONTENT_CLASS}`)
+	searchForm.rowContentWrappers = $(`${searchForm.sidebarClass} .${searchForm.CONTENT_CLASS}`)
 
 	// Collect carets
 	searchForm.carets = $(`.${searchForm.CARET_CLASS}`)
@@ -64,14 +65,22 @@ searchForm.masterCaretHandler = (e) => {
 	const rowsVisible = !!$masterCaret.data(visibleKey)
 
 	if (rowsVisible) {
-		$rowContentWrappers.slideUp(null, () => {
-			searchForm.toggleAllCarets('&#xf0d7;', {[visibleKey]: false})
-		})
+		searchForm.hide($rowContentWrappers, visibleKey)
 	} else if (!rowsVisible) {
-		$rowContentWrappers.slideDown(null, () => {
-			searchForm.toggleAllCarets('&#xf0d8;', {[visibleKey]: true})
-		})
+		searchForm.show($rowContentWrappers, visibleKey)
 	}
+}
+
+searchForm.hide = ($rowContentWrappers, visibleKey) => {
+	$rowContentWrappers.slideUp(null, () => {
+		searchForm.toggleAllCarets('&#xf0d7;', {[visibleKey]: false})
+	})
+}
+
+searchForm.show = ($rowContentWrappers, visibleKey) => {
+	$rowContentWrappers.slideDown(null, () => {
+		searchForm.toggleAllCarets('&#xf0d8;', {[visibleKey]: true})
+	})
 }
 
 searchForm.toggleAllCarets = (html, data) => {

@@ -7,6 +7,7 @@ class ComFormsFormBuilder extends HUB.FORMS.FormBuilder {
 
 	constructor(args) {
 		super(args)
+		this._domHelper = new HUB.FORMS.DomHelper()
 		this._pageId = args.pageId
 	}
 
@@ -15,7 +16,8 @@ class ComFormsFormBuilder extends HUB.FORMS.FormBuilder {
 
 		super.setFields(fields)
 
-		this._addCmsIdsToDom(fields)
+		this._domHelper.removeCollidingClasses()
+		this._domHelper.addCmsIdsToDom(fields)
 	}
 
 	_sortFields(fields) {
@@ -24,21 +26,6 @@ class ComFormsFormBuilder extends HUB.FORMS.FormBuilder {
 		})
 
 		return fields
-	}
-
-	_addCmsIdsToDom(virutalFields) {
-		const domFields = this._getFieldDomElements()
-
-		domFields.each((i, domField) => {
-			const cmsId = virutalFields[i].id
-			this._addCmsIdToDom($(domField), cmsId)
-		})
-	}
-
-	_addCmsIdToDom($field, cmsId) {
-		const dataAttribute = this.constructor.cmsIdsDataAttribute
-
-		$field.attr(dataAttribute, cmsId)
 	}
 
 	getFields() {
@@ -70,31 +57,12 @@ class ComFormsFormBuilder extends HUB.FORMS.FormBuilder {
 	}
 
 	_addCmsIds(virtualFields) {
-		const domFields = this._getFieldDomElements()
+		const domFields = this._domHelper.getFieldDomElements()
 
 		domFields.each((i, field) => {
-			const cmsId = this._getCmsIdFromDom($(field))
+			const cmsId = this._domHelper.getCmsIdFromDom($(field))
 			virtualFields[i].id = cmsId
 		})
-	}
-
-	_getCmsIdFromDom($field) {
-		const dataAttribute = this.constructor.cmsIdsDataAttribute
-
-		let cmsId = $field.attr(dataAttribute)
-
-		return cmsId
-	}
-
-	_getFieldDomElements() {
-		const $fieldsContainer = $('[id$=-stage-wrap]').find("ul")
-		const $fields = $fieldsContainer.children()
-
-		return $fields
-	}
-
-	static get cmsIdsDataAttribute() {
-		return 'data-cms-id'
 	}
 
 }

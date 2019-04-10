@@ -9,6 +9,7 @@
 defined('_HZEXEC_') or die();
 
 $this->css('fieldsForm')
+	->js('formBuilderDomHelper')
 	->js('form-builder.min')
 	->js('form-builder.min')
 	->js('formBuilder')
@@ -18,8 +19,7 @@ $this->css('fieldsForm')
 	->js('notify')
 	->js('objectHelper')
 	->js('page')
-	->js('fieldsForm')
-	->js('updateFieldActionButtonsStyles');
+	->js('fieldsForm');
 
 \Html::behavior('core');
 

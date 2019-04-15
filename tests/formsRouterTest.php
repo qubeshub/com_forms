@@ -339,11 +339,25 @@ class FormsRouterTest extends Basic
 
   public function testFormResponsesEmailUrl()
   {
-		$id = 65;
-		$expectedUrl = "/forms/emailRespondents/responses?form_id=$id";
+		$formId = 65;
+		$responseIds = [1, 2];
+		$queryString = http_build_query([
+			'form_id' => $formId, 'response_ids' => $responseIds
+		]);
+		$expectedUrl = "/forms/emailRespondents/responses?$queryString";
 		$routes = new FormsRouter();
 
-		$generatedUrl = $routes->responsesEmailUrl($id);
+		$generatedUrl = $routes->responsesEmailUrl($formId, $responseIds);
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+  }
+
+  public function testResponseEmailSendingUrl()
+  {
+		$expectedUrl = "/forms/emailRespondents/send";
+		$routes = new FormsRouter();
+
+		$generatedUrl = $routes->sendResponsesEmailUrl();
 
 		$this->assertEquals($expectedUrl, $generatedUrl);
   }

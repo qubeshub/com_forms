@@ -482,15 +482,30 @@ class FormsRouter extends ComponentRouter
 	/**
 	 * Generates URL to respondent email page
 	 *
-	 * @param    int      $formId   Form's ID
+	 * @param    int        $formId        Form's ID
+	 * @param    array      $responseIds   Responses' IDs
 	 * @return   string
 	 */
-	public function responsesEmailUrl($formId)
+	public function responsesEmailUrl($formId, $responseIds)
 	{
 		$segments = ['emailRespondents', 'responses'];
-		$params = ['form_id' => $formId];
+		$params = ['form_id' => $formId, 'response_ids' => $responseIds];
 
 		$url = $this->_generateComponentUrl($segments, $params);
+
+		return $url;
+	}
+
+	/**
+	 * Generates URL to send emails to respondents
+	 *
+	 * @return   string
+	 */
+	public function sendResponsesEmailUrl()
+	{
+		$segments = ['emailRespondents', 'send'];
+
+		$url = $this->_generateComponentUrl($segments);
 
 		return $url;
 	}

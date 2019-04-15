@@ -20,34 +20,6 @@ class EmailTest extends Basic
 {
 	use canMock;
 
-	public function testConstructRequiresTitle()
-	{
-		$this->setExpectedException('PHPUnit_Framework_Error_Notice');
-
-		$email = new Email(['reply_to' => '', 'content' => '', 'to' => '']);
-	}
-
-	public function testConstructRequiresReplyTo()
-	{
-		$this->setExpectedException('PHPUnit_Framework_Error_Notice');
-
-		$email = new Email(['title' => '', 'content' => '', 'to' => '']);
-	}
-
-	public function testConstructRequiresContent()
-	{
-		$this->setExpectedException('PHPUnit_Framework_Error_Notice');
-
-		$email = new Email(['title' => '', 'reply_to' => '', 'to' => '']);
-	}
-
-	public function testConstructRequiresTo()
-	{
-		$this->setExpectedException('PHPUnit_Framework_Error_Notice');
-
-		$email = new Email(['title' => '', 'reply_to' => '', 'content' => '']);
-	}
-
 	public function testSendInstantiatesMessage()
 	{
 		$message = $this->mock([
@@ -229,15 +201,27 @@ class EmailTest extends Basic
 		$this->assertEquals($expectedErrors, $errors);
 	}
 
-	public function testSentSuccessfullyIsTrueIfValidAndNoFailures()
+	public function testSentSuccessfullyIsTrueIfSentValidAndNoFailures()
 	{
+		$message = $this->mock([
+			'class' => 'Message',
+			'methods' => [
+				'setSubject', 'addFrom', 'addPart',
+				'addTo', 'addReplyTo', 'send', 'getFailures' => []
+			]
+		]);
+		$emailFactory = $this->mock([
+			'class' => 'EmailFactory', 'methods' => ['one' => $message]
+		]);
 		$email = new Email([
+			'factory' => $emailFactory,
 			'title' => 'title',
 			'reply_to' => ['reply@e'],
 			'content' => 'content',
 		 	'to' => ['to@e']
 		]);
 
+		$email->send();
 		$sentSuccessfully = $email->sentSuccessfully();
 
 		$this->assertEquals(true, $sentSuccessfully);
@@ -245,10 +229,25 @@ class EmailTest extends Basic
 
 	public function testSentSuccessfullyIsFalseIfInvalid()
 	{
+		$message = $this->mock([
+			'class' => 'Message',
+			'methods' => [
+				'setSubject', 'addFrom', 'addPart',
+				'addTo', 'addReplyTo', 'send', 'getFailures' => []
+			]
+		]);
+		$emailFactory = $this->mock([
+			'class' => 'EmailFactory', 'methods' => ['one' => $message]
+		]);
 		$email = new Email([
-			'title' => '', 'reply_to' => [], 'content' => '', 'to' => []
+			'factory' => $emailFactory,
+			'title' => '',
+			'reply_to' => [],
+			'content' => '',
+		 	'to' => []
 		]);
 
+		$email->send();
 		$sentSuccessfully = $email->sentSuccessfully();
 
 		$this->assertEquals(false, $sentSuccessfully);

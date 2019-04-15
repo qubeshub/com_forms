@@ -79,11 +79,15 @@ class FormsAdmin extends SiteController
 		$formId = $this->_params->getInt('form_id');
 		$form = Form::oneOrFail($formId);
 
-		$responsesEmailUrl = $this->_routes->responsesEmailUrl($formId);
 		$responses = $form->getResponses()
 			->paginated('limitstart', 'limit');
 		$responses = $this->_sortResponses($responses);
+		$responsesCopy = clone $responses;
+		$responseIds = array_map(function($response) {
+			return $response['id'];
+		}, $form->getResponses()->rows()->toArray());
 		$responseListUrl = $this->_routes->formsResponseList($formId);
+		$responsesEmailUrl = $this->_routes->responsesEmailUrl($formId, $responseIds);
 
 		$this->view
 			->set('responsesEmailUrl', $responsesEmailUrl)

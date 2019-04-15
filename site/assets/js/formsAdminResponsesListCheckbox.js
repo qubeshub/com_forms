@@ -1,5 +1,9 @@
 
-var FORMS = FORMS || {}
+var HUB = HUB || {}
+
+HUB.FORMS = HUB.FORMS || {}
+
+FORMS = HUB.FORMS
 
 FORMS.masterCheckboxId = 'master-checkbox'
 

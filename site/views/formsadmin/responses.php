@@ -10,7 +10,8 @@ defined('_HZEXEC_') or die();
 
 $this->css('formsAdminResponses');
 
-$this->js('formsAdminResponsesListCheckbox')
+$this->js('notify')
+	->js('formsAdminResponsesListCheckbox')
 	->js('formsAdminResponsesListEmail')
 	->js('formsAdminResponsesListSorting')
 	->js('formsAdminResponsesList');

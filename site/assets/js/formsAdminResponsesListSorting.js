@@ -1,5 +1,9 @@
 
-var FORMS = FORMS || {}
+var HUB = HUB || {}
+
+HUB.FORMS = HUB.FORMS || {}
+
+FORMS = HUB.FORMS
 
 FORMS.$sortForm
 FORMS.sortFormId = 'sort-form'

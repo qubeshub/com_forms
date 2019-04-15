@@ -53,20 +53,11 @@ class UrlBuilder
 	 */
 	protected function _addParameters($url, $parameters)
 	{
-		$count = 0;
+		$queryString = http_build_query($parameters);
 
-		foreach ($parameters as $name => $value)
+		if (!empty($parameters))
 		{
-			if ($count === 0)
-			{
-				$url .= "?$name=$value";
-			}
-			else
-			{
-				$url .= "&$name=$value";
-			}
-
-			$count++;
+			$url = "$url?$queryString";
 		}
 
 		return $url;

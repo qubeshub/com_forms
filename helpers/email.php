@@ -33,14 +33,15 @@ class Email
 	 */
 	public function __construct($args = [])
 	{
-		$this->_title = $args['title'];
+		$this->_title = Arr::getValue($args, 'title', '');
 		$this->_fromEmail = Arr::getValue($args, 'from_email', Config::get('mail.mailfrom'));
 		$this->_fromName = Arr::getValue($args, 'from_name', Config::get('mail.fromname'));
-		$this->_replyTo = $args['reply_to'];
-		$this->_content = $args['content'];
-		$this->_to = $args['to'];
+		$this->_replyTo = Arr::getValue($args, 'reply_to', []);
+		$this->_content = Arr::getValue($args, 'content', '');
+		$this->_to = Arr::getValue($args, 'to', []);
 		$this->_emailFactory = Arr::getValue($args, 'factory', new EmailFactory());
 		$this->_errors = [];
+		$this->_sent = false;
 	}
 
 	/**
@@ -139,6 +140,8 @@ class Email
 		{
 			$message->send();
 		}
+
+		$this->_sent = true;
 	}
 
 	/**
@@ -148,23 +151,35 @@ class Email
 	 */
 	public function isValid()
 	{
-		$isValid = true;
+		$this->_validate();
+
+		return empty($this->getErrors());
+	}
+
+	/**
+	 * Validates email
+	 *
+	 * @return   void
+	 */
+	protected function _validate()
+	{
+		if ($this->_sent) return;
+
+		$this->_errors = [];
 
 		foreach (self::_getRequiredData() as $attribute)
 		{
 			if (empty($this->$attribute))
 			{
-				$isValid = false;
 				$this->_addNonEmptyError($attribute);
 			}
 		}
-
-		return $isValid;
 	}
 
 	/**
 	 * Adds empty attribute error
 	 *
+	 * @param    string   $attribute   Attribute name
 	 * @return   void
 	 */
 	protected function _addNonEmptyError($attribute)
@@ -192,7 +207,7 @@ class Email
 	 */
 	public function getErrors()
 	{
-		$this->isValid();
+		$this->_validate();
 
 		return $this->_errors;
 	}
@@ -204,10 +219,29 @@ class Email
 	 */
 	public function sentSuccessfully()
 	{
-		$failures = $this->_getMessage()->getFailures();
 		$isValid = $this->isValid();
+		$wasSent = $this->_sent;
+		$noFailures = !$this->_hadSendFailures();
 
-		return $isValid && empty($failures);
+		return $wasSent && $isValid && $noFailures;
+	}
+
+	/**
+	 * Indicates if any send failures occurred
+	 *
+	 * @return   bool
+	 */
+	protected function _hadSendFailures()
+	{
+		$failures = $this->_getMessage()->getFailures();
+		$failures = $failures ? $failures : [];
+
+		foreach ($failures as $failure)
+		{
+			$this->_addError($failure);
+		}
+
+		return !empty($failures);
 	}
 
 	/**
@@ -241,6 +275,36 @@ class Email
 	protected static function _getAttributeName($attribute)
 	{
 		return self::$_requiredData[$attribute];
+	}
+
+	/**
+	 * Title accessor
+	 *
+	 * @return   string
+	 */
+	public function getTitle()
+	{
+		return $this->_title;
+	}
+
+	/**
+	 * Reply to accessor
+	 *
+	 * @return   array
+	 */
+	public function getReplyTo()
+	{
+		return $this->_replyTo;
+	}
+
+	/**
+	 * Content accessor
+	 *
+	 * @return   string
+	 */
+	public function getContent()
+	{
+		return $this->_content;
 	}
 
 }

@@ -27,6 +27,11 @@ class VirtualCrudHelper extends CrudHelper
 		parent::__construct($args);
 	}
 
+	/**
+	 * Handles failed creation of a record
+	 *
+	 * @return   void
+	 */
 	public function failedCreate($record, $url = '/')
 	{
 		parent::failedCreate($record);

@@ -1,4 +1,10 @@
 
+var HUB = HUB || {}
+
+HUB.FORMS = HUB.FORMS || {}
+
+FORMS = HUB.FORMS
+
 $(document).ready(() => {
 
 	FORMS.$emailButton = FORMS.getEmailButton()

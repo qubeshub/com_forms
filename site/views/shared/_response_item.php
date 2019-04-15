@@ -19,6 +19,7 @@ $responseId = $response->get('id');
 $responseModified = $response->get('modified');
 $responseProgress = $response->requiredCompletionPercentage();
 $responseSubmitted = $response->get('submitted');
+$selectable = $this->selectable;
 $user = $response->getUser();
 $userId = $user->get('id');
 $usersName = $user->get('name');
@@ -26,9 +27,11 @@ $usersName = $user->get('name');
 
 <tr class="response-item">
 
-	<td>
-		<input type="checkbox" name="response_ids[]" value="<?php echo $responseId; ?>">
-	</td>
+	<?php	if ($selectable): ?>
+		<td>
+			<input type="checkbox" name="response_ids[]" value="<?php echo $responseId; ?>">
+		</td>
+	<?php	endif; ?>
 
 	<td>
 		<?php

@@ -10,10 +10,6 @@ defined('_HZEXEC_') or die();
 
 $this->css('formsAdminResponsesList');
 
-$this->js('formsAdminResponsesListSorting')
-	->js('formsAdminResponsesListCheckbox')
-	->js('formsAdminResponsesList');
-
 $checkboxesName = 'responses_ids[]';
 $columns = [
 	'ID' => 'id',
@@ -27,16 +23,20 @@ $columns = [
 ];
 $formId = $this->formId;
 $responses = $this->responses;
+$responsesSelectable = isset($this->selectable) ? $this->selectable : true;
 $sortingAction = $this->sortingAction;
 $sortingCriteria = $this->sortingCriteria;
 ?>
 
-<table class="response-list">
+<table id="response-list">
 	<thead>
 		<tr>
-			<td>
-				<input id="master-checkbox" type="checkbox" name="response_ids[]">
-			</td>
+
+			<?php	if ($responsesSelectable): ?>
+				<td>
+					<input id="master-checkbox" type="checkbox">
+				</td>
+			<?php	endif; ?>
 
 			<?php
 				$this->view('_sortable_column_headers', 'shared')
@@ -53,6 +53,7 @@ $sortingCriteria = $this->sortingCriteria;
 				$this->view('_response_item')
 					->set('checkboxName', $checkboxesName)
 					->set('response', $response)
+					->set('selectable', $responsesSelectable)
 					->display();
 			endforeach;
 		?>

@@ -14,7 +14,7 @@ $sortingAction = $this->sortingAction;
 $sortingCriteria = $this->sortingCriteria;
 
 if (count($responses) > 0):
-	$this->view('_response_list')
+	$this->view('_response_list', 'shared')
 		->set('formId', $formId)
 		->set('responses', $responses)
 		->set('sortingAction', $sortingAction)

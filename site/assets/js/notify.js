@@ -38,10 +38,19 @@ class Notify {
 	}
 
 	static displayNotification($notification) {
-		$('#content').append($notification)
+		this._getContentElement().append($notification)
 		setTimeout(() => {
 			$notification.hide()
 		}, 5000)
+	}
+
+	static _getContentElement() {
+		const contentIdentifier = 'content'
+		let $contentElement = $(`#${contentIdentifier}`)
+
+		$contentElement = $contentElement.length ? $contentElement : $(`.${contentIdentifier}`)
+
+		return $contentElement
 	}
 
 }

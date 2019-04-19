@@ -19,7 +19,7 @@ $decodedResponse = json_decode($userResponse);
 $responseObject = $decodedResponse ? $decodedResponse : (object) [];
 $selectedOptionsIds = get_object_vars($responseObject);
 
-if ($userResponse && isset($userResponse->$optionId))
+if ($userResponse && isset($selectedOptionsIds[$optionId]))
 {
 	$isSelected = true;
 }

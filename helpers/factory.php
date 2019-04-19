@@ -196,4 +196,82 @@ class Factory
 		}
 	}
 
+  /**
+   * Adds modified data if record data was changed
+   *
+   * @param    array   $newData   New records' data
+   * @return   array
+   */
+  protected function _addModifiedIfAltered($newData)
+  {
+    $recordIds = array_map(function($data) { return $data['id']; }, $newData);
+    $recordsById = $this->_getRecordsById($recordIds);
+    $augmentedData = [];
+
+    foreach ($newData as $recordData)
+    {
+      $id = $recordData['id'];
+
+      if ($this->_dataDiffers($recordData, $recordsById[$id]))
+      {
+        $recordData = $this->_addModified($recordData);
+      }
+
+      $augmentedData[] = $recordData;
+    }
+
+    return $augmentedData;
+  }
+
+  /**
+   * Determines if new data differs from record's persisted data
+   *
+   * @param    array    $newData   New data for record
+   * @param    object   $record    Record object
+   * @return   bool
+   */
+  protected function _dataDiffers($newData, $record)
+  {
+    foreach ($newData as $name => $value)
+    {
+      $dataDiffers = $record->get($name) != $value;
+
+      if ($dataDiffers) break ;
+    }
+
+    return $dataDiffers;
+  }
+
+  /**
+   * Queries for records with given IDs
+   *
+   * @param    array   $recordIds   Records' IDs
+   * @return   array
+   */
+  protected function _getRecordsById($recordIds)
+  {
+    $recordsById = $this->_modelClass->all()
+      ->whereIn('id', $recordIds)
+      ->rows()
+      ->raw();
+
+    return $recordsById;
+  }
+
+  /**
+   * Adds modified data
+   *
+   * @param    array   $recordData   Record's data
+   * @return   array
+   */
+  protected function _addModified($recordData)
+  {
+    $currentDatetime = Date::toSql();
+
+    $recordData['modified'] = $currentDatetime;
+    $recordData['modified_by'] = User::get('id');
+
+    return $recordData;
+  }
+
 }

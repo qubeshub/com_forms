@@ -95,4 +95,24 @@ class CrudBatchTest extends Basic
 		$this->assertEquals([1, 2], $failedDestroys);
 	}
 
+	public function testNewBatchGetSuccessfulSavesReturnsEmptyArray()
+	{
+		$crudBatch = new CrudBatch();
+
+		$successfulSaves = $crudBatch->getSuccessfulSaves();
+
+		$this->assertEquals([], $successfulSaves);
+	}
+
+	public function testBatchGetSuccessfulSavesReturnsSuccessfulSaves()
+	{
+		$crudBatch = new CrudBatch();
+		$crudBatch->addSuccessfulSave(1);
+		$crudBatch->addSuccessfulSave(2);
+
+		$successfulSaves = $crudBatch->getSuccessfulSaves();
+
+		$this->assertEquals([1, 2], $successfulSaves);
+	}
+
 }

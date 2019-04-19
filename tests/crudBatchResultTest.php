@@ -110,4 +110,23 @@ class CrudBatchResultTest extends Basic
 		$this->assertEquals(['Record 1' => ['a'], 'Record 2' => ['b']], $errors);
 	}
 
+	public function testGetSuccessfulSavesReturnsAllBatchesFailedSaves()
+	{
+		$batchA = $this->mock([
+			'class' => 'CrudBatch', 'methods' => ['getSuccessfulSaves' => [1]]
+		]);
+		$batchB = $this->mock([
+			'class' => 'CrudBatch', 'methods' => ['getSuccessfulSaves' => [2]]
+		]);
+		$batchC = $this->mock([
+			'class' => 'CrudBatch', 'methods' => ['getSuccessfulSaves' => [3, 4]]
+		]);
+		$batches = [$batchA, $batchB, $batchC];
+		$crudBatchResult = new CrudBatchResult(['batches' => $batches]);
+
+		$successfulSaves = $crudBatchResult->getSuccessfulSaves();
+
+		$this->assertEquals([1,2, 3, 4], $successfulSaves);
+	}
+
 }

@@ -100,4 +100,14 @@ class CrudBatch
 		return $this->_failedDestroys;
 	}
 
+	/**
+	 * Returns all models that were saved
+	 *
+	 * @return   array
+	 */
+	public function getSuccessfulSaves()
+	{
+		return $this->_successfulSaves;
+	}
+
 }

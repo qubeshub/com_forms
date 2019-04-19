@@ -94,7 +94,7 @@ class CrudBatchResult
 	/**
 	 * Returns all models that failed to be saved
 	 *
-	 * @return   bool
+	 * @return   array
 	 */
 	public function getFailedSaves()
 	{
@@ -108,7 +108,7 @@ class CrudBatchResult
 	/**
 	 * Returns all models that failed to be destroyed
 	 *
-	 * @return   bool
+	 * @return   array
 	 */
 	public function getFailedDestroys()
 	{
@@ -117,6 +117,20 @@ class CrudBatchResult
 		}, []);
 
 		return $failedDestroys;
+	}
+
+	/**
+	 * Returns all models that were successfully saved
+	 *
+	 * @return   array
+	 */
+	public function getSuccessfulSaves()
+	{
+		$successfulSaves = array_reduce($this->_batches, function($successfulSaves, $batch) {
+			return array_merge($successfulSaves, $batch->getSuccessfulSaves());
+		}, []);
+
+		return $successfulSaves;
 	}
 
 }

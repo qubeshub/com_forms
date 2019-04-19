@@ -58,7 +58,11 @@ class PageFieldsFactory extends Factory
 	 */
 	public function updatePagesFields($currentFields, $submittedData)
 	{
-		return parent::batchUpdate($currentFields, $submittedData);
+		$augmentedData = $this->_addModifiedIfAltered($submittedData);
+
+		$updateResult = parent::batchUpdate($currentFields, $augmentedData);
+
+		return $updateResult;
 	}
 
 }

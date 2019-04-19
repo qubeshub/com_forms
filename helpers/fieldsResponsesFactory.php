@@ -37,9 +37,11 @@ class FieldsResponsesFactory extends Factory
 	 */
 	public function updateFieldsResponses($currentResponses, $submittedResponsesData)
 	{
-    $parsedData = $this->_parseResponsesData($submittedResponsesData);
+		$parsedData = $this->_parseResponsesData($submittedResponsesData);
 
-		return parent::batchUpdate($currentResponses, $parsedData);
+		$augmentedData = $this->_addModifiedIfAltered($parsedData);
+
+		return parent::batchUpdate($currentResponses, $augmentedData);
 	}
 
 	/**

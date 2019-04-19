@@ -10,8 +10,10 @@ namespace Components\Forms\Helpers;
 $compnentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/factory.php";
+require_once "$componentPath/models/formPage.php";
 
 use Components\Forms\Helpers\Factory;
+use Components\Forms\Models\FormPage as Page;
 
 class FormPagesFactory extends Factory
 {
@@ -34,15 +36,17 @@ class FormPagesFactory extends Factory
 	/**
 	 * Updates form's associated prerequisites
 	 *
-	 * @param    object   $currentPages        Form's current pages
-	 * @param    array    $submittedPageData   Submitted pages' data
+	 * @param    object   $currentPages    Form's current pages
+	 * @param    array    $submittedData   Submitted pages' data
 	 * @return   object
 	 */
-	public function updateFormsPages($currentPages, $submittedPageData)
+	public function updateFormsPages($currentPages, $submittedData)
 	{
-		return parent::batchUpdate($currentPages, $submittedPageData);
+		$augmentedData = $this->_addModifiedIfAltered($submittedData);
+
+		$updateResult = parent::batchUpdate($currentPages, $augmentedData);
+
+		return $updateResult;
 	}
 
 }
-
-

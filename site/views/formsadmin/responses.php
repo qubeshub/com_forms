@@ -49,14 +49,16 @@ $this->view('_forms_breadcrumbs', 'shared')
 		</div>
 
 		<div class="col span12 omega list-actions">
-			<span id="email-respondents-button" class="list-action">
-				<?php
-					$this->view('_email_respondents_form')
-						->set('action', $responsesEmailUrl)
-						->set('formId', $formId)
-						->display();
-				?>
-			</span>
+			<?php if ($responsesCount > 0): ?>
+				<span id="email-respondents-button" class="list-action">
+					<?php
+						$this->view('_email_respondents_form')
+							->set('action', $responsesEmailUrl)
+							->set('formId', $formId)
+							->display();
+					?>
+				</span>
+			<?php endif; ?>
 		</div>
 
 		<div class="col span12 omega">
@@ -76,17 +78,19 @@ $this->view('_forms_breadcrumbs', 'shared')
 					->display();
 			?>
 
-			<div>
-				<?php
-					$this->view('_protected_link', 'shared')
-						->set('authMethod', 'canCurrentUserEditForm')
-						->set('authArgs', [$form])
-						->set('textKey', 'COM_FORMS_FIELDS_RESPONSES_EXPORT')
-						->set('urlFunction', 'formResponsesExportUrl')
-						->set('urlFunctionArgs', [$formId])
-						->display();
-				?>
-			</div>
+			<?php if ($responsesCount > 0): ?>
+				<div>
+					<?php
+						$this->view('_protected_link', 'shared')
+							->set('authMethod', 'canCurrentUserEditForm')
+							->set('authArgs', [$form])
+							->set('textKey', 'COM_FORMS_FIELDS_RESPONSES_EXPORT')
+							->set('urlFunction', 'formResponsesExportUrl')
+							->set('urlFunctionArgs', [$formId])
+							->display();
+					?>
+				</div>
+			<?php endif; ?>
 		</div>
 
 	</div>

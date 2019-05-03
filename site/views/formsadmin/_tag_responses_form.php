@@ -9,16 +9,16 @@
 defined('_HZEXEC_') or die();
 
 $action = $this->action;
-$emailButton = Lang::txt('COM_FORMS_HEADINGS_EMAIL_RESPONDENTS');
+$tagButton = Lang::txt('COM_FORMS_HEADINGS_TAG_RESPONSES');
 $formId = $this->formId;
 ?>
 
 
 <span>
-	<span class="fontcont">&#x2709; </span>
-	<?php echo $emailButton; ?>
+	<span class="fontcon">&#xf02b;</span>
+	<?php echo $tagButton; ?>
 </span>
 
-<form id="email-respondents-form" action="<?php echo $action; ?>">
+<form id="tag-responses-form" action="<?php echo $action; ?>">
 	<input type="hidden" name="form_id" value="<?php echo $formId; ?>">
 </form>

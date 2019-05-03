@@ -15,6 +15,7 @@ $replyToTip = Lang::txt('COM_FORMS_EMAIL_REPLY_TO_TIP');
 ?>
 
 <form id="hubForm" action="<?php echo $action; ?>">
+
 	<fieldset>
 		<label>
 			<?php echo Lang::txt('COM_FORMS_FIELDS_TITLE'); ?>

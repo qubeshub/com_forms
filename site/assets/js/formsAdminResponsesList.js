@@ -7,12 +7,12 @@ FORMS = HUB.FORMS
 
 $(document).ready(() => {
 
-	FORMS.$emailButton = FORMS.getEmailButton()
+	FORMS.$responseActionButtons = FORMS.getResponseActionButtons()
 	FORMS.$masterCheckbox = FORMS.getMasterCheckbox()
 	FORMS.$responsesList = FORMS.getResponsesList()
 
 	FORMS.registerCheckboxHandlers(FORMS.$masterCheckbox)
-	FORMS.registerEmailHandlers(FORMS.$emailButton)
+	FORMS.registerListActionHandlers(FORMS.$responseActionButtons)
 	FORMS.registerSortHandlers(FORMS.$responsesList)
 
 })

@@ -11,12 +11,13 @@ defined('_HZEXEC_') or die();
 $this->css('formsAdminResponses');
 
 $this->js('notify')
+	->js('formsAdminResponsesListActions')
 	->js('formsAdminResponsesListCheckbox')
-	->js('formsAdminResponsesListEmail')
 	->js('formsAdminResponsesListSorting')
 	->js('formsAdminResponsesList');
 
 $responsesEmailUrl = $this->responsesEmailUrl;
+$responsesTagsUrl = $this->responsesTagsUrl;
 $form = $this->form;
 $formId = $form->get('id');
 $formName = $form->get('name');
@@ -58,6 +59,15 @@ $this->view('_forms_breadcrumbs', 'shared')
 							->display();
 					?>
 				</span>
+
+				<span id="tag-responses-button" class="list-action">
+					<?php
+						$this->view('_tag_responses_form')
+							->set('action', $responsesTagsUrl)
+							->set('formId', $formId)
+							->display();
+					?>
+				</span>
 			<?php endif; ?>
 		</div>
 
@@ -79,7 +89,7 @@ $this->view('_forms_breadcrumbs', 'shared')
 			?>
 
 			<?php if ($responsesCount > 0): ?>
-				<div>
+				<span>
 					<?php
 						$this->view('_protected_link', 'shared')
 							->set('authMethod', 'canCurrentUserEditForm')
@@ -89,7 +99,7 @@ $this->view('_forms_breadcrumbs', 'shared')
 							->set('urlFunctionArgs', [$formId])
 							->display();
 					?>
-				</div>
+				</span>
 			<?php endif; ?>
 		</div>
 

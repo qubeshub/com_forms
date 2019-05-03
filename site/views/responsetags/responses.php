@@ -8,19 +8,15 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('respondentEmailsResponses');
+$this->css('responseTagsResponses');
 
-$this->js('formsAdminResponsesListSorting')
-	->js('respondentEmailsResponses');
-
-$email = $this->email;
 $form = $this->form;
 $formId = $form->get('id');
 $formName = $form->get('name');
 $hiddenFields = ['form_id' => $formId];
+$tagResponsesUrl = $this->tagResponsesUrl;
 $responses = $this->responses;
 $responseIds = $this->responseIds;
-$sendEmailUrl = $this->sendEmailUrl;
 $sortingAction = $this->sortingAction;
 $sortingCriteria = $this->sortingCriteria;
 
@@ -28,17 +24,17 @@ foreach ($responseIds as $id):
 	$hiddenFields["response_ids[$id]"] = $id;
 endforeach;
 
-$viewHeader = Lang::txt('COM_FORMS_HEADINGS_EMAIL_RESPONDENTS_FORM', $formName);
+$viewHeader = Lang::txt('COM_FORMS_HEADINGS_TAG_RESPONSES_FORM', $formName);
 
 $breadcrumbs = [
 	 $formName => ['formsDisplayUrl', [$formId]],
 	'Admin' => ['formsEditUrl', [$formId]],
-	'Email Respondents' => ['responsesEmailUrl', [$formId, $responseIds]]
+	'Tag Responses' => ['responsesTagsUrl', [$formId, $responseIds]]
 ];
 
 $this->view('_forms_breadcrumbs', 'shared')
 	->set('breadcrumbs', $breadcrumbs)
-	->set('page', "Email Respondents - $formName")
+	->set('page', "Tag Responses - $formName")
 	->display();
 ?>
 
@@ -51,9 +47,8 @@ $this->view('_forms_breadcrumbs', 'shared')
 
 		<div class="col span12 omega">
 			<?php
-				$this->view('_email_form', 'shared')
-					->set('action', $sendEmailUrl)
-					->set('email', $email)
+				$this->view('_tagging_form', 'shared')
+					->set('action', $tagResponsesUrl)
 					->set('hiddenFields', $hiddenFields)
 					->display();
 			?>

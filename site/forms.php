@@ -18,6 +18,7 @@ $controllerNameMap = [
 	'emailRespondents' => 'respondentEmails',
 	'fill' => 'fieldResponses',
 	'forms' => 'forms',
+	'tagResponses' => 'responseTags',
 	'pages' => 'formPages',
 	'queries' => 'queries',
 	'responses' => 'formResponses',

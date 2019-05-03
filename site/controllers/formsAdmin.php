@@ -88,9 +88,11 @@ class FormsAdmin extends SiteController
 		}, $form->getResponses()->rows()->toArray());
 		$responseListUrl = $this->_routes->formsResponseList($formId);
 		$responsesEmailUrl = $this->_routes->responsesEmailUrl($formId, $responseIds);
+		$responsesTagsUrl = $this->_routes->responsesTagsUrl($formId, $responseIds);
 
 		$this->view
 			->set('responsesEmailUrl', $responsesEmailUrl)
+			->set('responsesTagsUrl', $responsesTagsUrl)
 			->set('form', $form)
 			->set('responseListUrl', $responseListUrl)
 			->set('responses', $responses)

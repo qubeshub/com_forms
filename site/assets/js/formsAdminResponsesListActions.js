@@ -5,27 +5,32 @@ HUB.FORMS = HUB.FORMS || {}
 
 FORMS = HUB.FORMS
 
-FORMS.emailButtonId = 'email-respondents-button'
-FORMS.emailFormId = 'email-respondents-form'
+FORMS.listActionsClass = 'list-action'
 FORMS.responseIdFieldsName = 'response_ids[]'
 
-FORMS.getEmailButton = () => {
-	return $(`#${FORMS.emailButtonId}`)
+FORMS.getResponseActionButtons = () => {
+	return $(`.${FORMS.listActionsClass}`)
 }
 
-FORMS.registerEmailHandlers = ($emailButton) => {
-	$emailButton.on('click', FORMS.submitEmailRespondentsForm)
+FORMS.registerListActionHandlers = ($listActions) => {
+	$listActions.on('click', FORMS.submitActionForm)
 }
 
-FORMS.submitEmailRespondentsForm = () => {
-	const $form = FORMS.getEmailRespondentsForm()
+FORMS.submitActionForm = (e) => {
+	const $form = FORMS.getActionForm(e.target)
 
 	if (FORMS.responsesSelected()) {
-		FORMS.populateEmailRespondentForm($form)
+		FORMS.populateActionForm($form)
 		$form.submit()
 	} else {
 		FORMS.adviseUserToSelectResponses()
 	}
+}
+
+FORMS.getActionForm = (eventTarget) => {
+	const $actionSpan = $(eventTarget).closest(`.${FORMS.listActionsClass}`)
+
+	return $actionSpan.find('form')
 }
 
 FORMS.responsesSelected = () => {
@@ -36,11 +41,7 @@ FORMS.adviseUserToSelectResponses = () => {
 	FORMS.Notify['warn']('Select at least one response from the list below')
 }
 
-FORMS.getEmailRespondentsForm = () => {
-	return $(`#${FORMS.emailFormId}`)
-}
-
-FORMS.populateEmailRespondentForm = ($form) => {
+FORMS.populateActionForm = ($form) => {
 	const selectedResponsesIds = FORMS.getSelectedResponsesIds()
 
 	FORMS.addSelectedResponsesIds($form, selectedResponsesIds)

@@ -510,4 +510,35 @@ class FormsRouter extends ComponentRouter
 		return $url;
 	}
 
+	/**
+	 * Generates URL to respondent tagging page
+	 *
+	 * @param    int        $formId        Form's ID
+	 * @param    array      $responseIds   Responses' IDs
+	 * @return   string
+	 */
+	public function responsesTagsUrl($formId, $responseIds)
+	{
+		$segments = ['tagResponses', 'responses'];
+		$params = ['form_id' => $formId, 'response_ids' => $responseIds];
+
+		$url = $this->_generateComponentUrl($segments, $params);
+
+		return $url;
+	}
+
+	/**
+	 * Generates URL to response tagging action
+	 *
+	 * @return   string
+	 */
+	public function tagResponsesUrl()
+	{
+		$segments = ['tagResponses', 'tag'];
+
+		$url = $this->_generateComponentUrl($segments);
+
+		return $url;
+	}
+
 }

@@ -362,4 +362,29 @@ class FormsRouterTest extends Basic
 		$this->assertEquals($expectedUrl, $generatedUrl);
   }
 
+  public function testFormResponsesTaggingUrl()
+  {
+		$formId = 65;
+		$responseIds = [1, 2];
+		$queryString = http_build_query([
+			'form_id' => $formId, 'response_ids' => $responseIds
+		]);
+		$expectedUrl = "/forms/tagResponses/responses?$queryString";
+		$routes = new FormsRouter();
+
+		$generatedUrl = $routes->responsesTagsUrl($formId, $responseIds);
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+  }
+
+  public function testResponseTaggingUrl()
+  {
+		$expectedUrl = "/forms/tagResponses/tag";
+		$routes = new FormsRouter();
+
+		$generatedUrl = $routes->tagResponsesUrl();
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+  }
+
 }

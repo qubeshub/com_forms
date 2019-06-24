@@ -25,7 +25,7 @@ use Components\Forms\Helpers\Params;
 use Components\Forms\Helpers\RespondentsHelper;
 use Components\Forms\Helpers\FormsRouter as RoutesHelper;
 use Components\Forms\Helpers\SortableResponses;
-use Components\Forms\Helpers\VirtualCrudHelper as VirtualCrudHelper;
+use Components\Forms\Helpers\VirtualCrudHelper;
 use Components\Forms\Models\Form;
 use Hubzero\Component\SiteController;
 
@@ -79,7 +79,7 @@ class RespondentEmails extends SiteController
 		$this->_bouncer->redirectUnlessCanEditForm($form);
 		$this->_bouncer->redirectUnlessAuthorized('core.create');
 
-		$email = new Email();
+		$email = $email ? $email : new Email();
 		$responseIds = $this->_params->getVar('response_ids');
 		$responses = $form->getResponses()
 			->whereIn('id', $responseIds);

@@ -54,6 +54,24 @@ class AddTagsResult
 	}
 
 	/**
+	 * Returns records tagging error
+	 *
+	 * @return   array
+	 */
+	public function getErrors()
+	{
+		$errors = [];
+		$failures = $this->getFailures();
+
+		foreach ($failures as $failure)
+		{
+			$this->_addTaggingError($failure, $errors);
+		}
+
+		return $errors;
+	}
+
+	/**
 	 * Returns failures
 	 *
 	 * @return   array
@@ -61,6 +79,19 @@ class AddTagsResult
 	public function getFailures()
 	{
 		return $this->_failures;
+	}
+
+	/**
+	 * Adds record's tagging error to collection of all errors
+	 *
+	 * @param   object   $failure   Tagging failure
+	 * @param   array    $errors    Collection of all records' errors
+	 */
+	protected function _addTaggingError($failure, &$errors)
+	{
+		$record = $failure->record;
+
+		$errors[$record->id] = $failure->errors;
 	}
 
 	/**

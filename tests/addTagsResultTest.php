@@ -87,4 +87,35 @@ class AddTagsResultTest extends Basic
 		$this->assertEquals(true, $succeeded);
 	}
 
+	public function testGetErrorsReturnsEmptyArrayIfNoErrors()
+	{
+		$result = new AddTagsResult();
+
+		$result->addSuccess(new stdClass);
+		$errors = $result->getErrors();
+
+		$this->assertEquals([], $errors);
+	}
+
+	public function testGetErrorsReturnsErrorsWhenPresent()
+	{
+		$result = new AddTagsResult();
+		$recordA = $this->mock(['class' => 'Relational']);
+		$recordA->id = 4;
+		$recordA->errors = ['a'];
+		$recordB = $this->mock(['class' => 'Relational']);
+		$recordB->id = 3;
+		$recordB->errors = ['b'];
+		$expected = [
+			$recordA->id => $recordA->errors,
+			$recordB->id => $recordB->errors
+		];
+
+		$result->addFailure($recordA, $recordA->errors);
+		$result->addFailure($recordB, $recordB->errors);
+		$errors = $result->getErrors();
+
+		$this->assertEquals($expected, $errors);
+	}
+
 }

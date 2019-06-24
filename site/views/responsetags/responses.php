@@ -19,6 +19,7 @@ $responses = $this->responses;
 $responseIds = $this->responseIds;
 $sortingAction = $this->sortingAction;
 $sortingCriteria = $this->sortingCriteria;
+$tagString = $this->tagString;
 
 foreach ($responseIds as $id):
 	$hiddenFields["response_ids[$id]"] = $id;
@@ -50,6 +51,7 @@ $this->view('_forms_breadcrumbs', 'shared')
 				$this->view('_tagging_form', 'shared')
 					->set('action', $tagResponsesUrl)
 					->set('hiddenFields', $hiddenFields)
+					->set('tagString', $tagString)
 					->display();
 			?>
 		</div>

@@ -14,13 +14,16 @@ require_once "$componentPath/helpers/pageBouncer.php";
 require_once "$componentPath/helpers/params.php";
 require_once "$componentPath/helpers/sortableResponses.php";
 require_once "$componentPath/helpers/tagsHelper.php";
+require_once "$componentPath/helpers/virtualCrudHelper.php";
 require_once "$componentPath/models/form.php";
 
+use Components\Forms\Helpers\CrudHelper as BaseCrudHelper;
 use Components\Forms\Helpers\PageBouncer;
 use Components\Forms\Helpers\Params;
 use Components\Forms\Helpers\FormsRouter as RoutesHelper;
 use Components\Forms\Helpers\SortableResponses;
 use Components\Forms\Helpers\TagsHelper;
+use Components\Forms\Helpers\VirtualCrudHelper;
 use Components\Forms\Models\Form;
 use Hubzero\Component\SiteController;
 
@@ -44,6 +47,9 @@ class ResponseTags extends SiteController
 	 */
 	public function execute()
 	{
+		$this->_bCrudHelper = new BaseCrudHelper([
+			'errorSummary' => Lang::txt('COM_FORMS_NOTICES_RESPONSES_LABEL_ERROR_SUMMARY')
+		]);
 		$this->_bouncer = new PageBouncer([
 			'component' => $this->_option
 		]);
@@ -52,6 +58,7 @@ class ResponseTags extends SiteController
 		);
 		$this->_routes = new RoutesHelper();
 		$this->_tagsHelper = new TagsHelper();
+		$this->_vCrudHelper = new VirtualCrudHelper([]);
 
 		parent::execute();
 	}
@@ -61,7 +68,7 @@ class ResponseTags extends SiteController
 	 *
 	 * @return   void
 	 */
-  public function responsesTask()
+  public function responsesTask($tagString = '')
   {
 		$formId = $this->_params->getVar('form_id');
 		$form = Form::oneOrFail($formId);
@@ -73,14 +80,15 @@ class ResponseTags extends SiteController
 		$responses = $form->getResponses()
 			->whereIn('id', $responseIds);
 		$responses = $this->_sortResponses($responses);
-		$tagResponsesUrl = $this->_routes->tagResponsesUrl();
 		$sortingAction = $this->_routes->responsesTagsUrl($formId, $responseIds);
+		$tagResponsesUrl = $this->_routes->tagResponsesUrl();
 
 		$this->view
 			->set('form', $form)
 			->set('responses', $responses)
 			->set('responseIds', $responseIds)
 			->set('tagResponsesUrl', $tagResponsesUrl)
+			->set('tagString', $tagString)
 			->set('sortingAction', $sortingAction)
 			->display();
   }
@@ -129,17 +137,15 @@ class ResponseTags extends SiteController
 
 		if ($taggingResult->succeeded())
 		{
-ddie('success');
-			//$emailSentMessage = Lang::txt('COM_FORMS_EMAIL_SENT');
-			//$responseList = $this->_routes->formsResponseList($formId);
-			//$this->_vCrudHelper->successfulCreate($responseList, $emailSentMessage);
+			$labeledMessage = Lang::txt('COM_FORMS_NOTICES_RESPONSES_LABELED');
+			$responseList = $this->_routes->formsResponseList($formId);
+			$this->_vCrudHelper->successfulCreate($responseList, $labeledMessage);
 		}
 		else
 		{
-ddie('failure');
-			//$this->_bCrudHelper->failedCreate($email);
-			//$this->setView('respondentemails', 'responses');
-			//$this->responsesTask($email);
+			$this->_bCrudHelper->failedCreate($taggingResult);
+			$this->setView('responsetags', 'responses');
+			$this->responsesTask($tagString);
 		}
 	}
 

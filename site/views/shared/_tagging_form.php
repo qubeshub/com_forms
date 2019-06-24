@@ -10,8 +10,9 @@ defined('_HZEXEC_') or die();
 
 $action = $this->action;
 $hiddenFields = isset($this->hiddenFields) ? $this->hiddenFields : [];
+$tagString = $this->tagString;
 
-$autocompleter = Event::trigger('hubzero.onGetMultiEntry', [[]]);
+$autocompleter = Event::trigger('hubzero.onGetMultiEntry', [[4 => $tagString]]);
 ?>
 
 <form id="hubForm" action="<?php echo $action; ?>">

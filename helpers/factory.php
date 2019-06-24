@@ -211,8 +211,9 @@ class Factory
     foreach ($newData as $recordData)
     {
       $id = $recordData['id'];
+			$record = isset($recordsById[$id]) ? $recordsById[$id] : null;
 
-      if ($this->_dataDiffers($recordData, $recordsById[$id]))
+      if ($record && $this->_dataDiffers($recordData, $record))
       {
         $recordData = $this->_addModified($recordData);
       }

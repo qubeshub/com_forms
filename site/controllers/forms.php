@@ -162,7 +162,7 @@ class Forms extends SiteController
 	 *
 	 * @return   void
 	 */
-	public function editTask($form = false)
+	public function manageTask($form = false)
 	{
 		$this->bouncer->redirectUnlessAuthorized('core.create');
 

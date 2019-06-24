@@ -63,7 +63,7 @@ class FormsRouter extends ComponentRouter
 	 */
 	public function formsEditUrl($formId)
 	{
-		$segments = ['forms', $formId, 'edit'];
+		$segments = ['forms', $formId, 'manage'];
 
 		$url = $this->_generateComponentUrl($segments);
 
@@ -405,14 +405,14 @@ class FormsRouter extends ComponentRouter
 	}
 
 	/**
-	 * Generates URL to admin form response review page
+	 * Generates URL to response feed page
 	 *
 	 * @param    int      $responseId   Given response's ID
 	 * @return   string
 	 */
-	public function adminResponseReviewUrl($responseId)
+	public function responseFeedUrl($responseId)
 	{
-		$segments = ['admin', 'response'];
+		$segments = ['admin', 'feed'];
 		$params = ['response_id' => $responseId];
 
 		$url = $this->_generateComponentUrl($segments, $params);

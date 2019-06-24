@@ -18,11 +18,11 @@ $submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_UPDATE_FORM');
 
 $breadcrumbs = [
 	 $formName => ['formsDisplayUrl', [$formId]],
-	'Edit' => ['formsEditUrl', [$formId]]
+	'Manage' => ['formsEditUrl', [$formId]]
 ];
 $this->view('_forms_breadcrumbs', 'shared')
 	->set('breadcrumbs', $breadcrumbs)
-	->set('page', 'Edit Form')
+	->set('page', Lang::txt('COM_FORMS_FIELDS_MANAGE', $formName))
 	->display();
 ?>
 

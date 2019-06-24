@@ -41,7 +41,7 @@ class FormsRouterTest extends Basic
 	{
 		$routes = new FormsRouter();
 		$testId = 99;
-		$expectedUrl = "/forms/forms/$testId/edit";
+		$expectedUrl = "/forms/forms/$testId/manage";
 
 		$generatedUrl = $routes->formsEditUrl($testId);
 
@@ -295,13 +295,13 @@ class FormsRouterTest extends Basic
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
 
-	public function testAdminResponseReviewUrlReturnsCorrectUrl()
+	public function testResponseFeedUrlReturnsCorrectUrl()
 	{
 		$responseId = 1;
-		$expectedUrl = "/forms/admin/response?response_id=$responseId";
+		$expectedUrl = "/forms/admin/feed?response_id=$responseId";
 		$routes = new FormsRouter();
 
-		$generatedUrl = $routes->adminResponseReviewUrl($responseId);
+		$generatedUrl = $routes->responseFeedUrl($responseId);
 
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}

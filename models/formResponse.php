@@ -8,9 +8,11 @@
 namespace Components\Forms\Models;
 
 $componentPath = Component::path('com_forms');
+$tagComponentPath = Component::path('com_tags');
 
 require_once "$componentPath/helpers/relationalQueryHelper.php";
 require_once "$componentPath/models/fieldResponse.php";
+require_once "$tagComponentPath/models/tag.php";
 
 use Components\Forms\Helpers\RelationalQueryHelper;
 use Hubzero\Database\Relational;
@@ -20,6 +22,7 @@ class FormResponse extends Relational
 
 	static protected $_fieldResponseClass = 'Components\Forms\Models\FieldResponse';
 	static protected $_formClass = 'Components\Forms\Models\Form';
+	static protected $_tagClass = 'Components\Tags\Models\Tag';
 
 	/**
 	 * Records table
@@ -223,6 +226,74 @@ class FormResponse extends Relational
 		$reviewerId = $this->get('reviewed_by');
 
 		return User::oneOrNew($reviewerId);
+	}
+
+	/**
+	 * Returns string containing response's tag's unaltered names
+	 *
+	 * @return   string
+	 */
+	public function getTagString()
+	{
+		$rawTags = $this->_getRawTags();
+
+		$tagString = join($rawTags, ',');
+
+		return $tagString;
+	}
+
+	/**
+	 * Returns response's tags unaltered name
+	 *
+	 * @return   array
+	 */
+	protected function _getRawTags()
+	{
+		$tagsData = $this->_getTagsData();
+
+		$rawTags = array_map(function($tagData) {
+			return $tagData['raw_tag'];
+		}, $tagsData);
+
+		return $rawTags;
+	}
+
+	/**
+	 * Returns response's tag's data
+	 *
+	 * @return   array
+	 */
+	protected function _getTagsData()
+	{
+		$tagsData = $this->getTags()->rows()->toArray();
+
+		return $tagsData;
+	}
+
+	/**
+	 * Gets associated tags
+	 *
+	 * @return   object
+	 */
+	public function getTags()
+	{
+		$tagClass = self::$_tagClass;
+		$associativeTable = '#__tags_object';
+		$primaryKey = 'objectid';
+		$foreignKey = 'tagid';
+
+		$tagsAssociations = $this->manyToMany(
+			$tagClass,
+			$associativeTable,
+			$primaryKey,
+			$foreignKey
+		);
+		$responsesTags = $tagsAssociations->whereEquals(
+			'#__tags_object.tbl',
+			'forms_form_responses'
+		);
+
+		return $responsesTags;
 	}
 
 }

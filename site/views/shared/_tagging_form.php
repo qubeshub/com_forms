@@ -11,11 +11,13 @@ defined('_HZEXEC_') or die();
 $action = $this->action;
 $hiddenFields = isset($this->hiddenFields) ? $this->hiddenFields : [];
 $tagString = $this->tagString;
+$isHubForm = isset($this->isHubForm) ? $this->isHubForm : true;
+$id = $isHubForm ? 'hubForm' : '';
 
 $autocompleter = Event::trigger('hubzero.onGetMultiEntry', [[4 => $tagString]]);
 ?>
 
-<form id="hubForm" action="<?php echo $action; ?>">
+<form id="<?php echo $id; ?>" action="<?php echo $action; ?>">
 
 	<fieldset>
 
@@ -26,7 +28,7 @@ $autocompleter = Event::trigger('hubzero.onGetMultiEntry', [[4 => $tagString]]);
 		?>
 
 		<input type="submit" class="btn btn-success"
-			value="<?php echo Lang::txt('COM_FORMS_FIELDS_VALUES_TAG_RESPONSES'); ?>">
+			value="<?php echo Lang::txt('COM_FORMS_FIELDS_VALUES_SAVE_TAGS'); ?>">
 	</fieldset>
 
 	<span>

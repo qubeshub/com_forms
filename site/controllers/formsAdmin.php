@@ -42,7 +42,9 @@ class FormsAdmin extends SiteController
 	 * @var  array
 	 */
 	protected static $_paramWhitelist = [
-		'form_id'
+		'form_id',
+		'response_id',
+		'tag_string'
 	];
 
 	/**
@@ -68,7 +70,7 @@ class FormsAdmin extends SiteController
 	}
 
 	/**
-	 * Renders list of responses for given form
+	 * Renders users' responses for given form
 	 *
 	 * @return   void
 	 */
@@ -119,11 +121,11 @@ class FormsAdmin extends SiteController
 	}
 
 	/**
-	 * Renders given form response
+	 * Renders user's responses to form's fields
 	 *
 	 * @return   void
 	 */
-	public function responseTask()
+	public function fieldResponsesTask()
 	{
 		$this->_bouncer->redirectUnlessAuthorized('core.create');
 
@@ -174,7 +176,7 @@ class FormsAdmin extends SiteController
 		}
 		else
 		{
-			$forwardingUrl = $this->_routes->adminResponseReviewUrl($responseId);
+			$forwardingUrl = $this->_routes->responseFeedUrl($responseId);
 			$message = Lang::txt('The issues below prevented the response from being udpated.');
 			$this->_crudHelper->failedBatchUpdate($forwardingUrl, $response, $message);
 		}
@@ -218,6 +220,32 @@ class FormsAdmin extends SiteController
 		$server->acceptranges(false);
 
 		return $server->serve();
+	}
+
+	/**
+	 * Renders response's feed
+	 *
+	 * @return   void
+	 */
+	public function feedTask()
+	{
+		$this->_bouncer->redirectUnlessAuthorized('core.create');
+
+		$responseId = $this->_params->getInt('response_id');
+		$response = FormResponse::oneOrFail($responseId);
+		$form = $response->getForm();
+		$tagUpdateUrl = $this->_routes->updateResponsesTagsUrl();
+
+		$currentTagString = $response->getTagString();
+		$receivedTagString = $this->_params->getString('tag_string');
+		$tagString = $receivedTagString ? $receivedTagString : $currentTagString;
+
+		$this->view
+			->set('form', $form)
+			->set('response', $response)
+			->set('tagString', $tagString)
+			->set('tagUpdateUrl', $tagUpdateUrl)
+			->display();
 	}
 
 }

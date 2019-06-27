@@ -571,7 +571,7 @@ class FormsRouter extends ComponentRouter
 	 */
 	public function updateResponsesTagsUrl()
 	{
-		$segments = ['tagResponses', 'updateOneResponse'];
+		$segments = ['tagResponses', 'updateResponseTags'];
 
 		$url = $this->_generateComponentUrl($segments);
 

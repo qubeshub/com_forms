@@ -400,7 +400,7 @@ class FormsRouterTest extends Basic
 
   public function testupdateResponsesTagsUrl()
 	{
-		$expectedUrl = "/forms/tagResponses/updateOneResponse";
+		$expectedUrl = "/forms/tagResponses/updateResponseTags";
 		$routes = new FormsRouter();
 
 		$generatedUrl = $routes->updateResponsesTagsUrl();

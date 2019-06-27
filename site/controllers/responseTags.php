@@ -58,7 +58,9 @@ class ResponseTags extends SiteController
 		);
 		$this->_routes = new RoutesHelper();
 		$this->_tagsHelper = new TagsHelper();
-		$this->_vCrudHelper = new VirtualCrudHelper([]);
+		$this->_vCrudHelper = new VirtualCrudHelper([
+			'errorSummary' => Lang::txt('COM_FORMS_NOTICES_TAGS_UPDATE_ERROR')
+		]);
 
 		parent::execute();
 	}
@@ -146,6 +148,42 @@ class ResponseTags extends SiteController
 			$this->_bCrudHelper->failedCreate($taggingResult);
 			$this->setView('responsetags', 'responses');
 			$this->responsesTask($tagString);
+		}
+	}
+
+	/**
+	 * Updates given responses tags
+	 *
+	 * @return void
+	 */
+	public function updateResponseTagsTask()
+	{
+		$formId = $this->_params->getVar('form_id');
+		$form = Form::oneOrFail($formId);
+
+		$this->_bouncer->redirectUnlessCanEditForm($form);
+		$this->_bouncer->redirectUnlessAuthorized('core.create');
+
+		$responseId = $this->_params->get('response_id');
+		$response = $form->getResponses()
+			->whereEquals('id', $responseId);
+		$taggerId = User::get('id');
+		$tagString = $this->_params->get('tags');
+
+		$taggingResult = $this->_tagsHelper->updateTags(
+			$response, $tagString, $taggerId
+		);
+
+		if ($taggingResult->succeeded())
+		{
+			$feedUrl = $this->_routes->responseFeedUrl($responseId);
+			$successMessage = Lang::txt('COM_FORMS_NOTICES_TAGS_UPDATE_SUCCESS');
+			$this->_vCrudHelper->successfulCreate($feedUrl, $successMessage);
+		}
+		else
+		{
+			$feedUrl = $this->_routes->responseFeedUrl($responseId, $tagString);
+			$this->_vCrudHelper->failedCreate($taggingResult, $feedUrl);
 		}
 	}
 

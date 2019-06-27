@@ -37,7 +37,7 @@ $usersName = $user->get('name');
 		<?php
 			$this->view('_link', 'shared')
 				->set('content', $responseId)
-				->set('urlFunction', 'adminResponseReviewUrl')
+				->set('urlFunction', 'responseFeedUrl')
 				->set('urlFunctionArgs', [$responseId])
 				->display();
 		?>

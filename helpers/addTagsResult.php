@@ -54,7 +54,7 @@ class AddTagsResult
 	}
 
 	/**
-	 * Returns records tagging error
+	 * Returns records' tagging errors
 	 *
 	 * @return   array
 	 */
@@ -65,7 +65,7 @@ class AddTagsResult
 
 		foreach ($failures as $failure)
 		{
-			$this->_addTaggingError($failure, $errors);
+			$this->_collectAddTagErrors($failure, $errors);
 		}
 
 		return $errors;
@@ -87,7 +87,7 @@ class AddTagsResult
 	 * @param   object   $failure   Tagging failure
 	 * @param   array    $errors    Collection of all records' errors
 	 */
-	protected function _addTaggingError($failure, &$errors)
+	protected function _collectAddTagErrors($failure, &$errors)
 	{
 		$record = $failure->record;
 
@@ -117,17 +117,6 @@ class AddTagsResult
 	public function getSuccesses()
 	{
 		return $this->_successes;
-	}
-
-	/**
-	 * Instantiates AddTagsResult object
-	 *
-	 * @param    array    $args   Instantiation state
-	 * @return   object
-	 */
-	public static function one($args = [])
-	{
-		return new self($args);
 	}
 
 }

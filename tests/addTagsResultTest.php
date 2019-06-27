@@ -13,22 +13,13 @@ require_once "$componentPath/helpers/addTagsResult.php";
 require_once "$componentPath/tests/helpers/canMock.php";
 
 use Hubzero\Test\Basic;
-use Components\Forms\Helpers\AddTagsResult;
+use Components\Forms\Helpers\AddTagsResult as Result;
 use Components\Forms\Tests\Traits\canMock;
 use stdClass;
 
 class AddTagsResultTest extends Basic
 {
 	use canMock;
-
-	public function testOneReturnsAnInstance()
-	{
-		$result = AddTagsResult::one();
-
-		$resultClass = get_class($result);
-
-		$this->assertEquals('Components\Forms\Helpers\AddTagsResult', $resultClass);
-	}
 
 	public function testAddFailureAddsFailureObject()
 	{
@@ -37,7 +28,7 @@ class AddTagsResultTest extends Basic
 		$expectedObject = new stdClass;
 		$expectedObject->record = $record;
 		$expectedObject->errors = $errors;
-		$result = new AddTagsResult();
+		$result = new Result();
 
 		$result->addFailure($record, $errors);
 		$failures = $result->getFailures();
@@ -50,7 +41,7 @@ class AddTagsResultTest extends Basic
 		$record = $this->mock(['class' => 'Relational']);
 		$expectedObject = new stdClass;
 		$expectedObject->record = $record;
-		$result = new AddTagsResult();
+		$result = new Result();
 
 		$result->addSuccess($record);
 		$successes = $result->getSuccesses();
@@ -60,7 +51,7 @@ class AddTagsResultTest extends Basic
 
 	public function testSucceededIsFalseIfNoTagsAdded()
 	{
-		$result = new AddTagsResult();
+		$result = new Result();
 
 		$succeeded = $result->succeeded();
 
@@ -69,7 +60,7 @@ class AddTagsResultTest extends Basic
 
 	public function testSucceededIsFalseIfFailures()
 	{
-		$result = new AddTagsResult();
+		$result = new Result();
 
 		$result->addFailure(new stdClass, []);
 		$succeeded = $result->succeeded();
@@ -79,7 +70,7 @@ class AddTagsResultTest extends Basic
 
 	public function testSucceededIsTrueIfTagsAddedWithoutFailures()
 	{
-		$result = new AddTagsResult();
+		$result = new Result();
 
 		$result->addSuccess(new stdClass);
 		$succeeded = $result->succeeded();
@@ -89,7 +80,7 @@ class AddTagsResultTest extends Basic
 
 	public function testGetErrorsReturnsEmptyArrayIfNoErrors()
 	{
-		$result = new AddTagsResult();
+		$result = new Result();
 
 		$result->addSuccess(new stdClass);
 		$errors = $result->getErrors();
@@ -99,7 +90,7 @@ class AddTagsResultTest extends Basic
 
 	public function testGetErrorsReturnsErrorsWhenPresent()
 	{
-		$result = new AddTagsResult();
+		$result = new Result();
 		$recordA = $this->mock(['class' => 'Relational']);
 		$recordA->id = 4;
 		$recordA->errors = ['a'];

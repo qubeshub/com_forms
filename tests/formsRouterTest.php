@@ -298,10 +298,10 @@ class FormsRouterTest extends Basic
 	public function testResponseFeedUrlReturnsCorrectUrl()
 	{
 		$responseId = 1;
-		$expectedUrl = "/forms/admin/feed?response_id=$responseId";
+		$expectedUrl = "/forms/admin/feed?response_id=$responseId&tag_string=a%2Cb%2Cc";
 		$routes = new FormsRouter();
 
-		$generatedUrl = $routes->responseFeedUrl($responseId);
+		$generatedUrl = $routes->responseFeedUrl($responseId, 'a,b,c');
 
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
@@ -386,5 +386,26 @@ class FormsRouterTest extends Basic
 
 		$this->assertEquals($expectedUrl, $generatedUrl);
   }
+
+  public function testUserFieldResponsesUrl()
+	{
+		$responseId = 8;
+		$expectedUrl = "/forms/admin/fieldresponses?response_id=$responseId";
+		$routes = new FormsRouter();
+
+		$generatedUrl = $routes->userFieldResponsesUrl($responseId);
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
+  public function testupdateResponsesTagsUrl()
+	{
+		$expectedUrl = "/forms/tagResponses/updateOneResponse";
+		$routes = new FormsRouter();
+
+		$generatedUrl = $routes->updateResponsesTagsUrl();
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
 
 }

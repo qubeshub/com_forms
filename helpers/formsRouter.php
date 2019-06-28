@@ -535,13 +535,13 @@ class FormsRouter extends ComponentRouter
 	}
 
 	/**
-	 * Generates URL to response tagging action
+	 * Generates URL to responses tagging action
 	 *
 	 * @return   string
 	 */
 	public function tagResponsesUrl()
 	{
-		$segments = ['tagResponses', 'tag'];
+		$segments = ['tagResponses', 'addToManyResponses'];
 
 		$url = $this->_generateComponentUrl($segments);
 

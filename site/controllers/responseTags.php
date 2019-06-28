@@ -119,7 +119,7 @@ class ResponseTags extends SiteController
 	 *
 	 * @return   void
 	 */
-	public function tagTask()
+	public function addToManyResponsesTask()
 	{
 		$formId = $this->_params->getVar('form_id');
 		$form = Form::oneOrFail($formId);

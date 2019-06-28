@@ -379,7 +379,7 @@ class FormsRouterTest extends Basic
 
   public function testResponseTaggingUrl()
   {
-		$expectedUrl = "/forms/tagResponses/tag";
+		$expectedUrl = "/forms/tagResponses/addToManyResponses";
 		$routes = new FormsRouter();
 
 		$generatedUrl = $routes->tagResponsesUrl();

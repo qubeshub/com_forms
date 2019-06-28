@@ -23,7 +23,7 @@ elseif ($submissionDate = $response->get('submitted')):
 elseif ($isClosed):
 	$statusMessage = Lang::txt('COM_FORMS_RESPONSE_STATUS_REVIEW');
 elseif ($form->get('disabled')):
-	$statusMessage = Lang::txt('COM_FORMS_NOTICES_FORM_RESPONSE_WAITING');
+	$statusMessage = Lang::txt('COM_FORMS_NOTICES_FORM_RESPONSE_DISABLED');
 elseif (!$isOpen):
 	$statusMessage = Lang::txt('COM_FORMS_NOTICES_FORM_RESPONSE_WAITING');
 elseif ($response->isNew()):

@@ -13,21 +13,25 @@ $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/comFormsPageBouncer.php";
 require_once "$componentPath/helpers/formPageElementDecorator.php";
+require_once "$componentPath/helpers/formsAuth.php";
 require_once "$componentPath/helpers/formsRouter.php";
 require_once "$componentPath/helpers/params.php";
 require_once "$componentPath/helpers/relationalCrudHelper.php";
 require_once "$componentPath/helpers/virtualCrudHelper.php";
 require_once "$componentPath/models/form.php";
 require_once "$componentPath/models/formResponse.php";
+require_once "$componentPath/models/responseFeedItem.php";
 
-use Components\Forms\Helpers\FormPageElementDecorator as ElementDecorator;
-use Components\Forms\Helpers\FormsRouter as RoutesHelper;
 use Components\Forms\Helpers\ComFormsPageBouncer as PageBouncer;
+use Components\Forms\Helpers\FormPageElementDecorator as ElementDecorator;
+use Components\Forms\Helpers\FormsAuth as AuthHelper;
+use Components\Forms\Helpers\FormsRouter as RoutesHelper;
 use Components\Forms\Helpers\Params;
 use Components\Forms\Helpers\RelationalCrudHelper as RCrudHelper;
 use Components\Forms\Helpers\VirtualCrudHelper as VCrudHelper;
 use Components\Forms\Models\Form;
 use Components\Forms\Models\FormResponse;
+use Components\Forms\Models\ResponseFeedItem;
 use Date;
 
 class FormResponses extends SiteController
@@ -48,7 +52,8 @@ class FormResponses extends SiteController
 	 * @var  array
 	 */
 	protected static $_paramWhitelist = [
-		'form_id'
+		'form_id',
+		'tag_string'
 	];
 
 	/**
@@ -58,6 +63,7 @@ class FormResponses extends SiteController
 	 */
 	public function execute()
 	{
+    $this->_auth = new AuthHelper();
 		$this->_crudHelper = new VCrudHelper([
 			'errorSummary' => Lang::txt('COM_FORMS_NOTICES_FAILED_START')
 		]);
@@ -205,6 +211,40 @@ class FormResponses extends SiteController
 		$this->view
 			->set('responses', $responses)
 			->set('listUrl', $responsesListUrl)
+			->display();
+	}
+
+	/**
+	 * Renders response's feed
+	 *
+	 * @return   void
+	 */
+	public function feedTask()
+	{
+		$createCommentAction = $this->_routes->createResponseCommentUrl();
+		$responseId = $this->_params->getInt('response_id');
+		$response = FormResponse::oneOrFail($responseId);
+		$form = $response->getForm();
+		$tagUpdateUrl = $this->_routes->updateResponsesTagsUrl();
+
+		$currentTagString = $response->getTagString();
+		$receivedTagString = $this->_params->getString('tag_string');
+		$tagString = $receivedTagString ? $receivedTagString : $currentTagString;
+		$comment = $this->_params->getString('comment');
+		$feedItems = ResponseFeedItem::allFor($responseId)
+			->order('id', 'desc');
+
+		$isComponentAdmin = $this->_auth->currentCanCreate();
+
+		$this->view
+			->set('comment', $comment)
+			->set('createCommentUrl', $createCommentAction)
+			->set('feedItems', $feedItems)
+			->set('form', $form)
+			->set('userIsAdmin', $isComponentAdmin)
+			->set('response', $response)
+			->set('tagString', $tagString)
+			->set('tagUpdateUrl', $tagUpdateUrl)
 			->display();
 	}
 

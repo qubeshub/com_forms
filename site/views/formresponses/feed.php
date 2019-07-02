@@ -16,6 +16,7 @@ $feedItems = $this->feedItems;
 $form = $this->form;
 $formId = $form->get('id');
 $formName = $form->get('name');
+$userIsAdmin = $this->userIsAdmin;
 $response = $this->response;
 $responseId = $response->get('id');
 $tagString = $this->tagString;
@@ -23,12 +24,20 @@ $tagUpdateUrl = $this->tagUpdateUrl;
 $user = $response->getUser();
 $userName = $user->get('name');
 
-$breadcrumbs = [
-	 $formName => ['formsDisplayUrl', [$formId]],
-	'Admin' => ['formsEditUrl', [$formId]],
-	'Responses' => ['formsResponseList', [$formId]],
-	$userName => ['responseFeedUrl', [$responseId]]
-];
+$breadcrumbs = [$formName => ['formsDisplayUrl', [$formId]]];
+
+if ($userIsAdmin)
+{
+  $breadcrumbs = array_merge($breadcrumbs, [
+    'Admin' => ['formsEditUrl', [$formId]],
+    'Responses' => ['formsResponseList', [$formId]],
+    $userName => ['responseFeedUrl', [$responseId]]
+  ]);
+}
+else
+{
+  $breadcrumbs['Response'] = ['responseFeedUrl', [$responseId]];
+}
 
 $this->view('_forms_breadcrumbs', 'shared')
 	->set('breadcrumbs', $breadcrumbs)

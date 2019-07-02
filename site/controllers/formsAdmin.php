@@ -19,7 +19,6 @@ require_once "$componentPath/helpers/responsesCsvDecorator.php";
 require_once "$componentPath/helpers/sortableResponses.php";
 require_once "$componentPath/models/form.php";
 require_once "$componentPath/models/formResponse.php";
-require_once "$componentPath/models/responseFeedItem.php";
 
 use Components\Forms\Helpers\CsvHelper;
 use Components\Forms\Helpers\FormPageElementDecorator as ElementDecorator;
@@ -31,7 +30,6 @@ use Components\Forms\Helpers\ResponsesCsvDecorator as CsvDecorator;
 use Components\Forms\Helpers\SortableResponses;
 use Components\Forms\Models\Form;
 use Components\Forms\Models\FormResponse;
-use Components\Forms\Models\ResponseFeedItem;
 use Hubzero\Content\Server;
 use Hubzero\Component\SiteController;
 
@@ -45,8 +43,7 @@ class FormsAdmin extends SiteController
 	 */
 	protected static $_paramWhitelist = [
 		'form_id',
-		'response_id',
-		'tag_string'
+		'response_id'
 	];
 
 	/**
@@ -222,39 +219,6 @@ class FormsAdmin extends SiteController
 		$server->acceptranges(false);
 
 		return $server->serve();
-	}
-
-	/**
-	 * Renders response's feed
-	 *
-	 * @return   void
-	 */
-	public function responseFeedTask()
-	{
-		$this->_bouncer->redirectUnlessAuthorized('core.create');
-
-		$createCommentAction = $this->_routes->createResponseCommentUrl();
-		$responseId = $this->_params->getInt('response_id');
-		$response = FormResponse::oneOrFail($responseId);
-		$form = $response->getForm();
-		$tagUpdateUrl = $this->_routes->updateResponsesTagsUrl();
-
-		$currentTagString = $response->getTagString();
-		$receivedTagString = $this->_params->getString('tag_string');
-		$tagString = $receivedTagString ? $receivedTagString : $currentTagString;
-		$comment = $this->_params->getString('comment');
-		$feedItems = ResponseFeedItem::allFor($responseId)
-			->order('id', 'desc');
-
-		$this->view
-			->set('comment', $comment)
-			->set('createCommentUrl', $createCommentAction)
-			->set('feedItems', $feedItems)
-			->set('form', $form)
-			->set('response', $response)
-			->set('tagString', $tagString)
-			->set('tagUpdateUrl', $tagUpdateUrl)
-			->display();
 	}
 
 }

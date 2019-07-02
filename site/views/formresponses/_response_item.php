@@ -21,7 +21,7 @@ $formName = $form->get('name');
 			<?php
 				$this->view('_link', 'shared')
 					->set('content', $formName)
-					->set('urlFunction', 'formsDisplayUrl')
+					->set('urlFunction', 'responseFeedUrl')
 					->set('urlFunctionArgs', [$formId])
 					->display();
 			?>

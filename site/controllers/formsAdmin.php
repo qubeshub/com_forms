@@ -227,7 +227,7 @@ class FormsAdmin extends SiteController
 	 *
 	 * @return   void
 	 */
-	public function feedTask()
+	public function responseFeedTask()
 	{
 		$this->_bouncer->redirectUnlessAuthorized('core.create');
 

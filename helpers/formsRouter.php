@@ -414,7 +414,7 @@ class FormsRouter extends ComponentRouter
 	 */
 	public function responseFeedUrl($responseId, $params = [])
 	{
-		$segments = ['admin', 'feed'];
+		$segments = ['admin', 'responsefeed'];
 		$params['response_id'] = $responseId;
 
 		$url = $this->_generateComponentUrl($segments, $params);

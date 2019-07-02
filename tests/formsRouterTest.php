@@ -298,7 +298,7 @@ class FormsRouterTest extends Basic
 	public function testResponseFeedUrlReturnsCorrectUrlWithoutParams()
 	{
 		$responseId = 1;
-		$expectedUrl = "/forms/admin/feed?response_id=$responseId";
+		$expectedUrl = "/forms/admin/responsefeed?response_id=$responseId";
 		$routes = new FormsRouter();
 
 		$generatedUrl = $routes->responseFeedUrl($responseId);
@@ -310,7 +310,7 @@ class FormsRouterTest extends Basic
 	{
 		$responseId = 1;
 		$urlParams = ['comment' => 'test comment'];
-		$expectedUrl = "/forms/admin/feed?comment=test+comment&response_id=$responseId";
+		$expectedUrl = "/forms/admin/responsefeed?comment=test+comment&response_id=$responseId";
 		$routes = new FormsRouter();
 
 		$generatedUrl = $routes->responseFeedUrl($responseId, $urlParams);
@@ -321,7 +321,7 @@ class FormsRouterTest extends Basic
 	public function testResponseFeedUrlReturnsCorrectUrlWithTagString()
 	{
 		$responseId = 1;
-		$expectedUrl = "/forms/admin/feed?tag_string=a%2Cb%2Cc&response_id=$responseId";
+		$expectedUrl = "/forms/admin/responsefeed?tag_string=a%2Cb%2Cc&response_id=$responseId";
 		$urlParams = ['tag_string' => 'a,b,c'];
 		$routes = new FormsRouter();
 

@@ -17,3 +17,42 @@ form input[type="submit"] {
 	font-size: .85em;
 	float: right;
 }
+
+.response-feed-comments {
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	height: 100%;
+	margin: 0 0 1em 0;
+	max-height: 50vh;
+	padding: 1em 1em .5em 1em;
+	overflow-y: scroll;
+}
+
+.empty-feed-notice {
+	margin: 1em;
+}
+
+.feed-item {
+	margin: 0 0 2.5em 0;
+}
+
+.feed-item:last-child {
+	margin-bottom: 0;
+}
+
+.feed-item .comment-content {
+	margin: .35em 0 0 0;
+}
+
+.feed-item span:first-child {
+	margin: 0 .5em 0 0;
+}
+
+.feed-item span:first-child > a {
+	text-decoration: underline;
+	font-weight: 500;
+}
+
+.feed-item .date {
+	color: #a1a1a1;
+	font-size: 1em;
+}

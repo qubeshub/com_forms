@@ -10,6 +10,7 @@ defined('_HZEXEC_') or die();
 
 $action = $this->createCommentUrl;
 $comment = $this->comment;
+$feedItems = $this->feedItems;
 $formId = $this->formId;
 $responseId = $this->responseId;
 $submitInputValue = Lang::txt('COM_FORMS_FIELDS_VALUES_COMMENT');
@@ -18,6 +19,18 @@ $submitInputValue = Lang::txt('COM_FORMS_FIELDS_VALUES_COMMENT');
 <div class="response-feed">
 
 	<div class="response-feed-comments">
+		<?php
+			foreach ($feedItems as $item):
+				$this->view('_response_feed_item')
+					->set('item', $item)
+					->display();
+			endforeach;
+
+			if ($feedItems->count() == 0):
+				$this->view('_response_feed_empty_notice')
+				->display();
+			endif;
+		?>
 	</div>
 
 	<div class="response-feed-form">

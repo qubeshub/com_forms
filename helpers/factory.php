@@ -199,64 +199,62 @@ class Factory
   /**
    * Adds modified data if record data was changed
    *
-   * @param    array   $newData   New records' data
+   * @param    array   $recordsData   Records' data
    * @return   array
    */
-  protected function _addModifiedIfAltered($newData)
+  protected function _addModifiedIfAltered($recordsData)
   {
-    $recordIds = array_map(function($data) { return $data['id']; }, $newData);
-    $recordsById = $this->_getRecordsById($recordIds);
-    $augmentedData = [];
+    $augmentedRecordsData = [];
 
-    foreach ($newData as $recordData)
+    foreach ($recordsData as $recordData)
     {
-      $id = $recordData['id'];
-			$record = isset($recordsById[$id]) ? $recordsById[$id] : null;
-
-      if ($record && $this->_dataDiffers($recordData, $record))
+      if (isset($recordData['id']))
       {
-        $recordData = $this->_addModified($recordData);
+        $id = $recordData['id'];
+        $record = $this->_getRecordById($id);
+
+        if ($this->_dataDiffers($recordData, $record))
+        {
+          $recordData = $this->_addModified($recordData);
+        }
       }
 
-      $augmentedData[] = $recordData;
+      $augmentedRecordsData[] = $recordData;
     }
 
-    return $augmentedData;
+    return $augmentedRecordsData;
+  }
+
+  /**
+   * Queries for record with given ID
+   *
+   * @param    array   $id   Record's ID
+   * @return   object
+   */
+  protected function _getRecordById($id)
+  {
+    $record = $this->_modelClass->oneOrFail($id);
+
+    return $record;
   }
 
   /**
    * Determines if new data differs from record's persisted data
    *
-   * @param    array    $newData   New data for record
-   * @param    object   $record    Record object
+   * @param    array    $recordData   Record's data
+   * @param    object   $record       Record object
    * @return   bool
    */
-  protected function _dataDiffers($newData, $record)
+  protected function _dataDiffers($recordData, $record)
   {
-    foreach ($newData as $name => $value)
+    foreach ($recordData as $name => $value)
     {
       $dataDiffers = $record->get($name) != $value;
 
-      if ($dataDiffers) break ;
+      if ($dataDiffers) break;
     }
 
     return $dataDiffers;
-  }
-
-  /**
-   * Queries for records with given IDs
-   *
-   * @param    array   $recordIds   Records' IDs
-   * @return   array
-   */
-  protected function _getRecordsById($recordIds)
-  {
-    $recordsById = $this->_modelClass->all()
-      ->whereIn('id', $recordIds)
-      ->rows()
-      ->raw();
-
-    return $recordsById;
   }
 
   /**

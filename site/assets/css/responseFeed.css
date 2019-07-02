@@ -4,7 +4,7 @@ h3 {
 	text-decoration: underline;
 }
 
-.response-details {
+.response-details, .response-feed-container {
 	font-size: 1.5em;
 }
 
@@ -15,4 +15,5 @@ h3 {
 form input[type="submit"] {
 	margin-top: 1em;
 	font-size: .85em;
+	float: right;
 }

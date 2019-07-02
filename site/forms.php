@@ -16,6 +16,7 @@ $controllerName = Request::getCmd('controller', $defaultControllerName);
 $controllerNameMap = [
 	'admin' => 'formsAdmin',
 	'emailRespondents' => 'respondentEmails',
+	'feedComments' => 'feedComments',
 	'fill' => 'fieldResponses',
 	'forms' => 'forms',
 	'tagResponses' => 'responseTags',

@@ -231,6 +231,7 @@ class FormsAdmin extends SiteController
 	{
 		$this->_bouncer->redirectUnlessAuthorized('core.create');
 
+		$createCommentAction = $this->_routes->createResponseCommentUrl();
 		$responseId = $this->_params->getInt('response_id');
 		$response = FormResponse::oneOrFail($responseId);
 		$form = $response->getForm();
@@ -239,8 +240,11 @@ class FormsAdmin extends SiteController
 		$currentTagString = $response->getTagString();
 		$receivedTagString = $this->_params->getString('tag_string');
 		$tagString = $receivedTagString ? $receivedTagString : $currentTagString;
+		$comment = $this->_params->getString('comment');
 
 		$this->view
+			->set('comment', $comment)
+			->set('createCommentUrl', $createCommentAction)
 			->set('form', $form)
 			->set('response', $response)
 			->set('tagString', $tagString)

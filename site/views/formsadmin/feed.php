@@ -10,6 +10,8 @@ defined('_HZEXEC_') or die();
 
 $this->css('responseFeed');
 
+$comment = $this->comment;
+$createCommentUrl = $this->createCommentUrl;
 $form = $this->form;
 $formId = $form->get('id');
 $formName = $form->get('name');
@@ -52,6 +54,17 @@ $this->view('_forms_breadcrumbs', 'shared')
 					->set('response', $response)
 					->set('tagString', $tagString)
 					->set('tagUpdateUrl', $tagUpdateUrl)
+					->display();
+			?>
+		</div>
+
+		<div class="col span6 response-feed-container omega">
+			<?php
+				$this->view('_response_feed')
+					->set('comment', $comment)
+					->set('createCommentUrl', $createCommentUrl)
+					->set('formId', $formId)
+					->set('responseId', $responseId)
 					->display();
 			?>
 		</div>

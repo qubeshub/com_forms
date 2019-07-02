@@ -409,18 +409,13 @@ class FormsRouter extends ComponentRouter
 	 * Generates URL to response feed page
 	 *
 	 * @param    int         $responseId   Given response's ID
-	 * @param    string      $tagString    Comma-separated list of tags
+	 * @param    array       $params       URL parameters
 	 * @return   string
 	 */
-	public function responseFeedUrl($responseId, $tagString = null)
+	public function responseFeedUrl($responseId, $params = [])
 	{
 		$segments = ['admin', 'feed'];
-		$params = ['response_id' => $responseId];
-
-		if ($tagString)
-		{
-			$params['tag_string'] = $tagString;
-		}
+		$params['response_id'] = $responseId;
 
 		$url = $this->_generateComponentUrl($segments, $params);
 
@@ -572,6 +567,20 @@ class FormsRouter extends ComponentRouter
 	public function updateResponsesTagsUrl()
 	{
 		$segments = ['tagResponses', 'updateResponseTags'];
+
+		$url = $this->_generateComponentUrl($segments);
+
+		return $url;
+	}
+
+	/**
+	 * Generates URL to task to update a response's tags
+	 *
+	 * @return   string
+	 */
+	public function createResponseCommentUrl()
+	{
+		$segments = ['feedComments', 'createResponseComment'];
 
 		$url = $this->_generateComponentUrl($segments);
 

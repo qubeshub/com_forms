@@ -295,13 +295,37 @@ class FormsRouterTest extends Basic
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
 
-	public function testResponseFeedUrlReturnsCorrectUrl()
+	public function testResponseFeedUrlReturnsCorrectUrlWithoutParams()
 	{
 		$responseId = 1;
-		$expectedUrl = "/forms/admin/feed?response_id=$responseId&tag_string=a%2Cb%2Cc";
+		$expectedUrl = "/forms/admin/feed?response_id=$responseId";
 		$routes = new FormsRouter();
 
-		$generatedUrl = $routes->responseFeedUrl($responseId, 'a,b,c');
+		$generatedUrl = $routes->responseFeedUrl($responseId);
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
+	public function testResponseFeedUrlReturnsCorrectUrlWithComment()
+	{
+		$responseId = 1;
+		$urlParams = ['comment' => 'test comment'];
+		$expectedUrl = "/forms/admin/feed?comment=test+comment&response_id=$responseId";
+		$routes = new FormsRouter();
+
+		$generatedUrl = $routes->responseFeedUrl($responseId, $urlParams);
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
+	public function testResponseFeedUrlReturnsCorrectUrlWithTagString()
+	{
+		$responseId = 1;
+		$expectedUrl = "/forms/admin/feed?tag_string=a%2Cb%2Cc&response_id=$responseId";
+		$urlParams = ['tag_string' => 'a,b,c'];
+		$routes = new FormsRouter();
+
+		$generatedUrl = $routes->responseFeedUrl($responseId, $urlParams);
 
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
@@ -337,8 +361,8 @@ class FormsRouterTest extends Basic
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
 
-  public function testFormResponsesEmailUrl()
-  {
+	public function testFormResponsesEmailUrl()
+	{
 		$formId = 65;
 		$responseIds = [1, 2];
 		$queryString = http_build_query([
@@ -350,20 +374,20 @@ class FormsRouterTest extends Basic
 		$generatedUrl = $routes->responsesEmailUrl($formId, $responseIds);
 
 		$this->assertEquals($expectedUrl, $generatedUrl);
-  }
+	}
 
-  public function testResponseEmailSendingUrl()
-  {
+	public function testResponseEmailSendingUrl()
+	{
 		$expectedUrl = "/forms/emailRespondents/send";
 		$routes = new FormsRouter();
 
 		$generatedUrl = $routes->sendResponsesEmailUrl();
 
 		$this->assertEquals($expectedUrl, $generatedUrl);
-  }
+	}
 
-  public function testFormResponsesTaggingUrl()
-  {
+	public function testFormResponsesTaggingUrl()
+	{
 		$formId = 65;
 		$responseIds = [1, 2];
 		$queryString = http_build_query([
@@ -375,19 +399,19 @@ class FormsRouterTest extends Basic
 		$generatedUrl = $routes->responsesTagsUrl($formId, $responseIds);
 
 		$this->assertEquals($expectedUrl, $generatedUrl);
-  }
+	}
 
-  public function testResponseTaggingUrl()
-  {
+	public function testResponseTaggingUrl()
+	{
 		$expectedUrl = "/forms/tagResponses/addToManyResponses";
 		$routes = new FormsRouter();
 
 		$generatedUrl = $routes->tagResponsesUrl();
 
 		$this->assertEquals($expectedUrl, $generatedUrl);
-  }
+	}
 
-  public function testUserFieldResponsesUrl()
+	public function testUserFieldResponsesUrl()
 	{
 		$responseId = 8;
 		$expectedUrl = "/forms/admin/fieldresponses?response_id=$responseId";
@@ -398,12 +422,22 @@ class FormsRouterTest extends Basic
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
 
-  public function testupdateResponsesTagsUrl()
+	public function testUpdateResponsesTagsUrl()
 	{
 		$expectedUrl = "/forms/tagResponses/updateResponseTags";
 		$routes = new FormsRouter();
 
 		$generatedUrl = $routes->updateResponsesTagsUrl();
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
+	public function testCreateReponseCommentUrl()
+	{
+		$expectedUrl = "/forms/feedComments/createResponseComment";
+		$routes = new FormsRouter();
+
+		$generatedUrl = $routes->createResponseCommentUrl();
 
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}

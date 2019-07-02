@@ -182,7 +182,8 @@ class ResponseTags extends SiteController
 		}
 		else
 		{
-			$feedUrl = $this->_routes->responseFeedUrl($responseId, $tagString);
+			$forwardData = ['tag_string' => $tagString];
+			$feedUrl = $this->_routes->responseFeedUrl($responseId, $forwardData);
 			$this->_vCrudHelper->failedCreate($taggingResult, $feedUrl);
 		}
 	}

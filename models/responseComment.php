@@ -7,12 +7,14 @@
 
 namespace Components\Forms\Models;
 
-use Hubzero\Activity\Log;
+$componentPath = Component::path('com_forms');
 
-class ResponseComment extends Log
+require_once "$componentPath/models/responseFeedItem.php";
+
+use Components\Forms\Models\ResponseFeedItem;
+
+class ResponseComment extends ResponseFeedItem
 {
-
-	protected $table = '#__activity_logs';
 
 	/**
 	 * Validation rules
@@ -35,7 +37,7 @@ class ResponseComment extends Log
 		$state['created_by'] = User::get('id');
 		$state['description'] = $args['content'];
 		$state['action'] = 'comment';
-		$state['scope'] = 'forms.responses';
+		$state['scope'] = self::$ACTIVITY_SCOPE;
 		$state['scope_id'] = $args['response_id'];
 
 		$this->set($state);

@@ -8,6 +8,7 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$convertToLocal = isset($this->toLocal) ? $this->toLocal : true;
 $date = $this->date;
 $format = isset($this->format) ? $this->format : 'F j, Y';
 
@@ -18,6 +19,11 @@ if (!!$date)
 else
 {
 	$dateString = '';
+}
+
+if ($convertToLocal)
+{
+	$date = Date::of($date)->toLocal();
 }
 
 echo $dateString;

@@ -1,4 +1,8 @@
 
+nav {
+  margin: 0 0 3em 0;
+}
+
 h3 {
 	font-size: 1.5em;
 	text-decoration: underline;
@@ -10,6 +14,10 @@ h3 {
 
 .response-details > div {
 	margin-bottom: 3em;
+}
+
+.response-details > div:first-child {
+  margin: -1em 0 1.5em 0;
 }
 
 form input[type="submit"] {
@@ -36,7 +44,7 @@ form input[type="submit"] {
 }
 
 .feed-item:last-child {
-	margin-bottom: 0;
+	margin-bottom: 1em;
 }
 
 .feed-item .comment-content {

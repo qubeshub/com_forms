@@ -12,6 +12,7 @@ $response = $this->response;
 $form = $response->getForm();
 $formId = $form->get('id');
 $formName = $form->get('name');
+$responseId = $response->get('id');
 ?>
 
 <li class="response-item">
@@ -22,7 +23,7 @@ $formName = $form->get('name');
 				$this->view('_link', 'shared')
 					->set('content', $formName)
 					->set('urlFunction', 'responseFeedUrl')
-					->set('urlFunctionArgs', [$formId])
+					->set('urlFunctionArgs', [$responseId])
 					->display();
 			?>
 		</span>

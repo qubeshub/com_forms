@@ -22,6 +22,7 @@ $responseId = $response->get('id');
 $tagString = $this->tagString;
 $tagUpdateUrl = $this->tagUpdateUrl;
 $user = $response->getUser();
+$userId = $user->get('id');
 $userName = $user->get('name');
 
 if ($userIsAdmin)
@@ -44,7 +45,7 @@ else
 
 $this->view('_forms_breadcrumbs', 'shared')
 	->set('breadcrumbs', $breadcrumbs)
-	->set('page', "$formName Feed")
+	->set('page', "$formName Feed: $userName")
 	->display();
 ?>
 
@@ -57,6 +58,7 @@ $this->view('_forms_breadcrumbs', 'shared')
 					->set('current', 'Feed')
 					->set('formId', $formId)
 					->set('responseId', $responseId)
+					->set('userId', $userId)
 					->set('userIsAdmin', $userIsAdmin)
 					->display();
 			?>

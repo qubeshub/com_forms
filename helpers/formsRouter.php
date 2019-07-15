@@ -587,4 +587,24 @@ class FormsRouter extends ComponentRouter
 		return $url;
 	}
 
+	/**
+	 * Generates URL to user's form prereqs list
+	 *
+	 * param     int      $formId   Form's ID
+	 * param     int      $userId   User's ID
+	 * @return   string
+	 */
+	public function usersFormPrereqsUrl($formId, $userId)
+	{
+		$segments = ['usersSteps', 'list'];
+		$params = [
+			'form_id' => $formId,
+			'user_id' => $userId
+		];
+
+		$url = $this->_generateComponentUrl($segments, $params);
+
+		return $url;
+	}
+
 }

@@ -442,4 +442,14 @@ class FormsRouterTest extends Basic
 		$this->assertEquals($expectedUrl, $generatedUrl);
 	}
 
+	public function testUsersFormPrereqsUrl()
+	{
+		$expectedUrl = "/forms/usersSteps/list?form_id=1&user_id=2";
+		$routes = new FormsRouter();
+
+		$generatedUrl = $routes->usersFormPrereqsUrl(1, 2);
+
+		$this->assertEquals($expectedUrl, $generatedUrl);
+	}
+
 }

@@ -112,6 +112,10 @@ class FormResponse extends Relational
 		{
 			$requiredCompletionPercentage = round(($responsesCount / $requiredCount) * 100);
 		}
+		elseif ($this->isNew())
+		{
+			$requiredCompletionPercentage = 0;
+		}
 		else
 		{
 			$requiredCompletionPercentage = 100;

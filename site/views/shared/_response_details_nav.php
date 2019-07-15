@@ -20,12 +20,14 @@ $current = $this->current;
 $formId = $this->formId;
 $responseId = $this->responseId;
 $routes = new Routes();
+$userId = $this->userId;
 $userIsAdmin = $this->userIsAdmin;
 
 $steps = ['Feed' => $routes->responseFeedUrl($responseId)];
 
 if ($userIsAdmin)
 {
+	$steps['Steps'] = $routes->usersFormPrereqsUrl($formId, $userId);
 	$steps['Responses'] = $routes->userFieldResponsesUrl($responseId);
 }
 else

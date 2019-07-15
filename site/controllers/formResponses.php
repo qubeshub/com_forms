@@ -171,6 +171,7 @@ class FormResponses extends SiteController
 		$formId = $this->_params->getInt('form_id');
 		$form = Form::oneOrFail($formId);
 		$response = $form->getResponse($currentUsersId);
+		$responseId = $response->get('id');
 
 		$this->_pageBouncer->redirectIfResponseSubmitted($response);
 		$this->_pageBouncer->redirectIfFormNotOpen($form);
@@ -182,7 +183,7 @@ class FormResponses extends SiteController
 
 		if ($response->save())
 		{
-			$forwardingUrl = $this->_routes->formListUrl();
+			$forwardingUrl = $this->_routes->responseFeedUrl($responseId);
 			$successMessage = Lang::txt('COM_FORMS_NOTICES_FORM_RESPONSE_SUBMIT_SUCCESS');
 			$this->_rCrudHelper->successfulUpdate($forwardingUrl, $successMessage);
 		}

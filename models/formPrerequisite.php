@@ -18,6 +18,8 @@ class FormPrerequisite extends Relational
 {
 
 	static $FORM_MODEL_NAME = 'Components\Forms\Models\Form';
+	static $FORM_RESPONSE_MODEL_NAME = 'Components\Forms\Models\FormResponse';
+
 	protected $table = '#__forms_form_prerequisites';
 
 	/*
@@ -77,6 +79,26 @@ class FormPrerequisite extends Relational
 		$form = $this->belongsToOne($formModelName, $foreignKey)->row();
 
 		return $form;
+	}
+
+	/**
+	 * Returns response for user w/ given ID
+	 *
+	 * @param    int      $userId   User's ID
+	 * @return   object
+	 */
+	public function getResponse($userId)
+	{
+		$responseModelName = self::$FORM_RESPONSE_MODEL_NAME;
+		$responses = $responseModelName::all();
+		$prerequisiteId = $this->get('prerequisite_id');
+
+		$response = $responses
+			->whereEquals('form_id', $prerequisiteId)
+			->whereEquals('user_id', $userId)
+			->row();
+
+		return $response;
 	}
 
 	/**

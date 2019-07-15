@@ -11,6 +11,7 @@ $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/csvHelper.php";
 require_once "$componentPath/helpers/formPageElementDecorator.php";
+require_once "$componentPath/helpers/formsAuth.php";
 require_once "$componentPath/helpers/formsRouter.php";
 require_once "$componentPath/helpers/pageBouncer.php";
 require_once "$componentPath/helpers/params.php";
@@ -22,6 +23,7 @@ require_once "$componentPath/models/formResponse.php";
 
 use Components\Forms\Helpers\CsvHelper;
 use Components\Forms\Helpers\FormPageElementDecorator as ElementDecorator;
+use Components\Forms\Helpers\FormsAuth as AuthHelper;
 use Components\Forms\Helpers\FormsRouter as RoutesHelper;
 use Components\Forms\Helpers\PageBouncer;
 use Components\Forms\Helpers\Params;
@@ -53,6 +55,7 @@ class FormsAdmin extends SiteController
 	 */
 	public function execute()
 	{
+		$this->_auth = new AuthHelper();
 		$this->_bouncer = new PageBouncer([
 			'component' => $this->_option
 		]);
@@ -128,11 +131,12 @@ class FormsAdmin extends SiteController
 	{
 		$this->_bouncer->redirectUnlessAuthorized('core.create');
 
+		$isComponentAdmin = $this->_auth->currentCanCreate();
 		$responseId = $this->_params->getInt('response_id');
 		$response = FormResponse::oneOrFail($responseId);
-		$userId = $response->get('user_id');
 		$form = $response->getForm();
 		$pageElements = $form->getFieldsOrdered();
+		$userId = $response->get('user_id');
 		$decoratedPageElements = $this->_decorator->decorateForRendering($pageElements, $userId);
 		$reponseAcceptanceUrl = $this->_routes->responseApprovalUrl();
 
@@ -146,6 +150,7 @@ class FormsAdmin extends SiteController
 			->set('form', $form)
 			->set('pageElements', $decoratedPageElements)
 			->set('response', $response)
+			->set('userIsAdmin', $isComponentAdmin)
 			->display();
 	}
 

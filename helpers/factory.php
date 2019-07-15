@@ -208,7 +208,7 @@ class Factory
 
     foreach ($recordsData as $recordData)
     {
-      if (isset($recordData['id']))
+      if (!empty($recordData['id']))
       {
         $id = $recordData['id'];
         $record = $this->_getRecordById($id);

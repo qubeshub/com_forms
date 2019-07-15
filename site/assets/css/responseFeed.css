@@ -1,6 +1,15 @@
 
+h1 {
+	font-size: 2em;
+	font-weight: 500;
+}
+
+.response-details > div:first-child {
+	margin: -1em 0 1.5em 0;
+}
+
 nav {
-  margin: 0 0 3em 0;
+	margin: 0 0 3em 0;
 }
 
 h3 {
@@ -14,10 +23,6 @@ h3 {
 
 .response-details > div {
 	margin-bottom: 3em;
-}
-
-.response-details > div:first-child {
-  margin: -1em 0 1.5em 0;
 }
 
 form input[type="submit"] {

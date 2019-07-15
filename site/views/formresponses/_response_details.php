@@ -10,6 +10,7 @@ defined('_HZEXEC_') or die();
 
 $form = $this->form;
 $formId = $form->get('id');
+$formName = $form->get('name');
 $response = $this->response;
 $responseId = $response->get('id');
 $tagString = $this->tagString;
@@ -21,6 +22,10 @@ $hiddenFields = [
 	'response_id' => $responseId
 ];
 ?>
+
+<div>
+	<h1><?php echo $formName; ?></h1>
+</div>
 
 <div class="grid">
   <?php if ($userIsAdmin): ?>

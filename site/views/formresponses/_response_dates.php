@@ -9,14 +9,14 @@
 defined('_HZEXEC_') or die();
 
 $form = $this->form;
-$started = $this->started;
 ?>
 
 <div class="grid">
 	<div class="col span6">
 		<?php
-			$this->view('_response_dates_started')
-				->set('started', $started)
+			$this->view('_forms_dates_open', 'forms')
+				->set('isOpen', $form->isOpen())
+				->set('openingTime', $form->get('opening_time'))
 				->display();
 		?>
 	</div>

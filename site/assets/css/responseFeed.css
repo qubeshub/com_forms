@@ -56,8 +56,13 @@ form input[type="submit"] {
 }
 
 .feed-item span:first-child > a {
-	text-decoration: underline;
 	font-weight: 500;
+	text-decoration: underline;
+}
+
+.feed-item span:first-child > a:hover {
+	border: none;
+	text-decoration: none;
 }
 
 .feed-item .date {

@@ -13,7 +13,7 @@ use Hubzero\Test\Basic;
 trait canMock
 {
 
-	public function	mock($args = [])
+	public function mock($args = [])
 	{
 		$this->mock = $this->getMockBuilder($args['class']);
 

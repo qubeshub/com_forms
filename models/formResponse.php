@@ -12,24 +12,23 @@ $tagComponentPath = Component::path('com_tags');
 
 require_once "$componentPath/helpers/relationalQueryHelper.php";
 require_once "$componentPath/models/fieldResponse.php";
+require_once "$componentPath/traits/possessable.php";
 require_once "$tagComponentPath/models/tag.php";
 
 use Components\Forms\Helpers\RelationalQueryHelper;
+use Components\Forms\Traits\possessable;
 use Hubzero\Database\Relational;
 
 class FormResponse extends Relational
 {
+	use possessable;
 
 	static protected $_fieldResponseClass = 'Components\Forms\Models\FieldResponse';
 	static protected $_formClass = 'Components\Forms\Models\Form';
 	static protected $_tagClass = 'Components\Tags\Models\Tag';
 
-	/**
-	 * Records table
-	 *
-	 * @var string
-	 */
 	protected $table = '#__forms_form_responses';
+	protected $_ownerForeignKey = 'user_id';
 
 	/*
 	 * Attributes to be populated on record creation
@@ -56,6 +55,7 @@ class FormResponse extends Relational
 	public function __construct($args = [])
 	{
 		$this->_relationalHelper = new RelationalQueryHelper();
+
 		parent::__construct();
 	}
 

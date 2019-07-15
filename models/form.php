@@ -16,16 +16,19 @@ require_once "$componentPath/models/pageField.php";
 
 use Components\Forms\Models\FormResponse;
 use Components\Forms\Models\PageField;
+use Components\Forms\Traits\possessable;
 use Hubzero\Database\Relational;
 
 class Form extends Relational
 {
+	use possessable;
 
 	static protected $_pageClass = 'Components\Forms\Models\FormPage';
 	static protected $_prerequisiteClass = 'Components\Forms\Models\FormPrerequisite';
 	static protected $_responseClass = 'Components\Forms\Models\FormResponse';
 
 	protected $table = '#__forms_forms';
+	protected $_ownerForeignKey = 'created_by';
 
 	/*
 	 * Attributes to be populated on record creation
@@ -246,17 +249,6 @@ class Form extends Relational
 		}
 
 		return $page;
-	}
-
-	/**
-	 * Indicates form belongs to user with given ID
-	 *
-	 * @param    int    $userId   User ID
-	 * @return   bool
-	 */
-	public function isOwnedBy($userId)
-	{
-		return $this->get('created_by') === $userId;
 	}
 
 	/**

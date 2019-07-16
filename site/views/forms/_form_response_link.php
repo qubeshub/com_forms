@@ -24,6 +24,13 @@ elseif ($userCanStartResponse):
 	$this->view('_form_response_link_start')
 		->set('formId', $id)
 		->display();
+elseif ($responseId = $response->get('id')):
+	$this->view('_link_lang', 'shared')
+		->set('classes', 'user-response-link')
+		->set('textKey', 'COM_FORMS_LINKS_MY_RESPONSE')
+		->set('urlFunction', 'responseFeedUrl')
+		->set('urlFunctionArgs', [$responseId])
+		->display();
 else:
 	$this->view('_form_response_link_pages')
 		->set('formId', $id)

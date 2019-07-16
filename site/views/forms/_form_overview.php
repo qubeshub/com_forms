@@ -21,15 +21,6 @@ $response = $this->response;
 
 	<div class="row">
 		<?php
-			$this->view('_response_status')
-				->set('form', $form)
-				->set('response', $response)
-				->display();
-		?>
-	</div>
-
-	<div class="row">
-		<?php
 			$this->view('_forms_dates')
 				->set('form', $form)
 				->display();

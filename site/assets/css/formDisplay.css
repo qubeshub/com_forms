@@ -37,6 +37,11 @@ ol {
 	font-size: 1.5em;
 }
 
+.user-response-link {
+	font-size: 1.5em;
+	font-weight: 500;
+}
+
 .edit-link-container {
 	font-size: 1.5em;
 	margin: 2em 0 0 0;

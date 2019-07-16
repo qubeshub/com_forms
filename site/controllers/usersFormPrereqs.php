@@ -56,16 +56,15 @@ class UsersFormPrereqs extends SiteController
 	 */
 	public function listTask()
 	{
-		$this->_bouncer->redirectUnlessAuthorized('core.create');
-
 		$formId = $this->_params->getInt('form_id');
-		$userId = $this->_params->getInt('user_id');
-
 		$form = Form::oneOrFail($formId);
+		$userId = $this->_params->getInt('user_id');
 		$response = FormResponse::all()
 			->whereEquals('form_id', $formId)
 			->whereEquals('user_id', $userId)
 			->row();
+
+		$this->_bouncer->redirectUnlessCanViewResponse($response);
 
 		$isComponentAdmin = $this->_auth->currentCanCreate();
 

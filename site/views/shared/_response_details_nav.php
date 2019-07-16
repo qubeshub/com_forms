@@ -23,11 +23,13 @@ $routes = new Routes();
 $userId = $this->userId;
 $userIsAdmin = $this->userIsAdmin;
 
-$steps = ['Feed' => $routes->responseFeedUrl($responseId)];
+$steps = [
+	'Feed' => $routes->responseFeedUrl($responseId),
+	'Steps' => $routes->usersFormPrereqsUrl($formId, $userId)
+];
 
 if ($userIsAdmin)
 {
-	$steps['Steps'] = $routes->usersFormPrereqsUrl($formId, $userId);
 	$steps['Responses'] = $routes->userFieldResponsesUrl($responseId);
 }
 else

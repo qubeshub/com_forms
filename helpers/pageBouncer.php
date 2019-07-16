@@ -106,6 +106,25 @@ class PageBouncer
 	}
 
 	/**
+	 * Redirects user if they cannot view form response
+	 *
+	 * @param    object   $response   Form response
+	 * @param    string   $url        URL to redirect to
+	 * @return   void
+	 */
+	public function redirectUnlessCanViewResponse($response, $url = null)
+	{
+		$url = $url ? $url : '/forms';
+
+		$canView = $this->_permitter->canCurrentUserViewResponse($response);
+
+		if (!$canView)
+		{
+			$this->_router->redirect($url);
+		}
+	}
+
+	/**
 	 * Redirects users without given permission
 	 *
 	 * @param    string   $permission   Permission name

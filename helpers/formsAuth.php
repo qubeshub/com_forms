@@ -53,13 +53,39 @@ class FormsAuth extends ComponentAuth
 	 */
 	protected function _canUserEditForm($form, $userId)
 	{
-		$userIsAdmin = $this->currentIsAuthorized('core.admin');
+		$userIsAdmin = $this->_currentIsAdmin();
 		$userCanCreate = $this->currentIsAuthorized('core.create');
 		$userOwnsForm = $form->isOwnedBy($userId);
 
 		$canEdit = $userIsAdmin || ($userCanCreate && $userOwnsForm);
 
 		return $canEdit;
+	}
+
+	/**
+	 * Determines if current user can view given response
+	 *
+	 * @param    object   $response   Form response instance
+	 * @return   bool
+	 */
+	public function canCurrentUserViewResponse($response)
+	{
+		$currentUsersId = User::get('id');
+		$userIsAdmin = $this->_currentIsAdmin();
+
+		$canView = $response->isOwnedBy($currentUsersId) || $userIsAdmin;
+
+		return $canView;
+	}
+
+	/**
+	 * Indicates if current user is a component admin
+	 *
+	 * @return   bool
+	 */
+	protected function _currentIsAdmin()
+	{
+		return $this->currentIsAuthorized('core.admin');
 	}
 
 }

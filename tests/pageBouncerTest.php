@@ -227,4 +227,38 @@ class PageBouncerTest extends Basic
 		$bouncer->redirectIfFormNotOpen($form);
 	}
 
+	public function testRedirectUnlessCanViewResponseRedirectsIfUserCannotViewResponse()
+	{
+		$permitter = $this->mock([
+			'class' => 'Permitter', 'methods' => ['canCurrentUserViewResponse' => false]
+		]);
+		$router = $this->mock(['class' => 'Router', 'methods' => ['redirect']]);
+		$bouncer = new PageBouncer([
+			'permitter' => $permitter,
+			'router' => $router
+		]);
+
+		$router->expects($this->once())
+			->method('redirect');
+
+		$bouncer->redirectUnlessCanViewResponse(null);
+	}
+
+	public function testRedirectUnlessCanViewResponseDoesNothingIfUserCanViewResponse()
+	{
+		$permitter = $this->mock([
+			'class' => 'Permitter', 'methods' => ['canCurrentUserViewResponse' => true]
+		]);
+		$router = $this->mock(['class' => 'Router', 'methods' => ['redirect']]);
+		$bouncer = new PageBouncer([
+			'permitter' => $permitter,
+			'router' => $router
+		]);
+
+		$router->expects($this->never())
+			->method('redirect');
+
+		$bouncer->redirectUnlessCanViewResponse(null);
+	}
+
 }

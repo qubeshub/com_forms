@@ -10,12 +10,16 @@ defined('_HZEXEC_') or die();
 
 $prereqs = $this->prereqs;
 $userId = $this->userId;
+$userIsAdmin = $this->userIsAdmin;
 ?>
 
 <table>
 
 	<thead>
 		<tr>
+			<th>
+				<?php echo Lang::txt('COM_FORMS_FIELDS_ORDER'); ?>
+			</th>
 			<th>
 				<?php echo Lang::txt('COM_FORMS_HEADINGS_FORM_ID'); ?>
 			</th>
@@ -43,6 +47,7 @@ $userId = $this->userId;
 				$this->view('_users_prereq_progress_item')
 				->set('prereq', $prereq)
 				->set('userId', $userId)
+				->set('userIsAdmin', $userIsAdmin)
 				->display();
 			endforeach;
 		?>

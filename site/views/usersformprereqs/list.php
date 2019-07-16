@@ -48,17 +48,20 @@ $this->view('_forms_breadcrumbs', 'shared')
 			?>
 		</nav>
 
-		<div>
-			<h2>
-				<?php echo $respondentText; ?>
-			</h2>
-		</div>
+		<?php if ($userIsAdmin): ?>
+				<div>
+					<h2>
+						<?php echo $respondentText; ?>
+					</h2>
+				</div>
+		<?php endif; ?>
 
 		<div>
 			<?php
 				$this->view('_users_prereqs_progress')
 					->set('prereqs', $prereqs)
 					->set('userId', $userId)
+					->set('userIsAdmin', $userIsAdmin)
 					->display();
 			?>
 		</div>

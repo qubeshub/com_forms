@@ -31,7 +31,7 @@ elseif ($responseId = $response->get('id')):
 		->set('urlFunction', 'responseFeedUrl')
 		->set('urlFunctionArgs', [$responseId])
 		->display();
-else:
+elseif (!$form->get('disabled')):
 	$this->view('_form_response_link_pages')
 		->set('formId', $id)
 		->set('pages', $pages)

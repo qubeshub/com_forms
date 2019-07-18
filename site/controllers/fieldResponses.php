@@ -101,6 +101,7 @@ class FieldResponses extends SiteController
 			->set('page', $this->_page)
 			->set('pageElements', $decoratedPageElements)
 			->set('responsesCreateUrl', $fieldsResponsesCreateUrl)
+			->set('userId', $userId)
 			->display();
 	}
 

@@ -15,17 +15,17 @@ $formDisabled = $form->isDisabledFor(User::get('id'));
 $formId = $form->get('id');
 $formName = $form->get('name');
 $page = $this->page;
-$isLastPage = $form->isLastPage($page);
 $pageElements = $this->pageElements;
 $pageId = $page->get('id');
+$pageIsLast = $form->isLastPage($page);
 $pageMetadata = (object) ['name' => 'page_id', 'value' => $pageId];
 $pagePosition = $page->ordinalPosition();
 $pageTitle = $page->get('title');
 $responsesCreateUrl = $this->responsesCreateUrl;
 $submitClasses = 'btn btn-success';
+$userId =  $this->userId;
 
-
-if ($isLastPage)
+if ($pageIsLast)
 {
 	$submitValue = Lang::txt('COM_FORMS_FIELDS_VALUES_SAVE_AND_REVIEW');
 }
@@ -36,6 +36,7 @@ else
 
 $breadcrumbs = [
 	$formName => ['formsDisplayUrl', [$formId]],
+	'Pages' => ['usersFormPagesUrl', [$formId, $userId]],
 	$pageTitle => ['formsPageResponseUrl', [['page_id' => $pageId]]]
 ];
 $this->view('_forms_breadcrumbs', 'shared')
@@ -69,8 +70,21 @@ $this->view('_forms_breadcrumbs', 'shared')
 					$this->view('_next_button')
 						->set('formDisabled', $formDisabled)
 						->set('formId', $formId)
-						->set('isLastPage', $isLastPage)
+						->set('isLastPage', $pageIsLast)
 						->set('pagePosition', $pagePosition)
+						->display();
+				?>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col span12 omega pagination-container">
+				<?php
+					$this->view('_form_pages_pagination', 'shared')
+						->set('formId', $formId)
+						->set('pages', $form->getPages())
+						->set('position', $pagePosition)
 						->display();
 				?>
 			</div>

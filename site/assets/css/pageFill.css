@@ -49,3 +49,11 @@ input[type=text]
 	padding: 1em 0 0 0;
 	justify-content: flex-end;
 }
+
+.pagination-container {
+	text-align: center;
+}
+
+.current-position {
+	font-weight: bold;
+}

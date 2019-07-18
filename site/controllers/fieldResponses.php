@@ -86,7 +86,7 @@ class FieldResponses extends SiteController
 	public function fillTask()
 	{
 		$this->_setFormAndPage();
-		$this->_pageBouncer->redirectIfFormNotOpen($this->_form);
+		$this->_pageBouncer->redirectIfFormDisabled($this->_form);
 		$this->_pageBouncer->redirectIfPrereqsNotAccepted($this->_form);
 
 		$fieldsResponsesCreateUrl = $this->_routes->fieldsResponsesCreateUrl();

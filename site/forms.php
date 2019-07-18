@@ -24,6 +24,7 @@ $controllerNameMap = [
 	'queries' => 'queries',
 	'responses' => 'formResponses',
 	'steps' => 'formPrereqs',
+	'usersPages' => 'usersFormPages',
 	'usersSteps' => 'usersFormPrereqs'
 ];
 

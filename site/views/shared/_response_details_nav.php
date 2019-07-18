@@ -25,16 +25,13 @@ $userIsAdmin = $this->userIsAdmin;
 
 $steps = [
 	'Feed' => $routes->responseFeedUrl($responseId),
-	'Steps' => $routes->usersFormPrereqsUrl($formId, $userId)
+	'Steps' => $routes->usersFormPrereqsUrl($formId, $userId),
+	'Pages' => $routes->usersFormPagesUrl($formId, $userId)
 ];
 
 if ($userIsAdmin)
 {
 	$steps['Responses'] = $routes->userFieldResponsesUrl($responseId);
-}
-else
-{
-	$steps['Pages'] = $routes->formsDisplayUrl($formId);
 }
 
 $this->view('_ul_nav', 'shared')

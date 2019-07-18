@@ -75,18 +75,6 @@ class FormPage extends Relational
 	}
 
 	/**
-	 * Calculates percentage of required questions user has responded to
-	 *
-	 * @return   int
-	 */
-	public function requiredCompletionPercentage($response)
-	{
-		$completionPercentage = $response->pageRequiredCompletionPercentage($this);
-
-		return $completionPercentage;
-	}
-
-	/**
 	 * Get page's required fields
 	 *
 	 * @return   object

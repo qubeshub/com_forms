@@ -96,7 +96,26 @@ class FormResponse extends Relational
 	}
 
 	/**
-	 * Calculates percentage of required questions user has responded to
+	 * Calculates percentage of required questions user has responded to for
+	 * given page
+	 *
+	 * @return   int
+	 */
+	public function pageRequiredCompletionPercentage($page)
+	{
+		$requiredFields = $page->getRequiredFields();
+		$requiredCount = $requiredFields->count();
+		$responsesCount = $this->_getNonEmptyResponsesTo($requiredFields)
+			->count();
+
+		$requiredCompletionPercentage = $this->_calculateCompletionPercentage($requiredCount, $responsesCount);
+
+		return $requiredCompletionPercentage;
+	}
+
+	/**
+	 * Calculates percentage of required questions user has responded to for
+	 * associated form
 	 *
 	 * @return   int
 	 */
@@ -104,10 +123,21 @@ class FormResponse extends Relational
 	{
 		$requiredFields = $this->_getRequiredFields();
 		$requiredCount = $requiredFields->count();
-		$responsesCount = $this->_getResponsesTo($requiredFields)
-			->where('response', '!=', "")
+		$responsesCount = $this->_getNonEmptyResponsesTo($requiredFields)
 			->count();
 
+		$requiredCompletionPercentage = $this->_calculateCompletionPercentage($requiredCount, $responsesCount);
+
+		return $requiredCompletionPercentage;
+	}
+
+	/**
+	 * Calculates required completion percentage
+	 *
+	 * @return   int
+	 */
+	protected function _calculateCompletionPercentage($requiredCount, $responsesCount)
+	{
 		if ($requiredCount > 0)
 		{
 			$requiredCompletionPercentage = round(($responsesCount / $requiredCount) * 100);
@@ -131,23 +161,9 @@ class FormResponse extends Relational
 	 */
 	protected function _getRequiredFields()
 	{
-		$allFields = $this->_getFields();
-
-		$requiredFields = $allFields->whereEquals('required', 1);
-
-		return $requiredFields;
-	}
-
-	/**
-	 * Gets all of the forms fields
-	 *
-	 * @return   object
-	 */
-	protected function _getFields()
-	{
 		$form = $this->getForm();
 
-		$fields = $form->getFields();
+		$fields = $form->getRequiredFields();
 
 		return $fields;
 	}
@@ -175,6 +191,20 @@ class FormResponse extends Relational
 			->rows();
 
 		return $form;
+	}
+
+	/**
+	 * Returns user's non-empty responses to given fields
+	 *
+	 * @param    object   $fields   Fields to search for responses to
+	 * @return   object
+	 */
+	protected function _getNonEmptyResponsesTo($fields)
+	{
+		$nonEmptyResponses = $this->_getResponsesTo($fields)
+		->where('response', '!=', "");
+
+		return $nonEmptyResponses;
 	}
 
 	/**

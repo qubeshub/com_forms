@@ -607,4 +607,24 @@ class FormsRouter extends ComponentRouter
 		return $url;
 	}
 
+	/**
+	 * Generates URL to pages list for respondents
+	 *
+	 * param     int      $formId   Form's ID
+	 * param     int      $userId   User's ID
+	 * @return   string
+	 */
+	public function usersFormPagesUrl($formId, $userId)
+	{
+		$segments = ['usersPages', 'list'];
+		$params = [
+			'form_id' => $formId,
+			'user_id' => $userId
+		];
+
+		$url = $this->_generateComponentUrl($segments, $params);
+
+		return $url;
+	}
+
 }

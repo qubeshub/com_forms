@@ -22,10 +22,16 @@ $respondentText = Lang::txt('COM_FORMS_HEADINGS_RESPONDENT', $userName);
 
 $breadcrumbs = [
 	$formName => ['formsDisplayUrl', [$formId]],
-	'Admin' => ['formsEditUrl', [$formId]],
-	'Responses' => ['formsResponseList', [$formId]],
-	$userName => ['responseFeedUrl', [$responseId]]
 ];
+
+if ($userIsAdmin)
+{
+	$breadcrumbs['Admin'] = ['formsEditUrl', [$formId]];
+	$breadcrumbs['Responses'] = ['formsResponseList', [$formId]];
+	$breadcrumbs[$userName] = ['responseFeedUrl', [$responseId]];
+}
+
+$breadcrumbs['Steps'] = ['usersFormPrereqsUrl', [$formId, $userId]];
 
 $this->view('_forms_breadcrumbs', 'shared')
 	->set('breadcrumbs', $breadcrumbs)

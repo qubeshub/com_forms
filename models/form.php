@@ -166,6 +166,20 @@ class Form extends Relational
 	}
 
 	/**
+	 * Get required fields
+	 *
+	 * @return   object
+	 */
+	public function getRequiredFields()
+	{
+		$allFields = $this->getFields();
+
+		$requiredFields = $allFields->whereEquals('required', 1);
+
+		return $requiredFields;
+	}
+
+	/**
 	 * Get associated fields
 	 *
 	 * @return   object

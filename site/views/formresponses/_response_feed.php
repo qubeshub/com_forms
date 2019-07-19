@@ -20,16 +20,12 @@ $submitInputValue = Lang::txt('COM_FORMS_FIELDS_VALUES_COMMENT');
 
 	<div class="response-feed-comments">
 		<?php
-			foreach ($feedItems as $item):
-				$this->view('_response_feed_item')
-					->set('item', $item)
-					->display();
-			endforeach;
-
-			if ($feedItems->count() == 0):
-				$this->view('_response_feed_empty_notice')
+			$this->view('_feed', 'shared')
+				->set('feedItems', $feedItems)
+				->set('itemView', '_response_feed_item')
+				->set('noticeView', '_response_feed_empty_notice')
+				->set('subviewsSource', 'formresponses')
 				->display();
-			endif;
 		?>
 	</div>
 

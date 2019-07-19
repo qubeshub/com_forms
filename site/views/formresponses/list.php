@@ -10,6 +10,7 @@ defined('_HZEXEC_') or die();
 
 $this->css('formResponsesList');
 
+$feedItems = $this->feedItems;
 $responses = $this->responses;
 $responsesCount = $responses->count();
 $responsesListUrl = $this->listUrl;
@@ -27,7 +28,7 @@ $this->view('_forms_breadcrumbs', 'shared')
 <section class="main section">
 	<div class="grid">
 
-		<div class="col span7 omega">
+		<div class="col span7">
 			<?php
 				$this->view('_response_list')
 					->set('responses', $responses)
@@ -40,6 +41,19 @@ $this->view('_forms_breadcrumbs', 'shared')
 					->set('recordsCount', $responsesCount)
 					->display();
 				?>
+		</div>
+
+		<div class="col span5 omega">
+			<div class="feed-comments">
+				<?php
+					$this->view('_feed', 'shared')
+						->set('feedItems', $feedItems)
+						->set('itemView', '_responses_feed_item')
+						->set('noticeView', '_responses_feed_empty_notice')
+						->set('subviewsSource', 'formresponses')
+						->display();
+				?>
+			</div>
 		</div>
 
 	</div>

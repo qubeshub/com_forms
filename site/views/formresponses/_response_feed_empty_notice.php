@@ -8,7 +8,7 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$feedEmptyNotice = Lang::txt('This response\'s feed is empty right now.');
+$feedEmptyNotice = Lang::txt('COM_FORMS_NOTICES_RESPONSE_FEED_EMPTY');
 
 ?>
 

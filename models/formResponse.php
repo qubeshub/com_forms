@@ -330,4 +330,16 @@ class FormResponse extends Relational
 		return $responsesTags;
 	}
 
+	/**
+	 * Returns all responses for user w/ given ID
+	 *
+	 * @param    int      $userId   User record's ID
+	 * @return   object
+	 */
+	public static function allForUser($userId)
+	{
+		return self::all()
+			->whereEquals('user_id', $userId);
+	}
+
 }

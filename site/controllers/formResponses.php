@@ -208,8 +208,11 @@ class FormResponses extends SiteController
 			->paginated('limitstart', 'limit')
 			->rows();
 		$responsesListUrl = $this->_routes->usersResponsesUrl();
+		$feedItems = ResponseFeedItem::allForUser($currentUserId)
+			->order('id', 'desc');
 
 		$this->view
+			->set('feedItems', $feedItems)
 			->set('responses', $responses)
 			->set('listUrl', $responsesListUrl)
 			->display();
@@ -232,7 +235,7 @@ class FormResponses extends SiteController
 		$receivedTagString = $this->_params->getString('tag_string');
 		$tagString = $receivedTagString ? $receivedTagString : $currentTagString;
 		$comment = $this->_params->getString('comment');
-		$feedItems = ResponseFeedItem::allFor($responseId)
+		$feedItems = ResponseFeedItem::allForResponse($responseId)
 			->order('id', 'desc');
 
 		$isComponentAdmin = $this->_auth->currentCanCreate();

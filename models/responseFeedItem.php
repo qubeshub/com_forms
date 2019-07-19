@@ -7,6 +7,11 @@
 
 namespace Components\Forms\Models;
 
+$componentPath = Component::path('com_forms');
+
+require_once "$componentPath/models/formResponse.php";
+
+use Components\Forms\Models\FormResponse;
 use Hubzero\Activity\Log;
 
 class ResponseFeedItem extends Log
@@ -38,10 +43,74 @@ class ResponseFeedItem extends Log
 	 * @param    int      $responseId   Response record's ID
 	 * @return   object
 	 */
-	public static function allFor($responseId)
+	public static function allForResponse($responseId)
 	{
 		return self::all()
 			->whereEquals('scope_id', $responseId);
+	}
+
+	/**
+	 * Returns all activity items for user w/ given ID
+	 *
+	 * @param    int      $userId   User record's ID
+	 * @return   object
+	 */
+	public static function allForUser($userId)
+	{
+		$responses = FormResponse::allForUser($userId)->rows();
+
+		$responseIds = $responses->fieldsByKey('id');
+
+		return self::all()
+			->whereIn('scope_id', $responseIds);
+	}
+
+	/**
+	 * Accessor for associated form's name
+	 *
+	 * @return   int
+	 */
+	public function getFormName()
+	{
+		$form = $this->getForm();
+
+		return $form->get('name');
+	}
+
+	/**
+	 * Accessor for associated form
+	 *
+	 * @return   object
+	 */
+	public function getForm()
+	{
+		$response = $this->getResponse();
+
+		return $response->getForm();
+	}
+
+	/**
+	 * Accessor for associated response's ID
+	 *
+	 * @return   int
+	 */
+	public function getResponseId()
+	{
+		$response = $this->getResponse();
+
+		return $response->get('id');
+	}
+
+	/**
+	 * Accessor for associated response
+	 *
+	 * @return   object
+	 */
+	public function getResponse()
+	{
+		$responseId = $this->get('scope_id');
+
+		return FormResponse::one($responseId);
 	}
 
 }

@@ -12,6 +12,11 @@ $convertToLocal = isset($this->toLocal) ? $this->toLocal : true;
 $date = $this->date;
 $format = isset($this->format) ? $this->format : 'F j, Y';
 
+if ($convertToLocal)
+{
+	$date = Date::of($date)->toLocal();
+}
+
 if (!!$date)
 {
 	$dateString = (new DateTime($date))->format($format);
@@ -19,11 +24,6 @@ if (!!$date)
 else
 {
 	$dateString = '';
-}
-
-if ($convertToLocal)
-{
-	$date = Date::of($date)->toLocal();
 }
 
 echo $dateString;

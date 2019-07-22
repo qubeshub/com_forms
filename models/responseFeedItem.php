@@ -17,6 +17,13 @@ use Hubzero\Activity\Log;
 class ResponseFeedItem extends Log
 {
 
+	/**
+	 * Validation rules
+	 *
+	 * @var   array
+	 */
+	protected $rules = ['description' => 'notempty'];
+
 	protected $table = '#__activity_logs';
 
 	/**

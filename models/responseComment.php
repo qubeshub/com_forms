@@ -17,13 +17,6 @@ class ResponseComment extends ResponseFeedItem
 {
 
 	/**
-	 * Validation rules
-	 *
-	 * @var   array
-	 */
-	protected $rules = ['description' => 'notempty'];
-
-	/**
 	 * Constructs ResponseComment instance
 	 *
 	 * @param    array   $args   Instantiation state

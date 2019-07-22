@@ -17,6 +17,16 @@ class ResponseActivity extends ResponseFeedItem
 {
 
 	/**
+	 * Validation rules
+	 *
+	 * @var   array
+	 */
+	protected $rules = [
+		'action' => 'notempty',
+		'response_id' => 'notempty'
+	];
+
+	/**
 	 * Constructs ResponseEvent instance
 	 *
 	 * @param    array   $args   Instantiation state
@@ -26,12 +36,9 @@ class ResponseActivity extends ResponseFeedItem
 	{
 		$state = [];
 
-		$state['action'] = $args['action'];
 		$state['created'] = Date::toSql();
 		$state['created_by'] = User::get('id');
-		$state['description'] = $args['description'];
 		$state['scope'] = self::$ACTIVITY_SCOPE;
-		$state['scope_id'] = $args['response_id'];
 
 		$this->set($state);
 

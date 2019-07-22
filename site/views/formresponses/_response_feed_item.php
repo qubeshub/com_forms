@@ -9,44 +9,18 @@
 defined('_HZEXEC_') or die();
 
 $item = $this->item;
-$authorId = $item->get('created_by');
-$author = User::one($authorId);
-$authorName = $author->get('name');
-$comment = $item->get('description');
-$created = $item->get('created');
+$itemAction = $item->get('action');
 
-if ($authorId == User::get('id'))
+switch ($itemAction)
 {
-  $authorName = Lang::txt('COM_FORMS_HEADINGS_YOU');
+	case 'activity':
+		$this->view('_response_feed_activity')
+			->set('item', $item)
+			->display();
+		break;
+	case 'comment':
+		$this->view('_response_feed_comment')
+			->set('item', $item)
+			->display();
+		break;
 }
-
-?>
-
-<div class="feed-item">
-
-	<div>
-		<span>
-			<?php
-				$this->view('_link', 'shared')
-					->set('content', $authorName)
-					->set('urlFunction', 'userProfileUrl')
-					->set('urlFunctionArgs', [$authorId])
-					->display();
-			?>
-		</span>
-
-		<span class="date">
-			<?php
-				$this->view('_date', 'shared')
-					->set('date', $created)
-					->set('format', 'F jS Y, g:iA')
-					->display();
-			?>
-		</span>
-	</div>
-
-	<div class="comment-content">
-		<?php echo $comment; ?>
-	</div>
-
-</div>

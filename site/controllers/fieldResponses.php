@@ -10,9 +10,9 @@ namespace Components\Forms\Site\Controllers;
 $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/comFormsPageBouncer.php";
-require_once "$componentPath/helpers/eventDispatcher.php";
 require_once "$componentPath/helpers/fieldsResponsesFactory.php";
 require_once "$componentPath/helpers/formPageElementDecorator.php";
+require_once "$componentPath/helpers/formResponseEventsHelper.php";
 require_once "$componentPath/helpers/formsRouter.php";
 require_once "$componentPath/helpers/pagesRouter.php";
 require_once "$componentPath/helpers/params.php";
@@ -22,9 +22,9 @@ require_once "$componentPath/models/form.php";
 require_once "$componentPath/models/formPage.php";
 
 use Components\Forms\Helpers\ComFormsPageBouncer as PageBouncer;
-use Components\Forms\Helpers\EventDispatcher;
 use Components\Forms\Helpers\FieldsResponsesFactory;
 use Components\Forms\Helpers\FormPageElementDecorator as ElementDecorator;
+use Components\Forms\Helpers\FormResponseEventsHelper as EventHelper;
 use Components\Forms\Helpers\FormsRouter as RoutesHelper;
 use Components\Forms\Helpers\PagesRouter;
 use Components\Forms\Helpers\Params;
@@ -66,7 +66,7 @@ class FieldResponses extends SiteController
 	{
 		$this->_crudHelper = new CrudHelper(['controller' => $this]);
 		$this->_decorator = new ElementDecorator();
-		$this->_eventDispatcher = new EventDispatcher();
+		$this->_eventHelper = new EventHelper();
 		$this->_factory = new FieldsResponsesFactory();
 		$this->_pageBouncer = new PageBouncer();
 		$this->_pagesRouter = new PagesRouter();
@@ -123,7 +123,7 @@ class FieldResponses extends SiteController
 
 		if ($updateResult->succeeded())
 		{
-			$this->_eventDispatcher->fieldResponsesUpdate($responses);
+			$this->_eventHelper->fieldResponsesUpdate($responses);
 			$forwardingUrl = $this->_pagesRouter->nextPageUrl($this->_page);
 			$message = Lang::txt('COM_FORMS_NOTICES_FIELD_RESPONSES_SUCCESSFUL_UPDATE');
 			$this->_crudHelper->successfulUpdate($forwardingUrl, $message);

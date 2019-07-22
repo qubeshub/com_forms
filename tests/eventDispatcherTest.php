@@ -20,19 +20,24 @@ class EventDispatcherTest extends Basic
 {
 	use canMock;
 
-	public function testFieldResponsesUpdateInvokesTrigger()
+	public function testDispatchInvokesTrigger()
 	{
 		$dispatcher = $this->mock([
 			'class' => 'Event', 'methods' => ['trigger']
 		]);
-		$eventDispatcher = new EventDispatcher(['dispatcher' => $dispatcher]);
-		$fieldResponses = ['a', 3];
+		$eventScope = 'testScope';
+		$eventData = [1, 'foo'];
+		$eventDescription = 'testDescription';
+		$eventDispatcher = new EventDispatcher([
+			'scope' => $eventScope,
+			'dispatcher' => $dispatcher
+		]);
 
 		$dispatcher->expects($this->once())
 			->method('trigger')
-			->with('forms.onFieldResponsesUpdate', [$fieldResponses]);
+			->with("$eventScope.$eventDescription", $eventData);
 
-		$eventDispatcher->fieldResponsesUpdate($fieldResponses);
+		$eventDispatcher->dispatch($eventDescription, $eventData);
 	}
 
 }

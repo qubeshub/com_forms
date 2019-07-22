@@ -22,20 +22,20 @@ class EventDispatcher
 		$this->_dispatcher = Arr::getValue(
 			$args, 'dispatcher', new MockProxy(['class' => 'Event'])
 		);
-		$this->_eventScope = 'forms';
+		$this->_baseScope = Arr::getValue($args, 'scope', 'forms');
 	}
 
 	/**
-	 * Triggers the field response update event
 	 *
-	 * @param    array   $fieldResponses   User field responses
+	 * @param    string   $eventDescription   Event description
+	 * @param    array    $eventData          Event data
 	 * @return   void
 	 */
-	public function fieldResponsesUpdate($fieldResponses)
+	public function dispatch($eventDescription, $eventData)
 	{
-		$eventName = $this->_generateEventName('onFieldResponsesUpdate');
+		$eventName = $this->_generateEventName($eventDescription);
 
-		$this->_triggerEvent($eventName, [$fieldResponses]);
+		$this->_triggerEvent($eventName, $eventData);
 	}
 
 	/**
@@ -46,7 +46,7 @@ class EventDispatcher
 	 */
 	protected function _generateEventName($action)
 	{
-		$eventName = "$this->_eventScope.$action";
+		$eventName = "$this->_baseScope.$action";
 
 		return $eventName;
 	}

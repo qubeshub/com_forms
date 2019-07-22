@@ -7,12 +7,11 @@
 
 namespace Components\Forms\Site\Controllers;
 
-use Hubzero\Component\SiteController;
-
 $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/comFormsPageBouncer.php";
 require_once "$componentPath/helpers/formPageElementDecorator.php";
+require_once "$componentPath/helpers/formResponseActivityHelper.php";
 require_once "$componentPath/helpers/formsAuth.php";
 require_once "$componentPath/helpers/formsRouter.php";
 require_once "$componentPath/helpers/params.php";
@@ -28,10 +27,12 @@ use Components\Forms\Helpers\FormsAuth as AuthHelper;
 use Components\Forms\Helpers\FormsRouter as RoutesHelper;
 use Components\Forms\Helpers\Params;
 use Components\Forms\Helpers\RelationalCrudHelper as RCrudHelper;
+use Components\Forms\Helpers\FormResponseActivityHelper;
 use Components\Forms\Helpers\VirtualCrudHelper as VCrudHelper;
 use Components\Forms\Models\Form;
 use Components\Forms\Models\FormResponse;
 use Components\Forms\Models\ResponseFeedItem;
+use Hubzero\Component\SiteController;
 use Date;
 
 class FormResponses extends SiteController
@@ -75,6 +76,7 @@ class FormResponses extends SiteController
 		$this->_params = new Params(
 			['whitelist' => self::$_paramWhitelist]
 		);
+		$this->_responseActivity = new FormResponseActivityHelper();
 		$this->_routes = new RoutesHelper();
 
 		parent::execute();
@@ -90,20 +92,21 @@ class FormResponses extends SiteController
 	{
 		$formId = $this->_params->getInt('form_id');
 
-		$response = $this->_createResponse();
+		$response = $this->_generateResponse();
 
-		if ($response->isNew())
+		if ($response->save())
 		{
-			$formOverviewPage = $this->_routes->formsDisplayUrl($formId);
-			$this->_crudHelper->failedCreate($response, $formOverviewPage);
-		}
-		else
-		{
+			$this->_responseActivity->logStart($response->get('id'));
 			$formsFirstPage = $this->_routes->formsPageResponseUrl([
 				'form_id' => $formId, 'ordinal' => 1
 			]);
 			$responseStartedMessage = Lang::txt('COM_FORMS_NOTICES_SUCCESSFUL_START');
 			$this->_crudHelper->successfulCreate($formsFirstPage, $responseStartedMessage);
+		}
+		else
+		{
+			$formOverviewPage = $this->_routes->formsDisplayUrl($formId);
+			$this->_crudHelper->failedCreate($response, $formOverviewPage);
 		}
 	}
 
@@ -113,7 +116,7 @@ class FormResponses extends SiteController
 	 * @param    array    $responseData   Response instantiation data
 	 * @return   object
 	 */
-	protected function _createResponse($responseData = [])
+	protected function _generateResponse($responseData = [])
 	{
 		$defaultData = [
 			'form_id' => $this->_params->getInt('form_id'),
@@ -124,8 +127,6 @@ class FormResponses extends SiteController
 
 		$response = FormResponse::blank();
 		$response->set($combinedData);
-
-		$response->save();
 
 		return $response;
 	}
@@ -183,6 +184,7 @@ class FormResponses extends SiteController
 
 		if ($response->save())
 		{
+			$this->_responseActivity->logSubmit($response->get('id'));
 			$forwardingUrl = $this->_routes->responseFeedUrl($responseId);
 			$successMessage = Lang::txt('COM_FORMS_NOTICES_FORM_RESPONSE_SUBMIT_SUCCESS');
 			$this->_rCrudHelper->successfulUpdate($forwardingUrl, $successMessage);
@@ -236,7 +238,8 @@ class FormResponses extends SiteController
 		$tagString = $receivedTagString ? $receivedTagString : $currentTagString;
 		$comment = $this->_params->getString('comment');
 		$feedItems = ResponseFeedItem::allForResponse($responseId)
-			->order('id', 'desc');
+			->order('id', 'desc')
+			->rows();
 
 		$isComponentAdmin = $this->_auth->currentCanCreate();
 

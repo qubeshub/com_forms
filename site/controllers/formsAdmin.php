@@ -11,6 +11,7 @@ $componentPath = Component::path('com_forms');
 
 require_once "$componentPath/helpers/csvHelper.php";
 require_once "$componentPath/helpers/formPageElementDecorator.php";
+require_once "$componentPath/helpers/formResponseActivityHelper.php";
 require_once "$componentPath/helpers/formsAuth.php";
 require_once "$componentPath/helpers/formsRouter.php";
 require_once "$componentPath/helpers/pageBouncer.php";
@@ -23,6 +24,7 @@ require_once "$componentPath/models/formResponse.php";
 
 use Components\Forms\Helpers\CsvHelper;
 use Components\Forms\Helpers\FormPageElementDecorator as ElementDecorator;
+use Components\Forms\Helpers\FormResponseActivityHelper;
 use Components\Forms\Helpers\FormsAuth as AuthHelper;
 use Components\Forms\Helpers\FormsRouter as RoutesHelper;
 use Components\Forms\Helpers\PageBouncer;
@@ -66,6 +68,7 @@ class FormsAdmin extends SiteController
 		$this->_params = new Params(
 			['whitelist' => self::$_paramWhitelist]
 		);
+		$this->_responseActivity = new FormResponseActivityHelper();
 		$this->_routes = new RoutesHelper();
 
 		parent::execute();
@@ -174,6 +177,7 @@ class FormsAdmin extends SiteController
 
 		if ($response->save())
 		{
+			$this->_responseActivity->logReview($responseId, $responseAccepted);
 			$forwardingUrl = $this->_routes->formsResponseList($formId);
 			$message = Lang::txt('Response acceptance udpated');
 			$this->_crudHelper->successfulUpdate($forwardingUrl, $message);

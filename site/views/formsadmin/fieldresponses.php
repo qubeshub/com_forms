@@ -28,7 +28,8 @@ $breadcrumbs = [
 	 $formName => ['formsDisplayUrl', [$formId]],
 	'Admin' => ['formsEditUrl', [$formId]],
 	'Responses' => ['formsResponseList', [$formId]],
-	$userName => ['responseFeedUrl', [$responseId]]
+	$userName => ['responseFeedUrl', [$responseId]],
+	'Replies' => ['responseFeedUrl', [$responseId]]
 ];
 
 $this->view('_forms_breadcrumbs', 'shared')
@@ -43,7 +44,7 @@ $this->view('_forms_breadcrumbs', 'shared')
 		<nav class="col span12 nav omega">
 			<?php
 				$this->view('_response_details_nav', 'shared')
-					->set('current', 'Responses')
+					->set('current', 'Fields')
 					->set('formId', $formId)
 					->set('responseId', $responseId)
 					->set('userId', $userId)

@@ -22,15 +22,23 @@ $userIsAdmin = $this->userIsAdmin;
 $userName = $user->get('name');
 $respondentText = Lang::txt('COM_FORMS_HEADINGS_RESPONDENT', $userName);
 
-$breadcrumbs = [
-	$formName => ['formsDisplayUrl', [$formId]],
-];
+$breadcrumbs = [];
 
 if ($userIsAdmin)
 {
-	$breadcrumbs['Admin'] = ['formsEditUrl', [$formId]];
-	$breadcrumbs['Responses'] = ['formsResponseList', [$formId]];
-	$breadcrumbs[$userName] = ['responseFeedUrl', [$responseId]];
+	$breadcrumbs = [
+		$formName => ['formsDisplayUrl', [$formId]],
+		'Admin' => ['formsEditUrl', [$formId]],
+		'Responses' => ['formsResponseList', [$formId]],
+		$userName => ['responseFeedUrl', [$responseId]]
+	];
+}
+else
+{
+	$breadcrumbs = [
+    'Responses' => ['usersResponsesUrl'],
+		$formName => ['formsDisplayUrl', [$formId]]
+	];
 }
 
 $breadcrumbs['Pages'] = ['usersFormPagesUrl', [$formId, $userId]];

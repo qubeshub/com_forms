@@ -31,7 +31,7 @@ $steps = [
 
 if ($userIsAdmin)
 {
-	$steps['Responses'] = $routes->userFieldResponsesUrl($responseId);
+	$steps['Fields'] = $routes->userFieldResponsesUrl($responseId);
 }
 
 $this->view('_ul_nav', 'shared')

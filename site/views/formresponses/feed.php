@@ -39,9 +39,11 @@ else
   $breadcrumbs = [
     'Responses' => ['usersResponsesUrl'],
     $formName => ['formsDisplayUrl', [$formId]],
-    'Feed' => ['responseFeedUrl', [$responseId]]
+
   ];
 }
+
+$breadcrumbs['Feed'] = ['responseFeedUrl', [$responseId]];
 
 $this->view('_forms_breadcrumbs', 'shared')
 	->set('breadcrumbs', $breadcrumbs)
